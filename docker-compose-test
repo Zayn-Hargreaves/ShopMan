@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:16-alpine
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: npm start
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - NODE_ENV=${MODE}
+      - EXP_TIME=${EXP_TIME}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - API_KEY=${API_KEY}
+      - API_SECRET=${API_SECRET}
+      - SECRET=${SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=${REDIS_HOST}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - ES_HOST=${ES_HOST}
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+      - elasticsearch
+    networks:
+      - dev-network
+    mem_limit: 1g   # Tăng lên 1GB
+    cpus: "0.5"
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - dev-network
+    mem_limit: 512m # Tăng lên 512MB
+    cpus: "0.25"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - dev-network
+    mem_limit: 1g   # Tăng lên 1GB
+    cpus: "0.5"
+
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+    mem_limit: 1g   # Tăng lên 1GB
+    cpus: "0.5"
+
+  elasticsearch:
+    image: elasticsearch:7.17
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # Tăng heap size lên 512MB
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    networks:
+      - dev-network
+    mem_limit: 2g   # Tăng lên 2GB
+    cpus: "1.0"
+
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  rabbitmq-data:
+  postgres-data:
+  es-data:
