@@ -1,30 +1,33 @@
 const {DataTypes, Model} = require('@sequelize/core');
-const database = require('../db/dbs/db');
-const sequelize = database.sequelize;
+
 class PaymentMethod extends Model {}
-PaymentMethod.init({
-    id:{
-        type:DataTypes.INTEGER,
-        primaryKey:true,
-        autoIncrement:true
-    },
-    name:{
-        type:DataTypes.STRING,
-        allowNull:false
-    },
-    description:{
-        type:DataTypes.STRING,
-    },
-    status:{
-        type:DataTypes.STRING,
-        allowNull:false,
-        defaultValue:"active"
-    }
-},{
-    sequelize,
-    modelName:"PaymentMethod",
-    tableName:"PaymentMethod",
-    freezeTableName:true,
-    timestamps:true
-})
-module.exports = PaymentMethod;
+const initializePaymentMethod = async(sequelize)=>{
+
+    PaymentMethod.init({
+        id:{
+            type:DataTypes.INTEGER,
+            primaryKey:true,
+            autoIncrement:true
+        },
+        paymentMethod_name:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        paymentMethod_desc:{
+            type:DataTypes.STRING,
+        },
+        paymentMethod_status:{
+            type:DataTypes.STRING,
+            allowNull:false,
+            defaultValue:"active"
+        }
+    },{
+        sequelize,
+        modelName:"PaymentMethods",
+        tableName:"PaymentMethods",
+        freezeTableName:true,
+        timestamps:true
+    })
+    return PaymentMethod
+}
+module.exports = initializePaymentMethod;

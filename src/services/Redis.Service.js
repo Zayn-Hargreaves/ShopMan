@@ -1,4 +1,4 @@
-const redisClient = require("../db/rdb")
+const {getRedis} = require("../db/rdb")
 class RedisService{
     static async createRedisBloomFilter(filterName, falsePositiveRate, capacity){
         return await redisClient.bf.reserver(filterName,falsePositiveRate,capacity)

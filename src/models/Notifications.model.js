@@ -1,47 +1,47 @@
 const {DataTypes, Model} = require("@sequelize/core");
-const database = require("../db/dbs/db");
-const sequelize = database.sequelize;
-const User = require("./User.model");
-const Shop = require("./Shop.model");
-class Notifications extends Model {}
-Notifications.init({
-    id:{
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    type:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    option:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    content:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    ShopId:{
-        type: DataTypes.INTEGER,
-        references:{
-            model:Shop,
-            key:"id"
-        }
-    },
-    UserId:{
-        type: DataTypes.INTEGER,
-        references:{
-            model:User,
-            key:"id"
-        }
-    },
-},{
-    sequelize,
-    tableName:"Notification",
-    modelName:"Notification",
-    freezeTableName:true,
-    timestamps:true
-})
 
-module.exports = Notifications;
+class Notifications extends Model {}
+const initializeNotifications = async(sequelize)=>{
+    Notifications.init({
+        id:{
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        noti_type:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        noti_option:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        noti_content:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        ShopId:{
+            type: DataTypes.INTEGER,
+            // references:{
+            //     model:"Shops",
+            //     key:"id"
+            // }
+        },
+        UserId:{
+            type: DataTypes.INTEGER,
+            // references:{
+            //     model:"Users",
+            //     key:"id"
+            // }
+        },
+    },{
+        sequelize,
+        tableName:"Notifications",
+        modelName:"Notifications",
+        freezeTableName:true,
+        timestamps:true
+    })
+    return Notifications
+}
+
+module.exports = initializeNotifications;

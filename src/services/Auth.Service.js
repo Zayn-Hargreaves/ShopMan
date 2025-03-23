@@ -1,19 +1,19 @@
 const { createTokenPair, verifyJWT, createAccessToken } = require('../auth/authUtils');
 const { NotFoundError, UnauthorizedError, ForbiddenError, ConflictError, InternalServerError } = require('../cores/error.response');
+const initializeModels = require("../db/dbs/associations")
 const UserService = require('./User.Service');
 const { getInfoData } = require('../src/utils');
 const bcrypt = require('bcrypt');
-const redisClient = require("../db/rdb")
 const { OAuth2Client } = require("google-auth-library")
 const ClientId = process.env.GOOGLE_CLIENT_ID
 const Client = new OAuth2Client(ClientId)
-const User = require("../models/User.model");
 const RedisService = require('./Redis.Service');
 const {v4:uuidv4} = require("uuid")
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 class AuthService {
     static async signUp({ name, email, password }) {
+        const {User} = await initializeModels()
         const holderAccount = await UserService.findByEmail(email);
         if (holderAccount) {
             throw new ConflictError('Email is already registered');
@@ -41,6 +41,7 @@ class AuthService {
         }
     }
     static async signUpWithGoogle(body) {
+        const {User}  = await initializeModels()
         const { idToken } = body
         if (!idToken) {
             throw new UnauthorizedError("Id token is required")
