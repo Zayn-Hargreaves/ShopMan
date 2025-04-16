@@ -1,0 +1,74 @@
+dress, dress up, prune, trim, clothe
+top, shirt, blouse
+bottom, pants, trousers
+jacket, coat, blazer
+pants, trousers, bloomers, knickers
+tee, t-shirt, shirt
+shorts, short pants, boxers
+mobile, smartphone, phone
+headphones, earphones, earbuds
+charger, battery charger
+phone, smartphone, telephone
+gadget, device, widget
+sofa, couch, lounge
+furniture, furnishings
+table, desk
+chair, seat
+computer, pc, desktop
+monitor, screen, display
+laptop, notebook
+cream, lotion, moisturizer
+perfume, fragrance, scent
+lotion, cream, moisturizer
+makeup, cosmetics
+fan, blower
+vacuum, hoover, cleaner
+appliance, device, gadget
+supplement, vitamin, additive
+mask, face mask
+food, meal, cuisine
+beverage, drink
+coffee, java
+tea, chai
+toy, plaything
+diaper, nappy
+stroller, pram, pushchair
+game, video game
+controller, gamepad
+console, gaming console
+shoes, footwear
+bike, bicycle, cycle
+sports, athletics
+book, novel, textbook
+puzzle, riddle
+hobby, pastime
+camera, webcam
+drone, quadcopter
+lens, camera lens
+pet, animal, companion
+collar, pet collar
+bag, handbag, purse
+purse, wallet
+backpack, knapsack
+wallet, billfold
+ring, band
+jewellery, jewelry
+watch, timepiece
+timepiece, clock
+clock, timer
+boots, footwear
+sandals, flip-flops
+sneakers, trainers
+car, automobile
+tire, tyre
+accessory, add-on
+payment, transaction
+near, nearby, close
+dining, dinner
+travel, trip, journey
+service, support
+luggage, baggage
+suitcase, travel bag
+item, product
+product, merchandise
+stuff, things, goods

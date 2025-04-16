@@ -3,15 +3,11 @@ const config = require("../../config/index");
 
 class ElasticsearchClient {
     constructor() {
-        if (!ElasticsearchClient.instance) {
             this.client = null;
             this.maxRetries = 5;
             this.retryDelay = 2000;
-            ElasticsearchClient.instance = this;
-            this.initializeClient();
         }
-        return ElasticsearchClient.instance;
-    }
+
 
     async initializeClient() {
         let retries = 0;
@@ -22,7 +18,7 @@ class ElasticsearchClient {
                     log:"trace"
                 });
                 await this.client.ping();
-                console.log(`Elasticsearch connected successfully to ${config.elasticsearch.url}`);
+                console.log(`Elasticsearch connected successfully`);
                 break;
             } catch (error) {
                 retries++;
@@ -41,10 +37,21 @@ class ElasticsearchClient {
         }
         return this.client;
     }
+    static async getInstance(){
+        if(!ElasticsearchClient.instance){
+            ElasticsearchClient.instance = new ElasticsearchClient()
+            await ElasticsearchClient.instance.initializeClient()
+        }
+        return ElasticsearchClient.instance 
+    }
 }
 
-const elasticsearchClient = new ElasticsearchClient();
+const elasticsearchClient = ElasticsearchClient.getInstance();
 
 module.exports = {
-    getClient: () => elasticsearchClient.getClient(),
+    initElasticSearch:async()=>{
+        await elasticsearchClient;
+        return elasticsearchClient
+    },
+    getClient: async() => (await elasticsearchClient).getClient(),
 };

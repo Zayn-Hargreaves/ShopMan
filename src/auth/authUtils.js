@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const { asyncHandler } = require('../helpers/asyncHandler');
 const { UnauthorizedError } = require('../cores/error.response');
-const redisClient = require("../db/rdb")
+const RedisService = require("../services/Redis.Service")
 const HEADER = {
     CLIENT_ID: 'x-client-id',
     AUTHORIZATION:'authorization',
@@ -20,6 +20,12 @@ const createRefreshToken = (payload) => {
     return jwt.sign(payload, refreshSecretKey, {
         algorithm: 'HS256',
         expiresIn: '7d',
+    });
+}
+const createResetToken = (payload)=>{
+    return jwt.sign(payload, accessSecretKey, {
+        algorithm: 'HS256',
+        expiresIn: '15p',
     });
 }
 const createTokenPair = async (payload) => {
@@ -43,7 +49,7 @@ const verifyJWT = async (token, keySecret) => {
     return jwt.verify(token, keySecret);
 }
 
-const authentication = asyncHandler(async (req, res, next) => {
+const authentication = asyncHandler(async(req, res, next) => {
     const authorization = req.headers[HEADER.AUTHORIZATION];
     let accessToken;
     if(authorization){
@@ -55,8 +61,10 @@ const authentication = asyncHandler(async (req, res, next) => {
     }
     if(refreshtoken){
         try {
-            const {userId, roleId} = await verifyJWT(refreshtoken, refreshSecretKey);
-            req.decode = {userId, roleId};
+            const {userId, roleId,jti} = await verifyJWT(refreshtoken, refreshSecretKey);
+            const exists = await RedisService.checkElementExistInRedisBloomFilter("blacklist_token",jti)
+            if(!exists) throw new UnauthorizedError("invalid request")
+            req.userId = userId
             req.refreshToken = refreshtoken;
             return next();
         } catch (error) {
@@ -65,20 +73,12 @@ const authentication = asyncHandler(async (req, res, next) => {
     }
     if(accessToken){
         try {
-            const {userId, roleId} = await verifyJWT(accessToken, accessSecretKey);
-            req.decode = {userId, roleId};
+            const {userId, roleId,jti} = await verifyJWT(accessToken, accessSecretKey);
+            req.userId = userId
             req.accessToken = accessToken;
             if(!userId){
                 throw new UnauthorizedError('invalid request');
             }
-            if(!roleId){
-                throw new UnauthorizedError('invalid request');
-            }
-            const permissions = await PermissionService.getPermissionByRoleId(roleId);
-            if(!permissions){
-                throw new UnauthorizedError('invalid request');
-            }
-            req.permissions = permissions;
             return next();
         } catch (error) {
             throw new UnauthorizedError('invalid request');
@@ -87,4 +87,7 @@ const authentication = asyncHandler(async (req, res, next) => {
 })
 
 
-module.exports = { createTokenPair, authentication, verifyJWT,createAccessToken,createRefreshToken }
+
+
+
+module.exports = { createTokenPair, authentication, verifyJWT,createAccessToken,createRefreshToken, createResetToken }

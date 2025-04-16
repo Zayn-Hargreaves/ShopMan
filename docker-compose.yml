@@ -1,93 +1,147 @@
-version: '3.8'
-services:
-  apps:
-    image: node:16-alpine
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: npm run start
-    ports:
-      - "${PORT:-3000}:3000"
-    environment:
-      - NODE_ENV=${MODE}
-      - EXP_TIME=${EXP_TIME}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - REDIS_HOST=${REDIS_HOST}
-      - RABBITMQ_HOST=${RABBITMQ_HOST}
-      - ES_HOST=${ES_HOST}
-    depends_on:
-      - redis
-      - rabbitmq
-      - elasticsearch
-      - postgres
-    networks:
-      - dev-networks
-    mem_limit: 512m
-    cpus: "0.5"
+  version: '3.8'
+  services:
+    apps:
+      image: node:18-alpine
+      volumes:
+        - .:/app
+      working_dir: /app
+      command: node --watch server.js
+      ports:
+        - "${PORT:-3000}:3000"
+      environment:
+        - NODE_ENV=dev
+        - PORT=${PORT}
+        - EXP_TIME=${EXP_TIME}
+        - DB_HOST=${DB_HOST}
+        - DB_USER=${DB_USER_PRO}
+        - DB_PASSWORD=${DB_PASSWORD_PRO}
+        - DB_NAME=${DB_NAME_PRO}
+        - ES_HOST=${ES_HOST}
+        - KAFKA_BROKER=kafka:9092
+        - ACCESS_SECRET_KEY=${ACCESS_SECRET_KEY}
+        - REFRESH_SECRET_KEY=${REFRESH_SECRET_KEY}
+        - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+        - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+        - EMAIL_HOST=${EMAIL_HOST}
+        - EMAIL_PORT=${EMAIL_PORT}
+        - EMAIL_USERNAME=${EMAIL_USERNAME}
+        - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+        - FRONTEND_URL=${FRONTEND_URL}
+        - REDIS_URL=${REDIS_URL} # Thêm Redis URL
+        - REDIS_USERNAME=${REDIS_USERNAME}
+        - REDIS_PASSWORD=${REDIS_PASSWORD}
+        - REDIS_HOST=${REDIS_HOST}
+        - REDIS_PORT=${REDIS_PORT}
+      depends_on:
+        kafka:
+          condition: service_healthy
+      networks:
+        - dev-networks
+      mem_limit: 512m
+      cpus: "0.5"
 
-  redis:
-    image: redis:6-alpine
-    ports:
-      - 6379:6379
-    volumes:
-      - redis-data:/data
-    networks:
-      - dev-networks
-    mem_limit: 256m
-    cpus: "0.25"    
+    zookeeper:
+      image: confluentinc/cp-zookeeper:7.3.0
+      ports:
+        - "2181:2181"
+      environment:
+        ZOOKEEPER_CLIENT_PORT: 2181
+        ZOOKEEPER_TICK_TIME: 2000
+      volumes:
+        - zookeeper-data:/var/lib/zookeeper/data
+        - zookeeper-log:/var/lib/zookeeper/log
+      networks:
+        - dev-networks
+      mem_limit: 256m
+      cpus: "0.25"
+      healthcheck:
+        test: ["CMD", "echo", "ruok", "|", "nc", "localhost", "2181"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-      - 5672:5672
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - dev-networks
-    mem_limit: 512m 
-    cpus: "0.5"
+    kafka:
+      image: confluentinc/cp-kafka:7.3.0
+      depends_on:
+        zookeeper:
+          condition: service_healthy
+      ports:
+        - "9092:9092"
+        - "29092:29092"
+      environment:
+        KAFKA_BROKER_ID: 1
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+        KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        KAFKA_LOG_RETENTION_HOURS: 24
+      volumes:
+        - kafka-data:/var/lib/kafka/data
+      networks:
+        - dev-networks
+      mem_limit: 1g
+      cpus: "1.0"
+      healthcheck:
+        test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+        interval: 15s
+        timeout: 10s
+        retries: 10
 
-  postgres:
-    image: postgres:13-alpine
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - dev-networks
-    mem_limit: 512m
-    cpus: "0.5"
+    kafka-connect:
+      image: debezium/connect:2.7.0.Final
+      depends_on:
+        kafka:
+          condition: service_healthy
+      ports:
+        - "8083:8083"
+      environment:
+        BOOTSTRAP_SERVERS: kafka:9092
+        GROUP_ID: connect-cluster
+        CONFIG_STORAGE_TOPIC: connect-configs
+        OFFSET_STORAGE_TOPIC: connect-offsets
+        STATUS_STORAGE_TOPIC: connect-status
+        KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+        VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+        KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+        VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+        CONNECT_PLUGIN_PATH: /kafka/connect
+      volumes:
+        - ./src/connect-plugins:/kafka/connect
+        - ./src/connect-plugins/ca.pem:/aiven-ca.pem
+      networks:
+        - dev-networks
+      mem_limit: 1g
+      cpus: "1.0"
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8083/"]
+        interval: 15s
+        timeout: 10s
+        retries: 10
 
-  elasticsearch:
-    image: elasticsearch:7.17
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - es-data:/usr/share/elasticsearch/data
-    networks:
-      - dev-network
-    mem_limit: 1g
-    cpus: "1.0"
-networks:
-  dev-network:
-    driver: bridge
+    kafka-ui:
+      image: provectuslabs/kafka-ui:latest
+      depends_on:
+        kafka:
+          condition: service_healthy
+      ports:
+        - "8080:8080"
+      environment:
+        KAFKA_CLUSTERS_0_NAME: local
+        KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+        KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      networks:
+        - dev-networks
+      mem_limit: 256m
+      cpus: "0.25"
 
-volumes:
-  redis-data:
-  rabbitmq-data:
-  postgres-data:
-  es-data:
+  networks:
+    dev-networks:
+      driver: bridge
+
+  volumes:
+    zookeeper-data:
+    zookeeper-log:
+    kafka-data:

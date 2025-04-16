@@ -16,11 +16,11 @@ const initializeOrder = async(sequelize)=>{
             //     key:"id"
             // }
         },
-        order_TotalPrice:{
+        TotalPrice:{
             type:DataTypes.DECIMAL,
             allowNull:false
         },
-        order_Status:{
+        Status:{
             type:DataTypes.STRING,
             allowNull:false
         }

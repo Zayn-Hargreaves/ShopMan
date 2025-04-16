@@ -8,11 +8,11 @@ const initializeResource = async (sequelize)=>{
             primaryKey:true,
             autoIncrement:true,
         },
-        resrc_name:{
+        name:{
             type:DataTypes.STRING,
             allowNull:false,
         },
-        resrc_slug:{
+        slug:{
             type:DataTypes.STRING,
             allowNull:true,
             defaultValue:"",

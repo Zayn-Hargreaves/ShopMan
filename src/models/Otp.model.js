@@ -21,6 +21,10 @@ const initializeOtp = async(sequelize)=>{
             // },
             allowNull: false
         },
+        expire:{
+            type:DataTypes.DATE,
+            allowNull:false
+        }
     }, {
         sequelize,
         modelName: "Otps",

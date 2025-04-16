@@ -1,7 +1,7 @@
 const {
     ReasonPhrases,
     StatusCodes,
-} = require("../src/utils/httpStatusCodes");
+} = require("../utils/httpStatusCodes");
 
 class SuccessResponse {
     constructor(message, status, data = null) {

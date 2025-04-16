@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Invoice - Your Order is Confirmed!
+    link(rel="stylesheet" href="styles.css")
+  body
+    .email-container
+      .email-header
+        img.logo(src=logo alt="Logo")
+
+      .email-body
+        h1 Order Confirmation
+        p Hello #{firstName}, your order has been successfully processed!
+
+        .invoice-details
+          h2 Order Details
+          p Order ID: #{orderId}
+          p Order Date: #{orderDate}
+          p Payment Method: #{paymentMethod}
+
+          table.order-table
+            thead
+              tr
+                th Product
+                th Quantity
+                th Price
+                th Total
+            tbody
+              each item in orderItems
+                tr
+                  td #{item.name}
+                  td #{item.quantity}
+                  td $#{item.price}
+                  td $#{item.total}
+
+          .total-amount
+            h3 Total: $#{orderTotal}
+
+        a.btn(href=invoiceLink) View Full Invoice
+      
+      .email-footer
+        p Thank you for shopping with us!

@@ -1,73 +1,83 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const { DataTypes, Model } = require("@sequelize/core");
 
-class Product extends Model {}
+class Product extends Model { }
 
-const initializeProducts = async(sequelize)=>{
+const initializeProducts = async (sequelize) => {
     Product.init({
-        id:{
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        product_name:{
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        product_desc:{
+        desc: {
             type: DataTypes.STRING,
         },
-        product_price:{
+        desc_plain:{
+            type: DataTypes.STRING,
+        },
+        price: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        product_quantity:{
+        discount_percentage:{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        product_thumb:{
+        thumb: {
             type: DataTypes.STRING,
         },
-        product_type:{
-            type: DataTypes.STRING,
-            allowNull: false
+        attrs:{
+            type: DataTypes.JSON,
         },
-        product_status:{
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue:"active"
+            defaultValue: "active"
         },
-        product_slug:{
+        slug: {
             type: DataTypes.STRING,
             unique: true
         },
-        CategoryId:{
+        CategoryId: {
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Categories",
-            //     key:"id"
-            // },
+
             allowNull: false
         },
-        ShopId:{
+        sort:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Shops",
-            //     key:"id"
-            // },
             allowNull: false
         },
-        product_rating:{
-            type:DataTypes.DECIMAL(2,1),
-            defaultValue:4.5,
-            validate:{
-                min:1,
-                max:5
+        ShopId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        rating: {
+            type: DataTypes.DECIMAL(2, 1),
+            defaultValue: 4.5,
+            validate: {
+                min: 1,
+                max: 5
             }
-        }
+        },
+        sale_count: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: false
+        },
+        has_variations: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+
     }, {
         sequelize,
         modelName: "Products",
-        tableName : "Products",
+        tableName: "Products",
         freezeTableName: true,
         paranoid: true,
         timestamps: true,
@@ -75,7 +85,7 @@ const initializeProducts = async(sequelize)=>{
     Product.addHook("beforeCreate", (product) => {
         product.slug = product.name.toLowerCase().replace(/ /g, "-");
     })
-    return Product
+return Product
 }
 
 module.exports = initializeProducts;

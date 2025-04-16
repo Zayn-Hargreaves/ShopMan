@@ -2,13 +2,10 @@ const databasePromise = require("../dbs/db");
 const initializeCart = require("../../models/Cart.model");
 const initializeCartDetails = require("../../models/CartDetails.model");
 const initializeCategory = require("../../models/Category.model");
-const initializeClothing = require("../../models/Clothing.model");
 const initializeComments = require("../../models/Comment.model");
 const initializeDiscounts = require("../../models/Discounts.model");
 const initializeDiscountsProducts = require("../../models/DiscountsProducts.model");
-const initializeElectronics = require("../../models/Electronics.model");
 const initializeFollows = require("../../models/Follows.model");
-const initializeFurniture = require("../../models/Furnitures.model");
 const initializeInventories = require("../../models/Inventories.model");
 const initializeNotifications = require("../../models/Notifications.model");
 const initializeOtp = require("../../models/Otp.model");
@@ -17,30 +14,35 @@ const initializeOrderDetails = require("../../models/OrderDetails.model");
 const initializePayment = require("../../models/Payment.model");
 const initializePaymentMethod = require("../../models/PaymentMethod.model");
 const initializeProducts = require("../../models/Products.model");
-const initializeProductVariation = require("../../models/ProductVariation.model");
 const initializeShop = require("../../models/Shop.model");
 const initializeUser = require("../../models/User.model");
 const initializeWishLists = require("../../models/WishLists.model");
 const initializeRole = require("../../models/Roles.model");
 const initializeResource = require("../../models/Resource.model");
 const initializeRoleGrant = require("../../models/RoleGrants.model");
-
+const initializeBanner = require("../../models/Banner.model")
+const inittialPartner = require("../../models/Partner.model")
+const inittialAddress = require("../../models/Address.model")
+const initializeSku = require("../../models/Sku.model")
+const initializeSkuAttr = require("../../models/SkuAttr.model")
+const initializeSkuSpecs = require("../../models/SkuSpecs.model")
+const initializeSpuToSku = require("../../models/SpuToSku.model")
+const initializeCampaignShop = require("../../models/CampaignShop.model")
+const initializeCampaign = require("../../models/Campaign.model")
+const initializeCampaignCategory = require("../../models/CampaignCategory.model")
 const initializeModels = async () => {
     try {
-        const database = await databasePromise;
+        const database = await databasePromise();
         const sequelize = database.getSequelize();
 
         // Khởi tạo models
         const Cart = await initializeCart(sequelize);
         const CartDetails = await initializeCartDetails(sequelize);
         const Category = await initializeCategory(sequelize);
-        const Clothing = await initializeClothing(sequelize);
         const Comment = await initializeComments(sequelize);
         const Discounts = await initializeDiscounts(sequelize);
         const DiscountsProducts = await initializeDiscountsProducts(sequelize);
-        const Electronics = await initializeElectronics(sequelize);
         const Follows = await initializeFollows(sequelize);
-        const Furnitures = await initializeFurniture(sequelize);
         const Inventories = await initializeInventories(sequelize);
         const Notifications = await initializeNotifications(sequelize);
         const Order = await initializeOrder(sequelize);
@@ -49,13 +51,23 @@ const initializeModels = async () => {
         const Payment = await initializePayment(sequelize);
         const PaymentMethod = await initializePaymentMethod(sequelize);
         const Products = await initializeProducts(sequelize);
-        const ProductVariation = await initializeProductVariation(sequelize);
         const Resource = await initializeResource(sequelize);
         const RoleGrants = await initializeRoleGrant(sequelize);
         const Roles = await initializeRole(sequelize);
         const Shop = await initializeShop(sequelize);
         const User = await initializeUser(sequelize);
         const WishLists = await initializeWishLists(sequelize);
+        const Banner = await initializeBanner(sequelize);
+        const Partner = await inittialPartner(sequelize)
+        const Address = await inittialAddress(sequelize)
+        const Sku = await initializeSku(sequelize)
+        const SkuAttr = await initializeSkuAttr(sequelize)
+        const SkuSpecs = await initializeSkuSpecs(sequelize)
+        const SpuToSku = await initializeSpuToSku(sequelize)
+        const Campaign = await initializeCampaign(sequelize)
+        const CampaignCategory = await initializeCampaignCategory(sequelize)
+        const CampaignShop = await initializeCampaignShop(sequelize)
+
 
         // Quan hệ User - Cart (1-1)
         User.hasOne(Cart, { foreignKey: { name: "UserId" }, as: "cart" });
@@ -80,10 +92,6 @@ const initializeModels = async () => {
             foreignKey: { name: "ParentId", onDelete: "CASCADE" } // Đặt trong foreignKey
         });
 
-        // Quan hệ Products - Clothing (1-1)
-        Products.hasOne(Clothing, { foreignKey: { name: "ProductId", allowNull: false }, as: "clothing" });
-        Clothing.belongsTo(Products, { foreignKey: { name: "ProductId", allowNull: false }, as: "product" });
-
         // Quan hệ User - Comment (1-n)
         User.hasMany(Comment, { foreignKey: { name: "UserId", allowNull: false }, as: "comments" });
         Comment.belongsTo(User, { foreignKey: { name: "UserId", allowNull: false }, as: "user" });
@@ -104,10 +112,6 @@ const initializeModels = async () => {
         Products.hasMany(DiscountsProducts, { foreignKey: { name: "ProductId" }, as: "discountProducts" });
         DiscountsProducts.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
 
-        // Quan hệ Products - Electronics (1-1)
-        Products.hasOne(Electronics, { foreignKey: { name: "ProductId" }, as: "electronics" });
-        Electronics.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
-
         // Quan hệ User - Follows (1-n)
         User.hasMany(Follows, { foreignKey: { name: "UserId" }, as: "follows" });
         Follows.belongsTo(User, { foreignKey: { name: "UserId" }, as: "user" });
@@ -115,10 +119,6 @@ const initializeModels = async () => {
         // Quan hệ Shop - Follows (1-n)
         Shop.hasMany(Follows, { foreignKey: { name: "ShopId" }, as: "follows" });
         Follows.belongsTo(Shop, { foreignKey: { name: "ShopId" }, as: "shop" });
-
-        // Quan hệ Products - Furnitures (1-1)
-        Products.hasOne(Furnitures, { foreignKey: { name: "ProductId" }, as: "furnitures" });
-        Furnitures.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
 
         // Quan hệ Products - Inventories (1-n)
         Products.hasMany(Inventories, { foreignKey: { name: "ProductId" }, as: "inventories" });
@@ -173,10 +173,6 @@ const initializeModels = async () => {
         Products.belongsTo(Shop, { foreignKey: { name: "ShopId" }, as: "shop" });
 
         // Quan hệ Products - ProductVariation (1-n)
-        Products.hasMany(ProductVariation, { foreignKey: { name: "ProductId" }, as: "variations" });
-        ProductVariation.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
-
-        // Quan hệ Roles - RoleGrants (1-n)
         Roles.hasMany(RoleGrants, { foreignKey: { name: "RoleId" }, as: "roleGrants" });
         RoleGrants.belongsTo(Roles, { foreignKey: { name: "RoleId" }, as: "role" });
 
@@ -200,14 +196,47 @@ const initializeModels = async () => {
         Products.hasMany(WishLists, { foreignKey: { name: "ProductId" }, as: "wishlists" });
         WishLists.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
 
-        // Đồng bộ database
-        await sequelize.sync({ force: false }); // force: false để giữ dữ liệu hiện có
+        Shop.hasMany(Banner,{foreignKey : {name :"ShopId"}, as :'banners'})
+        Banner.belongsTo(Shop,{foreignKey:{name:'ShopId'}, as:'shops'})
+        
+        Partner.hasMany(Banner,{foreignKey:{name:"PartnerId"}, as:'banners'})
+        Banner.belongsTo(Partner,{foreignKey:{name:"PartnerId"}, as:'partners'})
+        
+        User.hasMany(Address,{foreignKey:'UserId', as:"address"})
+        Address.belongsTo(User,{foreignKey:"UserId",as:"users"})
+        
+        Discounts.hasMany(Banner,{foreignKey:{name:"DiscountId"}, as:'banners'})
+        Banner.belongsTo(Discounts,{foreignKey:{name:"DiscountId"}, as:'discount'})
+        
+        Products.hasMany(SpuToSku,{foreignKey:'spu_no',sourceKey:'id', foreignKeyConstraints: false})
+        SpuToSku.belongsTo(Products,{foreignKey:'spu_no',targetKey:'id', foreignKeyConstraints: false})
+
+        Sku.hasMany(SpuToSku,{foreignKey:'sku_no',sourceKey:'sku_no', foreignKeyConstraints: false})
+        SpuToSku.belongsTo(Sku,{foreignKey:'sku_no',targetKey:'sku_no', foreignKeyConstraints: false})
+        
+        Sku.hasOne(SkuAttr,{foreignKey:'sku_no',sourceKey:'sku_no', foreignKeyConstraints: false})
+        SkuAttr.belongsTo(Sku,{foreignKey:'sku_no',targetKey:'sku_no', foreignKeyConstraints: false})
+
+        Products.hasOne(SkuSpecs,{foreignKey:'id',sourceKey:'id', foreignKeyConstraints: false})
+        SkuSpecs.belongsTo(Products,{foreignKey:'id',targetKey:'id', foreignKeyConstraints: false})
+        
+        Campaign.hasMany(Discounts,{foreignKey:{name:'CampaignId'}, as:'discount'})
+        Discounts.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaign'})
+
+
+        Campaign.hasMany(CampaignCategory,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
+        CampaignCategory.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
+
+        Category.hasMany(CampaignCategory,{foreignKey:{name:'CategoryId'}, as:'category'})
+        CampaignCategory.belongsTo(Category,{foreignKey:{name:'CategoryId'}, as:'category'})
+
+        await sequelize.sync();
 
         return {
-            Cart, CartDetails, Category, Clothing, Comment, Discounts, DiscountsProducts,
-            Electronics, Follows, Furnitures, Inventories, Notifications, Order, OrderDetails,
-            Otp, Payment, PaymentMethod, Products, ProductVariation, Resource, RoleGrants,
-            Roles, Shop, User, WishLists
+            Cart, CartDetails, Category, Comment, Discounts, DiscountsProducts,
+            Follows, Inventories, Notifications, Order, OrderDetails,
+            Otp, Payment, PaymentMethod, Products,Resource, RoleGrants,
+            Roles, Shop, User, WishLists, Partner, Banner, Address,Sku,SpuToSku,SkuAttr,SkuSpecs,Campaign,CampaignCategory,CampaignShop,
         };
     } catch (error) {
         console.error("Error initializing models:", error);
@@ -215,4 +244,4 @@ const initializeModels = async () => {
     }
 };
 
-module.exports = initializeModels();
+module.exports = initializeModels;

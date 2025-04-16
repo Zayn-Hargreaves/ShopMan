@@ -8,15 +8,15 @@ const initializeNotifications = async(sequelize)=>{
             primaryKey: true,
             autoIncrement: true
         },
-        noti_type:{
+        type:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        noti_option:{
+        option:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        noti_content:{
+        content:{
             type: DataTypes.STRING,
             allowNull: false
         },

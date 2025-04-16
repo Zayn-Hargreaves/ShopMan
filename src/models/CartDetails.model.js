@@ -5,18 +5,10 @@ const initializeCartDetails = async(sequelize)=>{
     CartDetails.init({
         CartId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Carts",
-            //     key:"id"
-            // },
             allowNull:false
         },
         ProductId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Products",
-            //     key:"id"
-            // },
             allowNull:false
         },
         quantity:{

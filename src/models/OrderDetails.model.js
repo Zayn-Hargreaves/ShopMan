@@ -1,43 +1,35 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const { DataTypes, Model } = require("@sequelize/core");
 
 
-class OrderDetails extends Model {}
-const initializeOrderDetails = async(sequelize)=>{
+class OrderDetails extends Model { }
+const initializeOrderDetails = async (sequelize) => {
 
     OrderDetails.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        OrderId:{
-            type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Orders",
-            //     key:"id"
-            // }
+        OrderId: {
+            type: DataTypes.INTEGER,
         },
-        ProductId:{  
-            type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Products",
-            //     key:"id"
-            // }
+        ProductId: {
+            type: DataTypes.INTEGER,
         },
-        quantity:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        price:{
-            type:DataTypes.DECIMAL,
-            allowNull:false
+        price_at_time: {
+            type: DataTypes.DECIMAL,
+            allowNull: false
         }
-    },{
-        sequelize, 
-        tableName:"OrdersDetails",
-        modelName:"OrdersDetails",
-        freezeTableName:true,
-        timestamps:true
+    }, {
+        sequelize,
+        tableName: "OrdersDetails",
+        modelName: "OrdersDetails",
+        freezeTableName: true,
+        timestamps: true
     })
     return OrderDetails
 }

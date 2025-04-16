@@ -10,17 +10,9 @@ const initializeDiscountsProducts = async(sequelize)=>{
         },
         DiscountId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Discounts",
-            //     key:"id"
-            // }
         },
         ProductId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Products",
-            //     key:"id"
-            // }
         }
     },{
         sequelize,

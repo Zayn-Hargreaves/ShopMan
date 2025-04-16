@@ -9,14 +9,14 @@ const initializePaymentMethod = async(sequelize)=>{
             primaryKey:true,
             autoIncrement:true
         },
-        paymentMethod_name:{
+        name:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        paymentMethod_desc:{
+        desc:{
             type:DataTypes.STRING,
         },
-        paymentMethod_status:{
+        status:{
             type:DataTypes.STRING,
             allowNull:false,
             defaultValue:"active"

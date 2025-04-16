@@ -10,10 +10,6 @@ const initializeCart= async(sequelize)=>{
         },
         UserId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // }
         },
         cart_total:{
             type:DataTypes.DECIMAL,

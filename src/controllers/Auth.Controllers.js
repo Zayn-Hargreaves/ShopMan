@@ -1,0 +1,70 @@
+const {CreatedResponse, SuccessResponse, OkResponse} = require("../cores/success.response")
+const AuthService = require("../services/Auth.Service")
+class AuthController{
+    login = async (req, res, next) => {
+        new OkResponse({
+            message:"login success",
+            metadata: await AuthService.login(req.body)
+        }).send(res)
+    }
+    loginWithGoogle = async(req, res, next)=>{
+        new OkResponse({
+            message:'login with Google success',
+            metadata: await AuthService.loginWithGoogle(req.body)
+        }).send(res)
+    }
+    logout = async(req,res,next)=>{
+        new OkResponse({
+            message:"logout sucsess",
+            metadata:await AuthService.logout(req.header)
+        }).send(res)
+    }
+    handleRefreshToken = async(req, res, next)=>{
+        new OkResponse({
+            message:"refresh token sucess",
+            metadata: await AuthService.handleRefreshToken({
+                refreshToken:req.header,
+            })
+        }).send(res)
+    }
+    signup = async(req,res, next)=>{
+        new OkResponse({
+            metadata: await AuthService.signUp(req.body)
+        }).send(res)
+    }
+    signUpWithGoogle = async(req, res,next)=>{
+        new OkResponse({
+            message:'signUp with Google successfully',
+            metadata: await AuthService.signUpWithGoogle(req.body)
+        }).send(res)
+    }
+    forgotPassword = async(req,res, next)=>{
+        const email= req.body.email
+        new OkResponse({
+            message:"get Otp code successfully",
+            metadata: await AuthService.forgotPassword(email)
+        }).send(res)
+    }
+    linkGoogle = async(req, res, next)=>{
+        new OkResponse({
+            message:"link to google successfully",
+            metadata: await AuthService.linkGoogle(req.body)
+        }).send(res)
+    }
+    checkOtp = async(req, res, next)=>{
+        const opt = req.body.opt
+        new OkResponse({
+            message:"Otp code is correct",
+            metadata:await AuthService.checkOtp(opt)
+        }).send(res)
+    }
+    changePassword = async(req,res, next)=>{
+        const {resetToken, newPassword,confirmedPassword} = req.body
+        new OkResponse({
+            message:"Change Password successfull",
+            metadata:await AuthService.changePassword({resetToken,newPassword, confirmedPassword})
+        }).send(res)
+    }  
+}
+
+module.exports = new AuthController()

@@ -1,4 +1,5 @@
 const {DataTypes, Model} = require("@sequelize/core");
+const RedisService = require("../services/Redis.Service");
 
 class Discounts extends Model {}
 const initializeDiscounts = async(sequelize)=>{
@@ -8,64 +9,64 @@ const initializeDiscounts = async(sequelize)=>{
             primaryKey: true,
             autoIncrement: true
         },
-        discount_name:{
+        name:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        discount_desc:{
+        desc:{
             type: DataTypes.STRING,
         },
-        discount_value:{
+        value:{
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        discount_type:{
+        type:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        discount_code:{
+        code:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        discount_StartDate:{
+        StartDate:{
             type: DataTypes.DATE,
             allowNull: false
         },
-        discount_EndDate:{
+        EndDate:{
             type: DataTypes.DATE,
             allowNull: false
         },
-        discount_MaxUses:{
+        MaxUses:{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        discount_UserCounts:{
+        UserCounts:{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        discount_MinValueOrders:{
+        MinValueOrders:{
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        discount_status:{
+        status:{
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue:"active"
         },
         ShopId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Shops",
-            //     key:"id"
-            // },
             allowNull: false
+        },
+        CampaignId:{
+            type: DataTypes.INTEGER,
+            allowNull: true,
         },
     },{
         sequelize,
         modelName:"Discounts",
         tableName:"Discounts",
         freezeTableName:true,
-        timestamps:true
+        timestamps:true,
     })
     return Discounts
 }

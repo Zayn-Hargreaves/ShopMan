@@ -1,2 +1,4 @@
-node_modules
 .env
+postgres-connector.json
+elasticsearch-sink.json
+node_modules/

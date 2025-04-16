@@ -21,19 +21,18 @@ const initializeComments = async(sequelize)=>{
         //         key:"id"
         //     }
         },
-        comment_rating:{
+        rating:{
             type:DataTypes.INTEGER,
-            validate: { min: 1, max: 5 } // 1-5 sao
         },
-        comment_content:{
+        content:{
             type:DataTypes.STRING,
             allowNull:false
         },
-        comment_left:{
+        left:{
             type:DataTypes.INTEGER,
             allowNull:false
         },
-        comment_right:{
+        right:{
             type:DataTypes.INTEGER,
             allowNull:false
         },

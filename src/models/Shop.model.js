@@ -13,16 +13,16 @@ const initializeShop = async(sequelize)=>{
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        shop_name:{
+        name:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        shop_balance:{
+        balance:{
             type:DataTypes.DECIMAL,
             allowNull:false,
             defaultValue:0
         },
-        shop_status:{
+        status:{
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue: "pending"

@@ -1,21 +1,27 @@
-const initializeModels = require("../db/dbs/associations");
-const { getUnselectData } = require("../src/utils");
-
+const { NotFoundError } = require('../cores/error.response')
+const addressRepo = require('../models/repositories/address.repo')
+const UserRepository = require('../models/repositories/user.repo')
 class UserService{
-    static async findByEmail(email){
-        const {User} = await initializeModels()
-        return await User.findOne({
-            where:{
-                email
-            },
-            attributes:getUnselectData(['password'])
-        })
+    static async getUserProfile(UserId){
+        const user = await UserRepository.getUserProfile(UserId)
+        if(!user){
+            throw new NotFoundError("User not found")
+        }
     }
-    static async findById(id){
-        const {User} = await initializeModels()
-        return await User.findByPk(id,{
-            attributes:getUnselectData(['password'])
-        })
+    static async updateUserProfile(UserId,{User,Address}){
+        const user = await UserRepository.findUserById(UserId)
+        if(!user){
+            throw new NotFoundError("User not found")
+        }
+        await UserRepository.updateUserProfile(UserId,{...User})
+        const existingAddress = await addressRepo.findAddressByUserId({UserId})
+        if(!existingAddress){
+            await addressRepo.createAddress({UserId,...Address})
+        }else{
+            await addressRepo.updateUserAddress(UserId,{...Address})
+        }
+        const updatedUser = await this.getUserProfile(UserId)
+        return updatedUser
     }
 }
 

@@ -8,21 +8,21 @@ const initializeCategory = async(sequelize)=>{
             primaryKey: true,
             autoIncrement: true
         },
-        category_name:{
+        name:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        category_desc:{
+        desc:{
             type: DataTypes.STRING,
         },
-        category_status:{
+        status:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        category_thumb:{
+        thumb:{
             type:DataTypes.STRING
         },
-        category_slug:{
+        slug:{
             type: DataTypes.STRING,
             unique: true
         },

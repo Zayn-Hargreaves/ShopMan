@@ -8,30 +8,34 @@ const initializeUser = async(sequelize)=>{
             primaryKey: true,
             autoIncrement: true
         },
-        user_name:{
+        name:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        user_email:{
+        email:{
             type: DataTypes.STRING,
             allowNull: false
         },
-        user_password:{
+        password:{
             type: DataTypes.STRING,
         },
-        user_phone:{
+        google_id:{
             type: DataTypes.STRING,
         },
-        user_avatar:{
+        phone:{
             type: DataTypes.STRING,
         },
-        user_status:{
+        avatar:{
+            type: DataTypes.STRING,
+        },
+        balance:{
+            type: DataTypes.DECIMAL(10,2),
+            defaultValue: 0
+        },
+        status:{
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue:"active"
-        },
-        user_address:{
-            type: DataTypes.STRING,
         },
     }, {
         sequelize,

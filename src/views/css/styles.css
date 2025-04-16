@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.email-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.email-header {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.logo {
+    max-width: 150px;
+}
+
+.email-body {
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+.otp-code {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e60023;
+    background: #ffe6e6;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e60023;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.email-footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+
+
+
+.email-header img {
+    max-width: 150px;
+}
+
+
+.product-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.product-img {
+    max-width: 120px;
+    border-radius: 8px;
+}
+
+.product-info {
+    margin-left: 15px;
+    text-align: left;
+}
+
+
+
+.invoice-details {
+    text-align: left;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-table th,
+.order-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.total-amount {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+}
