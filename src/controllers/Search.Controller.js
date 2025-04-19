@@ -32,14 +32,14 @@ class SearchController {
     }
 
     getProductByCategory = async (req, res, next) => {
-        const { categoryId } = req.params;
+        const { slug } = req.params;
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by category successfully",
             metadata: await ElasticSearchService.searchProducts({
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                category: Number(categoryId),
+                categorySlug: slug,
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,
@@ -49,14 +49,14 @@ class SearchController {
     }
 
     getProductByShop = async (req, res, next) => {
-        const { shopId } = req.params;
+        const { slug} = req.params;
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by shop successfully",
             metadata: await ElasticSearchService.searchProducts({
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                shop: Number(shopId),
+                shopSlug: slug,
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,

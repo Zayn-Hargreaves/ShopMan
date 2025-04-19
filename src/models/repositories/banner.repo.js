@@ -4,13 +4,13 @@ class BannerRepository{
     constructor(models){
         this.Banner = models.Banner
     }
-    async getListBanner(time){
+    async getListBanner(){
         return await this.Banner.findAll({
             start_time:{
-                [Op.lte]:time,
+                [Op.lte]:new Date(),
             },
             end_time:{
-                [Op.gte]:time
+                [Op.gte]:new Date
             }
         })
     } 

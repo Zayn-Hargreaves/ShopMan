@@ -1,31 +1,28 @@
+const { NotFoundError } = require("../cores/error.response");
 const analysticsRepository = require("../db/edb/repositories/analysticsRepository");
 const ProductRepositoryEdb = require("../db/edb/repositories/productRepository");
 const userEventRepository = require("../db/edb/repositories/userEventRepository");
-
+const ShopRepo = require("../models/repositories/shop.repo.js")
+const CategoryRepo = require("../models/repositories/category.repo.js")
 class ElasticSearchService {
     async searchProducts({
         query,
         minPrice,
         maxPrice,
-        CategoryId,
-        ShopId,
+        CategorySlug,
+        ShopSlug,
         sortBy = null,
         lastSortValues = null,
         pageSize = 10,
         isAndroid = false
     }) {
-        // Validate tham số
+        const shop = await ShopRepo.findShopBySlug(CategorySlug)
+        const category = await CategoryRepo.findCategoryBySlug(ShopSlug)
         if (minPrice !== undefined && (isNaN(minPrice) || minPrice < 0)) {
             throw new Error("minPrice must be a non-negative number");
         }
         if (maxPrice !== undefined && (isNaN(maxPrice) || maxPrice < 0)) {
             throw new Error("maxPrice must be a non-negative number");
-        }
-        if (CategoryId !== undefined && (isNaN(CategoryId) || CategoryId <= 0)) {
-            throw new Error("category must be a positive number");
-        }
-        if (shop !== undefined && (isNaN(shop) || shop <= 0)) {
-            throw new Error("shop must be a positive number");
         }
         if (pageSize !== undefined && (isNaN(pageSize) || pageSize <= 0)) {
             throw new Error("pageSize must be a positive number");
@@ -40,8 +37,8 @@ class ElasticSearchService {
         const filters = {
             minPrice: minPrice !== undefined ? Number(minPrice) : undefined,
             maxPrice: maxPrice !== undefined ? Number(maxPrice) : undefined,
-            category: CategoryId !== undefined ? Number(CategoryId) : undefined,
-            shop: ShopId !== undefined ? Number(ShopId) : undefined
+            category: category.id !== undefined ? Number(category.id) : undefined,
+            shop: shop.id !== undefined ? Number(category.id) : undefined
         };
         const result = await ProductRepositoryEdb.searchProducts({
             query,

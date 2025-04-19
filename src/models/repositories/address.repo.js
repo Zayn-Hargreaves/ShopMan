@@ -12,7 +12,6 @@ class AddressRepository {
             },
             raw:true
         })
-        return await this.Address.fin
     }
     async getListAddress(UserId) {
         return await this.Address.findAll({

@@ -1,4 +1,5 @@
 const {DataTypes, Model} = require("@sequelize/core")
+const slugify = require("slugify")
 class Campaign extends Model{}
 const initializeCampaign = async(sequelize)=>{
     Campaign.init({
@@ -29,12 +30,19 @@ const initializeCampaign = async(sequelize)=>{
             validate: {
                 isIn: [['active', 'inactive']]
             }
+        },
+        slug:{
+            type:DataTypes.STRING,
+            allowNull:false
         }
     },{
         sequelize,
         tableName:"Campaigns",
         modelName:"Campaigns",
         timestamps:true
+    })
+    Campaign.addHook("beforeCreate",(campain)=>{
+        campain.slug = campain.title.toLowerCase().replace(/ /g, "-");
     })
     return Campaign
 }

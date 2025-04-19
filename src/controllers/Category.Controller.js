@@ -1,5 +1,5 @@
 const { OkResponse } = require("../cores/success.response");
-const categoryService = require("../services/Category.Service");
+const categoryService = require("../services/Category.service");
 class CategoryController{
     async getAllCategoriesNoParent(req,res, next){
         new OkResponse({

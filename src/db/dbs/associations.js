@@ -223,7 +223,6 @@ const initializeModels = async () => {
         Campaign.hasMany(Discounts,{foreignKey:{name:'CampaignId'}, as:'discount'})
         Discounts.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaign'})
 
-
         Campaign.hasMany(CampaignCategory,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
         CampaignCategory.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
 

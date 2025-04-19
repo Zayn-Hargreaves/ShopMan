@@ -28,7 +28,9 @@ const options = {
     "./src/routes/client/auth/index.js",
     "./src/routes/client/index.js",
     "./src/routes/client/user/index.js",
-    "./src/routes/client/product/index.js"
+    "./src/routes/client/product/index.js",
+    "./src/routes/client/category/index.js",
+
   ]
 };
 

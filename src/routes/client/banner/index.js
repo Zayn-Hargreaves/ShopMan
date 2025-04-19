@@ -1,9 +1,8 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
-const bannerController = require("../../../controllers/Banner.Controller");
+const bannerController = require("../../../controllers/Banner.Controller.js");
 
-router.get("/", asyncHandler(bannerController.getAllBanners));
-router.get("/detail/:slug", asyncHandler(bannerController.getBannerBySlug));
+router.get("/", asyncHandler(bannerController.getAllBanner));
 
 
 module.exports = router;

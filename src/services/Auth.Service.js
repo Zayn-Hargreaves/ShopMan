@@ -27,7 +27,7 @@ class AuthService {
             password: passwordHash,
             status: "active"
         });
-        const cart = await CartRepository.createCart({ UserId: newUser.id });
+        const cart = await CartRepository.getOrCreateCart(newUser.id );
         const userId = newUser.id;
         const jti = uuidv4();
         const tokens = await createTokenPair({ userId, jti });
@@ -99,7 +99,7 @@ class AuthService {
                 name,
                 status: "active"
             });
-            cart = await CartRepository.createCart({ UserId: user.id });
+            cart = await CartRepository.getOrCreateCart(user.id );
         } else if (!user.googleId) {
             cart = await CartRepository.getCartByUserId({ UserId: user.id });
             user.googleId = googleId;

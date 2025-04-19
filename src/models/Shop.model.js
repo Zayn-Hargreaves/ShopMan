@@ -2,7 +2,6 @@ const {DataTypes, Model} = require("@sequelize/core");
 
 class Shop extends Model {}
 const initializeShop = async(sequelize)=>{
-
     Shop.init({
         id:{
             type: DataTypes.INTEGER,
@@ -29,13 +28,13 @@ const initializeShop = async(sequelize)=>{
         },
         RolesId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Roles",
-            //     key:"id"
-            // }
         },
         shop_desc:{
             type: DataTypes.STRING,
+        },
+        slug:{
+            type:DataTypes.STRING,
+            allowNull:false
         }
     },{
         sequelize,
@@ -44,6 +43,9 @@ const initializeShop = async(sequelize)=>{
         freezeTableName: true,
         paranoid: true,
         timestamps: true,
+    })
+    Shop.addHook("beforeCreate",(shop)=>{
+        shop.slug = shop.name.toLowerCase().replace(/ /g, "-")
     })
     return Shop
 }

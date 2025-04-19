@@ -1,4 +1,6 @@
 
+const { get } = require("lodash");
+const { BadGatewayError } = require("../cores/error.response");
 const { getRedis } = require("../db/rdb");
 
 class RedisService {
@@ -23,12 +25,12 @@ class RedisService {
 
   static async addMultiElementToRedisBloomFilter(filterName, Elements = []) {
     const redis = await getRedis();
-    return redis.call("BF.MADD", filterName, ...Elements); // Sửa cú pháp cho ioredis
+    return redis.call("BF.MADD", filterName, ...Elements);
   }
 
   static async checkMultiElementExistInRedisBloomFilter(filterName, Elements = []) {
     const redis = await getRedis();
-    return redis.call("BF.MEXISTS", filterName, ...Elements); // Sửa cú pháp cho ioredis
+    return redis.call("BF.MEXISTS", filterName, ...Elements);
   }
 
   static async setStringEx(key, value, expireTime = 60 * 60 * 24) {
@@ -36,23 +38,121 @@ class RedisService {
     return redis.set(key, value, "EX", expireTime);
   }
 
-  static async subscribe(channel) {
-    const redis = await getRedis();
-    console.log(redis)
+  static async upsertItemIntoZset(key, member, score, ttl) {
+    const redis = await getRedis()
     try {
-      await redis.subscribe(channel);
-      console.log(`Subscribed to channel: ${channel}`);
+      await redis.zincrby(key, score, member)
+
+      if (ttl && Number.isInteger(ttl) && ttl > 0) {
+        await redis.expire(key, ttl)
+      }
+      return true
     } catch (error) {
-      console.error(`Error subscribing to channel ${channel}:`, error);
-      throw error;
+      throw new BadGatewayError(`Error upserting item into ZSET ${key}`)
+    }
+  }
+  static async getZsetRange(key, start, limit = -1, withScores = true) {
+    const redis = await getRedis()
+    try {
+      return await redis.zrevrange(key, start, end, withScores ? "WITHSCORES" : '"')
+    } catch (error) {
+      throw new BadGatewayError(`Error getting ZSET range ${key}:`,)
+    }
+  }
+  static async getZsetScore(key, member) {
+    const redis = await getRedis()
+    try {
+      return await redis.zscore(key, member)
+    } catch (error) {
+      throw new BadGatewayError(`Error getting score for ${member} in ZSET ${key}:`, error)
+    }
+  }
+  static async removeZsetItem(key, member) {
+    const redis = await getRedis()
+    try {
+      return await redis.zrem(key, member)
+    } catch (error) {
+      throw new BadGatewayError(`Error removing ${member} from ZSET ${key}:`, error)
+    }
+  }
+  static async getZsetCount(zsetkey) {
+    const redis = await getRedis()
+    try {
+      return await redis.zcard(zsetkey)
+    } catch (error) {
+      throw new BadGatewayError(`Error counting elements in ZSET ${zsetkey}:`, error)
+    }
+  }
+  static async cacheData(key, value, ttl = 3600) {
+    const redis = await getRedis()
+    try {
+      const serializedValue = JSON.stringify(value)
+      return await redis.set(key, serializedValue, "EX", ttl)
+    } catch (error) {
+      throw new BadGatewayError(`Error caching data for key ${key}:`, error)
+    }
+  }
+  static async getCachedData(key) {
+    const redis = getRedis()
+    try {
+      const data = await redis.get(key)
+      return data ? JSON.parse(data) : null
+    } catch (error) {
+      throw new BadGatewayError(`Error getting cached data for key ${key}:`, error)
+    }
+  }
+  static async setTrendingScore(zsetkey, productId, score, ttl = null) {
+    const redis = await getRedis()
+    try {
+      await redis.zadd(zsetkey, score, `product:${productId}`)
+      if (ttl && Number.isInteger(tll) && ttl > 0) {
+        const exist = await redis.exist(zsetkey)
+        if (!exist) {
+          await redis.expire(zsetkey, ttl)
+        }
+      }
+      return true
+    } catch (error) {
+      throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:`, error)
+    }
+  }
+  static async acquireLock({ productID, cartID, quantity, timeout = 10 }) {
+    const redis = await getRedis();
+    const lockKey = `lock:product:${productID}:cart:${cartID}`;
+    const token = uuidv4(); // Tạo token duy nhất cho khóa
+
+    try {
+      // Thử tạo khóa với NX (chỉ tạo nếu chưa tồn tại) và EX (hết hạn sau timeout giây)
+      const result = await redis.set(lockKey, token, "NX", "EX", timeout);
+
+      if (result === "OK") {
+        // Khóa được tạo thành công, trả về token để sử dụng khi giải phóng
+        return { key: lockKey, token };
+      } else {
+        // Không tạo được khóa (đã có client khác giữ khóa)
+        return null;
+      }
+    } catch (error) {
+      throw new BadGatewayError(`Error acquiring lock for product ${productID}: ${error.message}`);
     }
   }
 
-  static async onMessage(handler) {
+  static async releaseLock({ key, token }) {
     const redis = await getRedis();
-    redis.on("message", (channel, message) => {
-      handler(channel, message);
-    });
+
+    try {
+      // Kiểm tra token trước khi xóa khóa (đảm bảo chỉ xóa khóa của client đã tạo)
+      const currentToken = await redis.get(key);
+      if (currentToken !== token) {
+        return false; // Không phải khóa của client này, không xóa
+      }
+
+      // Xóa khóa
+      const result = await redis.del(key);
+      return result === 1; // Trả về true nếu xóa thành công
+    } catch (error) {
+      throw new BadGatewayError(`Error releasing lock for key ${key}: ${error.message}`);
+    }
   }
 }
 
