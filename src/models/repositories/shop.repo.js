@@ -33,7 +33,4 @@ class ShopRepository{
     }
 }
 
-module.exports = async()=>{
-    const models = await initializeModels()
-    return new ShopRepository(models)
-}
+module.exports=ShopRepository

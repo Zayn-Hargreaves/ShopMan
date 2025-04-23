@@ -11,7 +11,6 @@ class UserRepository {
     async findByEmail(email) {
         return await this.User.findOne({
             where: { email },
-            attributes: getUnselectData(['password']),
             raw:true
         });
     }
@@ -56,8 +55,10 @@ class UserRepository {
         });
     }
 
-    async changePassword({ id, password }) {
-        return await this.User.update({ user_password: password }, { where: { id } });
+    async updatePassword(id, password ) {
+        console.log(id)
+        console.log(password)
+        return await this.User.update({ password: password }, { where: { id } });
     }
 
     async createUser({name, email, password = null, googleId= null , status = 'active' }) {
@@ -76,7 +77,4 @@ class UserRepository {
     }
 }
 
-module.exports = async () => {
-    const models = await initializeModels();
-    return new UserRepository(models);
-};
+module.exports =UserRepository

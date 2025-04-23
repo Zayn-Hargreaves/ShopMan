@@ -10,22 +10,27 @@ const HEADER = {
 }   
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
+
+const accessSecretKey1 = process.env.ACCESS_SECRET_KEY;
+const refreshSecretKey1 = process.env.REFRESH_SECRET_KEY;
+let access 
+let refresh 
 const createAccessToken = (payload) => {
-    return jwt.sign(payload, accessSecretKey, {
+    return jwt.sign(payload, Buffer.from(accessSecretKey,'utf-8'), {
         algorithm: 'HS256',
         expiresIn: '2h',
     });
 }
 const createRefreshToken = (payload) => {
-    return jwt.sign(payload, refreshSecretKey, {
+    return jwt.sign(payload, Buffer.from(refreshSecretKey,'utf-8'), {
         algorithm: 'HS256',
         expiresIn: '7d',
     });
 }
 const createResetToken = (payload)=>{
-    return jwt.sign(payload, accessSecretKey, {
+    return jwt.sign(payload, Buffer.from(accessSecretKey,'utf-8'), {
         algorithm: 'HS256',
-        expiresIn: '15p',
+        expiresIn: '15m',
     });
 }
 const createTokenPair = async (payload) => {
@@ -33,7 +38,8 @@ const createTokenPair = async (payload) => {
         
         const accessToken = createAccessToken(payload);
         const refreshToken = createRefreshToken(payload);
-        jwt.verify(accessToken, accessSecretKey, (err, decode) => {
+        
+        jwt.verify(accessToken,Buffer.from(accessSecretKey,'utf-8'), (err, decode) => {
             if (err) {
                 console.error('error verify::', err);
             } else {
@@ -45,8 +51,9 @@ const createTokenPair = async (payload) => {
         console.error(error);
     }
 }
-const verifyJWT = async (token, keySecret) => {
-    return jwt.verify(token, keySecret);
+const verifyJWT = (token, keySecret) => {
+    const decoded = jwt.verify(token, Buffer.from(keySecret, 'utf-8'));
+    return decoded
 }
 
 const authentication = asyncHandler(async(req, res, next) => {
@@ -55,25 +62,27 @@ const authentication = asyncHandler(async(req, res, next) => {
     if(authorization){
         accessToken= authorization.split(' ')[1];
     }
+
     const refreshtoken = req.headers[HEADER.REFRESHTOKEN];
     if(!accessToken && !refreshtoken){
         throw new UnauthorizedError('invalid request');
     }
     if(refreshtoken){
         try {
-            const {userId, roleId,jti} = await verifyJWT(refreshtoken, refreshSecretKey);
+            const {userId,jti} = verifyJWT(refreshtoken, refreshSecretKey);
             const exists = await RedisService.checkElementExistInRedisBloomFilter("blacklist_token",jti)
-            if(!exists) throw new UnauthorizedError("invalid request")
+            if(exists) throw new UnauthorizedError("invalid request")
             req.userId = userId
             req.refreshToken = refreshtoken;
             return next();
         } catch (error) {
-            throw new UnauthorizedError('invalid request');
+            console.log(error)
+            throw new UnauthorizedError('invalid request::',error);
         }
     }
     if(accessToken){
         try {
-            const {userId, roleId,jti} = await verifyJWT(accessToken, accessSecretKey);
+            const {userId,jti} = verifyJWT(accessToken, accessSecretKey);
             req.userId = userId
             req.accessToken = accessToken;
             if(!userId){
@@ -81,7 +90,7 @@ const authentication = asyncHandler(async(req, res, next) => {
             }
             return next();
         } catch (error) {
-            throw new UnauthorizedError('invalid request');
+            throw new UnauthorizedError('invalid request::',error);
         }
     }
 })

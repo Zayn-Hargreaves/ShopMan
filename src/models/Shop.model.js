@@ -29,8 +29,19 @@ const initializeShop = async(sequelize)=>{
         RolesId:{
             type: DataTypes.INTEGER,
         },
-        shop_desc:{
+        desc:{
             type: DataTypes.STRING,
+        },
+        logo:{
+            type:DataTypes.STRING
+        },
+        rating: {
+            type: DataTypes.DECIMAL(2, 1),
+            defaultValue: 4.5,
+            validate: {
+                min: 1,
+                max: 5
+            }
         },
         slug:{
             type:DataTypes.STRING,

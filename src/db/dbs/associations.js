@@ -56,7 +56,7 @@ const initializeModels = async () => {
         const Roles = await initializeRole(sequelize);
         const Shop = await initializeShop(sequelize);
         const User = await initializeUser(sequelize);
-        const WishLists = await initializeWishLists(sequelize);
+        const Wishlists = await initializeWishLists(sequelize);
         const Banner = await initializeBanner(sequelize);
         const Partner = await inittialPartner(sequelize)
         const Address = await inittialAddress(sequelize)
@@ -189,12 +189,12 @@ const initializeModels = async () => {
         Shop.belongsTo(Roles, { foreignKey: { name: "RoleId" }, as: "role" });
 
         // Quan hệ User - WishLists (1-n)
-        User.hasMany(WishLists, { foreignKey: { name: "UserId" }, as: "wishlists" });
-        WishLists.belongsTo(User, { foreignKey: { name: "UserId" }, as: "user" });
+        User.hasMany(Wishlists, { foreignKey: { name: "UserId" }, as: "wishlists" });
+        Wishlists.belongsTo(User, { foreignKey: { name: "UserId" }, as: "user" });
 
         // Quan hệ Products - WishLists (1-n)
-        Products.hasMany(WishLists, { foreignKey: { name: "ProductId" }, as: "wishlists" });
-        WishLists.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
+        Products.hasMany(Wishlists, { foreignKey: { name: "ProductId" }, as: "wishlists" });
+        Wishlists.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
 
         Shop.hasMany(Banner,{foreignKey : {name :"ShopId"}, as :'banners'})
         Banner.belongsTo(Shop,{foreignKey:{name:'ShopId'}, as:'shops'})
@@ -235,7 +235,7 @@ const initializeModels = async () => {
             Cart, CartDetails, Category, Comment, Discounts, DiscountsProducts,
             Follows, Inventories, Notifications, Order, OrderDetails,
             Otp, Payment, PaymentMethod, Products,Resource, RoleGrants,
-            Roles, Shop, User, WishLists, Partner, Banner, Address,Sku,SpuToSku,SkuAttr,SkuSpecs,Campaign,CampaignCategory,CampaignShop,
+            Roles, Shop, User, Wishlists, Partner, Banner, Address,Sku,SpuToSku,SkuAttr,SkuSpecs,Campaign,CampaignCategory,CampaignShop,
         };
     } catch (error) {
         console.error("Error initializing models:", error);

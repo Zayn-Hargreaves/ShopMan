@@ -45,7 +45,4 @@ class AddressRepository {
     }
 }
 
-module.exports = async () => {
-    const models = await initializeModels()
-    return await AddressRepository(models)
-}
+module.exports = AddressRepository

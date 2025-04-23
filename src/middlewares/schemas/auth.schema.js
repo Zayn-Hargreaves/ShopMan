@@ -71,7 +71,7 @@ const authSchemas = {
     }),
 
     checkOtp: Joi.object({
-        opt: Joi.string()
+        otp: Joi.string()
             .length(6)
             .pattern(/^[0-9]+$/)
             .required()

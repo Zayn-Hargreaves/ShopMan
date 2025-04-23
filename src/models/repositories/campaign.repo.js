@@ -76,7 +76,4 @@ class CampaignRepository {
     }
 }
 
-module.exports = async () => {
-    const models = await initializeModels();
-    return new CampaignRepository(models);
-}
+module.exports = CampaignRepository

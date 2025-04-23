@@ -1,47 +1,41 @@
-const {DataTypes, Model} = require("@sequelize/core");
-class Comment extends Model {}
-const initializeComments = async(sequelize)=>{
+const { DataTypes, Model } = require("@sequelize/core");
+class Comment extends Model { }
+const initializeComments = async (sequelize) => {
     Comment.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        UserId:{
-            type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // }
+        UserId: {
+            type: DataTypes.INTEGER,
+
         },
-        ProductId:{
-            type:DataTypes.INTEGER,
-        //     references:{
-        //         model:"Products",
-        //         key:"id"
-        //     }
+        ProductId: {
+            type: DataTypes.INTEGER,
+
         },
-        rating:{
-            type:DataTypes.INTEGER,
+        rating: {
+            type: DataTypes.INTEGER,
         },
-        content:{
-            type:DataTypes.STRING,
-            allowNull:false
+        content: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        left:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        left: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        right:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        right: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-    },{
+    }, {
         sequelize,
-        modelName:"Comments",
-        tableName:"Comments",
-        freezeTableName:true,
-        timestamps:true
+        modelName: "Comments",
+        tableName: "Comments",
+        freezeTableName: true,
+        timestamps: true
     })
     return Comment
 }

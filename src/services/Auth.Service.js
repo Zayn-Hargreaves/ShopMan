@@ -1,6 +1,5 @@
 const { createTokenPair, verifyJWT, createAccessToken, createRefreshToken, createResetToken } = require('../auth/authUtils');
 const { NotFoundError, UnauthorizedError, ForbiddenError, ConflictError, InternalServerError, BadRequestError } = require('../cores/error.response');
-const UserRepository = require('../models/repositories/user.repo');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require("google-auth-library");
 const ClientId = process.env.GOOGLE_CLIENT_ID;
@@ -9,13 +8,16 @@ const RedisService = require('./Redis.Service');
 const { v4: uuidv4 } = require("uuid");
 const { getInfoData } = require('../utils/index');
 const EmailService = require('./Email.service');
-const OtpRepository = require('../models/repositories/opt.repo');
 const otpGenerator = require("otp-generator");
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
-const CartRepository = require('../models/repositories/cart.repo');
+const RepositoryFactory = require("../models/repositories/repositoryFactory")
+
 class AuthService {
     static async signUp({ name, email, password }) {
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
+        const CartRepository = RepositoryFactory.getRepository("CartRepository")
         const holderAccount = await UserRepository.findByEmail(email);
         if (holderAccount) {
             throw new ConflictError('Email is already registered');
@@ -27,7 +29,7 @@ class AuthService {
             password: passwordHash,
             status: "active"
         });
-        const cart = await CartRepository.getOrCreateCart(newUser.id );
+        const cart = await CartRepository.getOrCreateCart(newUser.id);
         const userId = newUser.id;
         const jti = uuidv4();
         const tokens = await createTokenPair({ userId, jti });
@@ -41,10 +43,14 @@ class AuthService {
     }
 
     static async login({ email, password }) {
+        await RepositoryFactory.initialize()
+
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
         if (!email || !password) {
             throw new UnauthorizedError('Email or password is required');
         }
         const user = await UserRepository.findByEmail(email);
+        console.log(user)
         if (!user) {
             throw new NotFoundError("Account not found");
         }
@@ -58,7 +64,6 @@ class AuthService {
         if (user.status !== "active") {
             throw new ForbiddenError("Account is not active");
         }
-        const cart = await CartRepository.getCartByUserId({ UserId: user.id });
         const userId = user.id;
         const jti = uuidv4();
         const tokens = await createTokenPair({ userId, jti });
@@ -72,6 +77,9 @@ class AuthService {
     }
 
     static async loginWithGoogle(body) {
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
+        const CartRepository = RepositoryFactory.getRepository("CartRepository")
         const { idToken } = body;
         if (!idToken) {
             throw new UnauthorizedError("Id token is required");
@@ -99,7 +107,7 @@ class AuthService {
                 name,
                 status: "active"
             });
-            cart = await CartRepository.getOrCreateCart(user.id );
+            cart = await CartRepository.getOrCreateCart(user.id);
         } else if (!user.googleId) {
             cart = await CartRepository.getCartByUserId({ UserId: user.id });
             user.googleId = googleId;
@@ -118,16 +126,14 @@ class AuthService {
                 fields: ["id", "name", "email", "phone", "status", "avatar"],
                 object: user
             }),
-            cart:getInfoData({
-                fields:['id'],
-                object:cart
-            }),
             tokens
         };
     }
 
-    static async linkGoogle({ idToken }) {
-        const { userId } = await verifyJWT(idToken, accessSecretKey);
+    static async linkGoogle(idToken ) {
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
+        const { userId } = verifyJWT(idToken, accessSecretKey);
         const ticket = await Client.verifyIdToken({
             idToken,
             audience: ClientId
@@ -154,8 +160,8 @@ class AuthService {
         return await user.save();
     }
 
-    static async logout({ refreshToken }) {
-        const decode = await verifyJWT(refreshToken, refreshSecretKey);
+    static async logout( refreshToken ) {
+        const decode = verifyJWT(refreshToken, refreshSecretKey);
         const { jti } = decode;
         const state = await RedisService.addElementToRedisBloomFilter("blacklist_token", jti);
         if (!state) {
@@ -164,8 +170,10 @@ class AuthService {
         return state;
     }
 
-    static async handleRefreshToken({ refreshToken }) {
-        const decode = await verifyJWT(refreshToken, refreshSecretKey);
+    static async handleRefreshToken(refreshToken ) {
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
+        const decode = verifyJWT(refreshToken, refreshSecretKey);
         const { userId, jti } = decode;
         const holderUser = await UserRepository.findById(userId);
         if (!holderUser) {
@@ -181,26 +189,38 @@ class AuthService {
     }
 
     static async forgotPassword(email) {
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
+        const OtpRepository = RepositoryFactory.getRepository("OtpRepository")
         const holderUser = await UserRepository.findByEmail(email);
         if (!holderUser) {
             throw new NotFoundError("Email is not registered");
         }
-        const newOtpValue = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+        const newOtpValue = otpGenerator.generate(6, {
+            upperCaseAlphabets: false,
+            lowerCaseAlphabets: false,
+            specialChars: false,
+            digits: true, // Đảm bảo chỉ sinh số
+        });
         const expireTime = new Date(Date.now() + 15 * 60 * 1000); // 15 phút
         const newOtp = await OtpRepository.createOtp({
             otp_value: newOtpValue,
             UserId: holderUser.id,
             expire: expireTime
         });
-        await EmailService.sendOtpCode({
+        const emailService = new EmailService(holderUser,'http')
+        await emailService.sendOtpCode({
             template: "reset-password",
             subject: "OTP for reset password",
-            newOtpValue
+            otp:newOtpValue
         });
         return { otp: newOtpValue };
     }
 
     static async checkOtp(otp) {
+        await RepositoryFactory.initialize()
+        const OtpRepository = RepositoryFactory.getRepository("OtpRepository")
+        
         if (!otp) {
             throw new BadRequestError("OTP is required");
         }
@@ -213,25 +233,29 @@ class AuthService {
             throw new UnauthorizedError("OTP has expired. Please request a new one.");
         }
         const userId = holderOtp.UserId;
-        const resetToken = createResetToken({ UserId: userId });
+        const resetToken = createResetToken({ userId: userId });
         await OtpRepository.deleteOtp(otp);
         return { resetToken };
     }
 
     static async changePassword({ resetToken, newPassword, confirmedPassword }) {
+        console.log(resetToken,newPassword, confirmedPassword)
+        await RepositoryFactory.initialize()
+        const UserRepository = RepositoryFactory.getRepository("UserRepository")
         if (!resetToken || !newPassword || !confirmedPassword) {
             throw new BadRequestError("All fields are required");
         }
         if (newPassword !== confirmedPassword) {
             throw new ConflictError("Confirmed password does not match");
         }
-        const { UserId } = await verifyJWT(resetToken, accessSecretKey);
-        const holderUser = await UserRepository.findById(UserId);
+        const decode = verifyJWT(resetToken, accessSecretKey);
+
+        const holderUser = await UserRepository.findById(decode.userId);
         if (!holderUser) {
             throw new NotFoundError("User not found");
         }
         const hashPassword = await bcrypt.hash(newPassword, 10);
-        const result = await UserRepository.updatePassword(UserId, hashPassword);
+        const result = await UserRepository.updatePassword(decode.userId, hashPassword);
         if (!result || result[0] === 0) {
             throw new BadRequestError("Failed to update password");
         }

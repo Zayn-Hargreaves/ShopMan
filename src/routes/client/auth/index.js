@@ -7,9 +7,46 @@ const authSchemas = require("../../../middlewares/schemas/auth.schema");
 
 /**
  * @swagger
- * tags:
- *   name: Authentication
- *   description: API for user authentication and authorization
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         email:
+ *           type: string
+ *           example: "john.doe@example.com"
+ *         phone:
+ *           type: string
+ *           example: "1234567890"
+ *           nullable: true
+ *         status:
+ *           type: string
+ *           example: "active"
+ *         avatar:
+ *           type: string
+ *           example: "https://example.com/avatar.jpg"
+ *           nullable: true
+ *     Tokens:
+ *       type: object
+ *       properties:
+ *         accessToken:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         refreshToken:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     ErrorResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           example: "Error message"
  */
 
 /**
@@ -17,23 +54,24 @@ const authSchemas = require("../../../middlewares/schemas/auth.schema");
  * /api/v1/auth/login:
  *   post:
  *     summary: User login
- *     tags: [Authentication]
+ *     description: Authenticate a user with email and password.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 example: password123
  *             required:
  *               - email
  *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
  *     responses:
  *       200:
  *         description: Login successful
@@ -44,59 +82,72 @@ const authSchemas = require("../../../middlewares/schemas/auth.schema");
  *               properties:
  *                 message:
  *                   type: string
- *                   example: login success
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     user:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: string
- *                         name:
- *                           type: string
- *                         email:
- *                           type: string
- *                         phone:
- *                           type: string
- *                         status:
- *                           type: string
- *                         avatar:
- *                           type: string
+ *                       $ref: '#/components/schemas/User'
  *                     tokens:
- *                       type: object
- *                       properties:
- *                         accessToken:
- *                           type: string
- *                         refreshToken:
- *                           type: string
+ *                       $ref: '#/components/schemas/Tokens'
+ *             example:
+ *               message: "login success"
+ *               metadata:
+ *                 user:
+ *                   id: 1
+ *                   name: "John Doe"
+ *                   email: "john.doe@example.com"
+ *                   phone: "1234567890"
+ *                   status: "active"
+ *                   avatar: null
+ *                 tokens:
+ *                   accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                   refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
  *         description: Unauthorized - Invalid email or password
- *       403:
- *         description: Forbidden - Account is not active
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Email or password incorrect"
  *       404:
  *         description: Not Found - Account not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Account not found"
+ *       403:
+ *         description: Forbidden - Account not active
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Account is not active"
  */
-router.post("/login", validate(authSchemas.login), asyncHandler(authController.login));
+router.post("/login", asyncHandler(validate(authSchemas.login)), asyncHandler(authController.login));
 
 /**
  * @swagger
  * /api/v1/auth/login-with-google:
  *   post:
  *     summary: Login with Google
- *     tags: [Authentication]
+ *     description: Authenticate a user using Google ID token.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - idToken
  *             properties:
  *               idToken:
  *                 type: string
- *                 example: google_id_token
- *             required:
- *               - idToken
+ *                 example: "google-id-token"
  *     responses:
  *       200:
  *         description: Login with Google successful
@@ -107,65 +158,72 @@ router.post("/login", validate(authSchemas.login), asyncHandler(authController.l
  *               properties:
  *                 message:
  *                   type: string
- *                   example: login with Google success
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     user:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: string
- *                         name:
- *                           type: string
- *                         email:
- *                           type: string
- *                         phone:
- *                           type: string
- *                         status:
- *                           type: string
- *                         avatar:
- *                           type: string
+ *                       $ref: '#/components/schemas/User'
  *                     tokens:
- *                       type: object
- *                       properties:
- *                         accessToken:
- *                           type: string
- *                         refreshToken:
- *                           type: string
+ *                       $ref: '#/components/schemas/Tokens'
+ *             example:
+ *               message: "login with Google success"
+ *               metadata:
+ *                 user:
+ *                   id: 1
+ *                   name: "John Doe"
+ *                   email: "john.doe@example.com"
+ *                   phone: null
+ *                   status: "active"
+ *                   avatar: null
+ *                 tokens:
+ *                   accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                   refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
  *         description: Unauthorized - Invalid Google token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Login by google error"
  *       403:
- *         description: Forbidden - Account is not active
+ *         description: Forbidden - Account not active
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Account is not active"
  */
-router.post("/login-with-google", validate(authSchemas.loginWithGoogle), asyncHandler(authController.loginWithGoogle));
+router.post("/login-with-google", asyncHandler(validate(authSchemas.loginWithGoogle)), asyncHandler(authController.loginWithGoogle));
 
 /**
  * @swagger
  * /api/v1/auth/signup:
  *   post:
  *     summary: User signup
- *     tags: [Authentication]
+ *     description: Register a new user account.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: John Doe
- *               email:
- *                 type: string
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 example: password123
  *             required:
  *               - name
  *               - email
  *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "John Doe"
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
  *     responses:
  *       200:
  *         description: Signup successful
@@ -174,51 +232,58 @@ router.post("/login-with-google", validate(authSchemas.loginWithGoogle), asyncHa
  *             schema:
  *               type: object
  *               properties:
+ *                 message:
+ *                   type: string
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     user:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: string
- *                         name:
- *                           type: string
- *                         email:
- *                           type: string
- *                         status:
- *                           type: string
+ *                       $ref: '#/components/schemas/User'
  *                     tokens:
- *                       type: object
- *                       properties:
- *                         accessToken:
- *                           type: string
- *                         refreshToken:
- *                           type: string
- *                    
+ *                       $ref: '#/components/schemas/Tokens'
+ *             example:
+ *               message: "Signup successful"
+ *               metadata:
+ *                 user:
+ *                   id: 1
+ *                   name: "John Doe"
+ *                   email: "john.doe@example.com"
+ *                   phone: null
+ *                   status: "active"
+ *                   avatar: null
+ *                 tokens:
+ *                   accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                   refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       409:
- *         description: Conflict - Email is already registered
+ *         description: Conflict - Email already registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Email is already registered"
  */
-router.post("/signup", validate(authSchemas.signup), asyncHandler(authController.signup));
+router.post("/signup", asyncHandler(validate(authSchemas.signup)), asyncHandler(authController.signup));
 
 /**
  * @swagger
  * /api/v1/auth/forgot-password:
  *   post:
- *     summary: Request OTP for password reset
- *     tags: [Authentication]
+ *     summary: Forgot password
+ *     description: Request an OTP to reset password.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - email
  *             properties:
  *               email:
  *                 type: string
- *                 example: user@example.com
- *             required:
- *               - email
+ *                 example: "john.doe@example.com"
  *     responses:
  *       200:
  *         description: OTP sent successfully
@@ -229,40 +294,49 @@ router.post("/signup", validate(authSchemas.signup), asyncHandler(authController
  *               properties:
  *                 message:
  *                   type: string
- *                   example: get Otp code successfully
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     otp:
  *                       type: string
- *                       example: 123456
- *                 
+ *                       example: "123456"
+ *             example:
+ *               message: "get Otp code successfully"
+ *               metadata:
+ *                 otp: "123456"
  *       404:
- *         description: Not Found - Email is not registered
+ *         description: Not Found - Email not registered
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Email is not registered"
  */
-router.post("/forgot-password", validate(authSchemas.forgotPassword), asyncHandler(authController.forgotPassword));
+router.post("/forgot-password", asyncHandler(validate(authSchemas.forgotPassword)), asyncHandler(authController.forgotPassword));
 
 /**
  * @swagger
  * /api/v1/auth/check-otp:
  *   post:
- *     summary: Verify OTP
- *     tags: [Authentication]
+ *     summary: Check OTP
+ *     description: Verify OTP to get reset token.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - otp
  *             properties:
  *               otp:
  *                 type: string
- *                 example: 123456
- *             required:
- *               - otp
+ *                 example: "123456"
  *     responses:
  *       200:
- *         description: OTP is correct
+ *         description: OTP verified successfully
  *         content:
  *           application/json:
  *             schema:
@@ -270,47 +344,70 @@ router.post("/forgot-password", validate(authSchemas.forgotPassword), asyncHandl
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Otp code is correct
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     resetToken:
  *                       type: string
+ *                       example: "reset-token"
+ *             example:
+ *               message: "Otp code is correct"
+ *               metadata:
+ *                 resetToken: "reset-token"
  *       400:
- *         description: Bad Request - OTP is required
- *       401:
- *         description: Unauthorized - OTP has expired
+ *         description: Bad Request - OTP required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "OTP is required"
  *       404:
  *         description: Not Found - OTP not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "OTP not found"
+ *       401:
+ *         description: Unauthorized - OTP expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "OTP has expired. Please request a new one."
  */
-router.post("/check-otp", validate(authSchemas.checkOtp), asyncHandler(authController.checkOtp));
+router.post("/check-otp", asyncHandler(validate(authSchemas.checkOtp)), asyncHandler(authController.checkOtp));
 
 /**
  * @swagger
  * /api/v1/auth/change-password:
  *   post:
- *     summary: Change user password
- *     tags: [Authentication]
+ *     summary: Change password
+ *     description: Change user password using reset token.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               resetToken:
- *                 type: string
- *                 example: reset_token
- *               newPassword:
- *                 type: string
- *                 example: newpassword123
- *               confirmedPassword:
- *                 type: string
- *                 example: newpassword123
  *             required:
  *               - resetToken
  *               - newPassword
  *               - confirmedPassword
+ *             properties:
+ *               resetToken:
+ *                 type: string
+ *                 example: "reset-token"
+ *               newPassword:
+ *                 type: string
+ *                 example: "newpassword123"
+ *               confirmedPassword:
+ *                 type: string
+ *                 example: "newpassword123"
  *     responses:
  *       200:
  *         description: Password changed successfully
@@ -321,59 +418,72 @@ router.post("/check-otp", validate(authSchemas.checkOtp), asyncHandler(authContr
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Change Password successful
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     user:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: string
- *                         name:
- *                           type: string
- *                         email:
- *                           type: string
- *                         phone:
- *                           type: string
- *                         status:
- *                           type: string
- *                         avatar:
- *                           type: string
+ *                       $ref: '#/components/schemas/User'
  *                     tokens:
- *                       type: object
- *                       properties:
- *                         accessToken:
- *                           type: string
- *                         refreshToken:
- *                           type: string
+ *                       $ref: '#/components/schemas/Tokens'
+ *             example:
+ *               message: "Change Password successful"
+ *               metadata:
+ *                 user:
+ *                   id: 1
+ *                   name: "John Doe"
+ *                   email: "john.doe@example.com"
+ *                   phone: null
+ *                   status: "active"
+ *                   avatar: null
+ *                 tokens:
+ *                   accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                   refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       400:
- *         description: Bad Request - All fields are required
+ *         description: Bad Request - Missing fields or failed to update
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "All fields are required"
  *       409:
- *         description: Conflict - Confirmed password does not match
+ *         description: Conflict - Passwords do not match
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Confirmed password does not match"
  *       404:
  *         description: Not Found - User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "User not found"
  */
-router.post("/change-password", validate(authSchemas.changePassword), asyncHandler(authController.changePassword));
+router.post("/change-password", asyncHandler(validate(authSchemas.changePassword)), asyncHandler(authController.changePassword));
 
 /**
  * @swagger
  * /api/v1/auth/link-google:
  *   post:
  *     summary: Link Google account
- *     tags: [Authentication]
+ *     description: Link a Google account to an existing user.
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - idToken
  *             properties:
  *               idToken:
  *                 type: string
- *                 example: google_id_token
- *             required:
- *               - idToken
+ *                 example: "google-id-token"
  *     responses:
  *       200:
  *         description: Google account linked successfully
@@ -384,17 +494,43 @@ router.post("/change-password", validate(authSchemas.changePassword), asyncHandl
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Google account linked successfully
+ *                 metadata:
+ *                   $ref: '#/components/schemas/User'
+ *             example:
+ *               message: "link to google successfully"
+ *               metadata:
+ *                 id: 1
+ *                 name: "John Doe"
+ *                 email: "john.doe@example.com"
+ *                 googleId: "google-sub-id"
  *       401:
  *         description: Unauthorized - Invalid Google token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Invalid Google token"
+ *       409:
+ *         description: Conflict - Account already linked or email mismatch
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Account already linked with Google"
  *       404:
  *         description: Not Found - User not found
- *       409:
- *         description: Conflict - Account already linked with Google
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "User not found"
  */
-router.post("/link-google", validate(authSchemas.linkGoogle), asyncHandler(authController.linkGoogle));
+router.post("/link-google", asyncHandler(validate(authSchemas.linkGoogle)), asyncHandler(authController.linkGoogle));
 
-// Các endpoint yêu cầu xác thực
+// Middleware authentication được áp dụng cho các endpoint dưới đây
 router.use(authentication);
 
 /**
@@ -402,21 +538,17 @@ router.use(authentication);
  * /api/v1/auth/logout:
  *   post:
  *     summary: User logout
- *     tags: [Authentication]
+ *     description: Logout a user by blacklisting the refresh token.
+ *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 example: refresh_token
- *             required:
- *               - refreshToken
+ *     parameters:
+ *       - in: header
+ *         name: x-rtoken-id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Refresh token to blacklist
  *     responses:
  *       200:
  *         description: Logout successful
@@ -427,34 +559,31 @@ router.use(authentication);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: logout success
  *                 metadata:
  *                   type: boolean
+ *             example:
+ *               message: "logout sucsess"
+ *               metadata: true
  *       500:
  *         description: Internal Server Error - Logout failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Logout failed"
  */
-router.post("/logout", validate(authSchemas.logout), asyncHandler(authController.logout));
+router.post("/logout", asyncHandler(authController.logout));
 
 /**
  * @swagger
  * /api/v1/auth/handle-refreshtoken:
  *   post:
- *     summary: Refresh access token
- *     tags: [Authentication]
+ *     summary: Refresh token
+ *     description: Refresh access token using refresh token.
+ *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               refreshToken:
- *                 type: string
- *                 example: refresh_token
- *             required:
- *               - refreshToken
  *     responses:
  *       200:
  *         description: Token refreshed successfully
@@ -465,17 +594,22 @@ router.post("/logout", validate(authSchemas.logout), asyncHandler(authController
  *               properties:
  *                 message:
  *                   type: string
- *                   example: refresh token success
  *                 metadata:
- *                   type: object
- *                   properties:
- *                     accessToken:
- *                       type: string
- *                     refreshToken:
- *                       type: string
+ *                   $ref: '#/components/schemas/Tokens'
+ *             example:
+ *               message: "refresh token sucess"
+ *               metadata:
+ *                 accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
- *         description: Unauthorized - Invalid refresh token
+ *         description: Unauthorized - Invalid or blacklisted refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Something went wrong, please relogin"
  */
-router.post("/handle-refreshtoken", validate(authSchemas.handleRefreshToken), asyncHandler(authController.handleRefreshToken));
+router.post("/handle-refreshtoken", asyncHandler(authController.handleRefreshToken));
 
 module.exports = router;

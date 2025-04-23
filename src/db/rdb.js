@@ -1,7 +1,6 @@
 const Redis = require("ioredis");
 const config = require("../config/index");
 const { InternalServerError } = require("../cores/error.response");
-console.log("Redis config", config.redis.url)
 const REDIS_CONFIG = {
     singleNode: {
         url: config.redis.url || "redis://localhost:6379" // URL mặc định nếu không có config
@@ -33,7 +32,6 @@ class RedisManager {
         try {
 
             let connectionOptions = { ...REDIS_CONFIG.options };
-            console.log(REDIS_CONFIG)
             // Ưu tiên dùng URL
             if (REDIS_CONFIG.singleNode.url) {
                 this.client = new Redis(REDIS_CONFIG.singleNode.url, connectionOptions);

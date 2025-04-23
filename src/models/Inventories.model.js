@@ -11,18 +11,12 @@ const initializeInventories = async(sequelize)=>{
         },
         ProductId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Products",
-            //     key:"id"
-            // },
+           
             allowNull: false
         },
         ShopId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Shops",
-            //     key:"id"
-            // },
+          
             allowNull: false
         },
         inven_quantity:{

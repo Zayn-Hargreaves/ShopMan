@@ -43,7 +43,7 @@ class Database {
             this.isConnected = true
             console.log("Connected to database successfully")
         } catch (error) {
-            this.isConnected = true
+            this.isConnected = false
             console.error("Error Database Connection::", error)
             throw new InternalServerError("Failed to connect to database")
         }

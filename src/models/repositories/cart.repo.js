@@ -8,7 +8,7 @@ class CartRepository {
         this.SpuToSku = models.SpuToSku
         this.Sku = models.Sku
         this.SkuAttr = models.SkuAttr
-        this.SkuSpec = models.SkuSpec
+        this.SkuSpecs = models.SkuSpecs
         this.Shop = models.Shop
     }
     async getOrCreateCart(UserId) {
@@ -17,7 +17,7 @@ class CartRepository {
         });
 
         if (!cart) {
-            cart = await this.Carts.create({
+            cart = await this.Cart.create({
                 UserId,
                 cart_total: 0,
                 cart_status: "active",
@@ -387,7 +387,4 @@ class CartRepository {
 
 
 }
-module.exports = async () => {
-    const models = await initializeModels()
-    return await CartRepository(models)
-}
+module.exports = CartRepository

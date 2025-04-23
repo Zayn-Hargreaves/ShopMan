@@ -11,7 +11,4 @@ class DiscountRepository{
 }
 
 
-module.exports = async () => {
-    const models = await initializeModels()
-    return await DiscountRepository(models)
-}
+module.exports =  DiscountRepository

@@ -16,19 +16,20 @@ class AuthController{
     logout = async(req,res,next)=>{
         new OkResponse({
             message:"logout sucsess",
-            metadata:await AuthService.logout(req.header)
+            metadata:await AuthService.logout(req.headers['x-rtoken-id'])
         }).send(res)
     }
     handleRefreshToken = async(req, res, next)=>{
         new OkResponse({
             message:"refresh token sucess",
-            metadata: await AuthService.handleRefreshToken({
-                refreshToken:req.header,
-            })
+            metadata: await AuthService.handleRefreshToken(
+                req.refreshToken
+            )
         }).send(res)
     }
     signup = async(req,res, next)=>{
         new OkResponse({
+            message:'sign up success',
             metadata: await AuthService.signUp(req.body)
         }).send(res)
     }
@@ -52,10 +53,10 @@ class AuthController{
         }).send(res)
     }
     checkOtp = async(req, res, next)=>{
-        const opt = req.body.opt
+        const otp = req.body.otp
         new OkResponse({
             message:"Otp code is correct",
-            metadata:await AuthService.checkOtp(opt)
+            metadata:await AuthService.checkOtp(otp)
         }).send(res)
     }
     changePassword = async(req,res, next)=>{

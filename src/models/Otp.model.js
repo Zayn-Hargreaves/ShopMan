@@ -15,10 +15,6 @@ const initializeOtp = async(sequelize)=>{
         },
         UserId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // },
             allowNull: false
         },
         expire:{

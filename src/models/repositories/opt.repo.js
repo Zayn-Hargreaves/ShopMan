@@ -5,7 +5,7 @@ class OtpRepository {
         this.Otp = models.Otp;
     }
 
-    async findOtpValue(otpValue) {
+    async findByValue(otpValue) {
         return await this.Otp.findOne({ where: { otp_value: otpValue } });
     }
 
@@ -19,7 +19,4 @@ class OtpRepository {
 }
 
 // Export factory function để khởi tạo repository bất đồng bộ
-module.exports = async () => {
-    const models = await initializeModels();
-    return new OtpRepository(models);
-};
+module.exports = OtpRepository

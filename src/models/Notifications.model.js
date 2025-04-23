@@ -22,17 +22,11 @@ const initializeNotifications = async(sequelize)=>{
         },
         ShopId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Shops",
-            //     key:"id"
-            // }
+           
         },
         UserId:{
             type: DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // }
+           
         },
     },{
         sequelize,

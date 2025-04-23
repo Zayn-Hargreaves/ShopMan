@@ -15,7 +15,4 @@ class BannerRepository{
         })
     } 
 }
-module.exports = async()=>{
-    const models= await initializeModels()
-    return new BannerRepository(models)
-}
+module.exports = BannerRepository

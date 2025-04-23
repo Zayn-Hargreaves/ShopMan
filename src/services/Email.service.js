@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer")
 const pug = require("pug")
 const htmlToText = require('html-to-text')
-const { template } = require("lodash")
 class EmailService {
     constructor(user, url) {
         this.to = user.email
@@ -9,7 +8,7 @@ class EmailService {
         this.url = url
         this.from = process.env.EMAIL_FROM
     }
-    static newTransport() {
+    newTransport() {
         if (process.env.NODE_ENV === "production") {
             return 1
         }
@@ -22,26 +21,26 @@ class EmailService {
             }
         })
     }
-    static async sendOtpCode ({template, subject, opt}){
+    async sendOtpCode({ template, subject, otp }) {
+        console.log(otp)
         const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
             firstName: this.firstName,
             url: this.url,
             subject,
-            otp: opt,
+            otp: otp,
             logo: 'cid:logo',
             resetLink: `${process.env.FRONTEND_URL}/reset-password`
         })
-
         const mailOptions = {
             from: this.from,
             to: this.to,
             subject: subject,
-            text: htmlToText.fromString(html),
+            text: htmlToText.convert(html),
             html: html,
             attachments: [
                 {
                     filename: "logo.png",
-                    path: `${_dirname}/../views/logo.png`,
+                    path: `${__dirname}/../views/logo.png`,
                     cid: "logo"
                 }
             ]
@@ -49,11 +48,11 @@ class EmailService {
         const transport = this.newTransport()
         await transport.sendMail(mailOptions)
     }
-    static async sendWelcome (){
+    async sendWelcome() {
         const template = ''
         await this.send(template, 'welcome to ShopMan')
     }
-    static async sendNotificationNewProduct(template, subject, data){
+    async sendNotificationNewProduct(template, subject, data) {
         const html = pug.renderFile(`${__dirname}/views/email/${template}.pug`, {
             firstName: this.firstName,
             productName: data.productName,
@@ -72,7 +71,7 @@ class EmailService {
             attachments: [
                 {
                     filename: "logo.png",
-                    path: `${_dirname}/../views/logo.png`,
+                    path: `${__dirname}/../views/logo.png`,
                     cid: "logo"
                 }
             ]
@@ -80,7 +79,7 @@ class EmailService {
         const transport = this.newTransport();
         await transport.sendMail(mailOptions);
     }
-    static async sendInvoice(template, subject, data){
+    async sendInvoice(template, subject, data) {
         const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
             firstName: this.firstName,
             orderId: data.orderId,
@@ -100,7 +99,7 @@ class EmailService {
             attachments: [
                 {
                     filename: "logo.png",
-                    path: `${_dirname}/../views/logo.png`,
+                    path: `${__dirname}/../views/logo.png`,
                     cid: "logo"
                 }
             ]

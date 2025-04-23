@@ -4,14 +4,14 @@ const { getSelectData } = require("../../utils");
 class ProductRepository {
     constructor(models) {
         this.Products = models.Products
-        this.Category = models.Category,
-        this.SpuToSku = models.SpuToSku,
-        this.Sku = models.Sku,
-        this.SkuAttr = models.SkuAttr,
-        this.SkuSpec = models.SkuSpec,
-        this.Wishlist = models.Wishlist
-        this.Discounts = models.Discounts,
-        this.Category = models.Category,
+        this.Category = models.Category
+        this.SpuToSku = models.SpuToSku
+        this.Sku = models.Sku
+        this.SkuAttr = models.SkuAttr
+        this.SkuSpecs = models.SkuSpecs
+        this.Wishlists = models.Wishlists
+        this.Discounts = models.Discounts
+        this.Category = models.Category
         this.DiscountsProducts = models.DiscountsProducts
         this.Campaign = models.Campaign
     }
@@ -170,7 +170,4 @@ class ProductRepository {
 }
 
 
-module.exports = async () => {
-    const models = await initializeModels()
-    return new ProductRepository(models)
-}
+module.exports = ProductRepository

@@ -1,8 +1,8 @@
 const {DataTypes, Model} = require("@sequelize/core");
-class WishLists extends Model {}
+class Wishlists extends Model {}
 const initializeWishLists = async(sequelize)=>{
 
-    WishLists.init({
+    Wishlists.init({
         id:{
             type:DataTypes.INTEGER,
             primaryKey:true,
@@ -23,6 +23,6 @@ const initializeWishLists = async(sequelize)=>{
         freezeTableName:true,
         timestamps:true
     })
-    return WishLists
+    return Wishlists
 }
 module.exports = initializeWishLists;

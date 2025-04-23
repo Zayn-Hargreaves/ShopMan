@@ -27,7 +27,4 @@ class CategoryRepository {
     // }
 }
 
-module.exports = async()=>{
-    const models = await initializeModels()
-    return new CategoryRepository(models)
-}
+module.exports =CategoryRepository

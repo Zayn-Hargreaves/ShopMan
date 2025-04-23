@@ -6,17 +6,10 @@ const initializeFollows = async(sequelize)=>{
     Follows.init({
         UserId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // }
         },
         ShopId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Shops",
-            //     key:"id"
-            // }
+         
         },
     },{
         sequelize,

@@ -11,10 +11,6 @@ const initializePayment = async(sequelize)=>{
         },
         UserId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Users",
-            //     key:"id"
-            // }
         },
         TotalPrice:{
             type:DataTypes.DECIMAL,

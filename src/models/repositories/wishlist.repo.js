@@ -2,12 +2,12 @@ const initializeModels = require("../../db/dbs/associations")
 const { getSelectData } = require("../../utils")
 class WishlistRepository{
     constructor(models){
-        this.WishLists =models.WishLists
+        this.Wishlists =models.Wishlists
         this.Products = models.Products
     }
     async getProductInWishlist(UserId,page, size){
         const offset = (page -1 ) * size
-        const {count,rows } = await this.WishLists.findAndCountAll({
+        const {count,rows } = await this.Wishlists.findAndCountAll({
             where:{UserId:UserId},
             include:{
                 model:this.Products,
@@ -22,7 +22,7 @@ class WishlistRepository{
         }
     }
     async checkProductInWishlist({ ProductId, UserId }) {
-        return await this.WishLists.findOne({
+        return await this.Wishlists.findOne({
             where: {
                 ProductId,
                 UserId
@@ -33,7 +33,7 @@ class WishlistRepository{
         if(!UserId||!ProductId){
             throw new Error("Missing UserId or ProductId")
         }
-        return await this.WishLists.destroy({
+        return await this.Wishlists.destroy({
             where:{
                 UserId,
                 ProductId
@@ -44,7 +44,7 @@ class WishlistRepository{
         if(!UserId){
             throw new Error("Missing UserId")
         }
-        return await this.WishLists.destroy({
+        return await this.Wishlists.destroy({
             where:{UserId}
         })
     }
@@ -52,13 +52,10 @@ class WishlistRepository{
         if(!UserId){
             throw new Error("Missing UserId")
         }
-        return await this.WishLists.count({
+        return await this.Wishlists.count({
             where:{UserId}
         })
     }
 }
 
-module.exports = async()=>{
-    const models = await initializeModels()
-    return new WishlistRepository(models)
-}
+module.exports = WishlistRepository
