@@ -25,5 +25,22 @@ app.use(compression())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // app.use("/api/v1/admin", require("./routes/admin/index"))
 app.use("/api/v1", require("./routes/client/index"))
-// app.get('/', (req, res) => console.log(req.body))
+
+app.use((req, res, next) => {
+    res.status(404).json({
+        success: false,
+        message: `Route ${req.originalUrl} not found`
+    });
+});
+
+app.use((err, req, res, next) => {
+    console.error('ERROR:', err);
+
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        message: err.message || 'Internal Server Error',
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
+});
 module.exports = app

@@ -1,5 +1,6 @@
+
 const initializeModels = require("../../db/dbs/associations")
-const {Op, where} = require("@sequelize/core")
+const {Op, where} = require('sequelize')
 class BannerRepository{
     constructor(models){
         this.Banner = models.Banner

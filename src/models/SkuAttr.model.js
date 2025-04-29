@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require("@sequelize/core");
+const { DataTypes, Model } = require('sequelize');
 
 class SkuAttr extends Model { }
 const initializeSkuAttr = async (sequelize) => {
@@ -25,7 +25,7 @@ const initializeSkuAttr = async (sequelize) => {
             defaultValue: 0
         },
         sku_attrs: {
-            type: DataTypes.JSON,
+            type: DataTypes.JSONB,
             allowNull: true,
         }
     }, {
@@ -33,8 +33,8 @@ const initializeSkuAttr = async (sequelize) => {
         modelName: "SkuAttr",
         tableName: "SkuAttr",
         freezeTableName: true,
-        timestamps: true,
-        underscored: true,
+
+        timestamps:false,
         indexes: []
     })
     return SkuAttr

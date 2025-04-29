@@ -7,7 +7,7 @@ const buildBaseSearchQuery = ({ query, filters = {} }) => {
                         query,
                         fields: ['name^3', 'desc_plain'],
                         fuzziness: 'AUTO',
-                        analyzer: 'search_analyzer' 
+                        analyzer: 'search_analyzer'
                     }
                 }
                 : { match_all: {} },
@@ -17,15 +17,34 @@ const buildBaseSearchQuery = ({ query, filters = {} }) => {
                     ? {
                         range: {
                             price: {
-                                gte: filters.minPrice,
-                                lte: filters.maxPrice
+                                ...(filters.minPrice !== undefined && { gte: filters.minPrice }),
+                                ...(filters.maxPrice !== undefined && { lte: filters.maxPrice })
                             }
                         }
                     }
                     : {},
-                filters.CategoryId ? { term: { CategoryId: filters.CategoryId } } : {},
-                filters.ShopId ? { term: { ShopId: filters.ShopId } } : {}
-            ].filter(f => Object.keys(f).length > 0) // Loại bỏ filter rỗng
+                filters.categoryPath && Array.isArray(filters.categoryPath)
+                    ? {
+                        terms: {
+                            CategoryPath: filters.categoryPath
+                        }
+                    }
+                    : {},
+                filters.CategoryId
+                    ? {
+                        term: {
+                            CategoryId: filters.CategoryId
+                        }
+                    }
+                    : {},
+                filters.ShopId
+                    ? {
+                        term: {
+                            ShopId: filters.ShopId
+                        }
+                    }
+                    : {}
+            ].filter(f => Object.keys(f).length > 0)
         }
     };
 

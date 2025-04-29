@@ -1,0 +1,120 @@
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1426070518,"shopName":"Gamers Fantasy","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":1202397081,"shopName":"MTstore.sg","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":1189320599,"shopName":"Good life.sg","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":293608330,"shopName":"Drea M","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy6-m1f4aslajorc1f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":1489038588,"shopName":"欣欣欢乐购","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":1478782073,"shopName":"CyberLane SG","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyi-m1f4bjyafgbhd3.webp"}
+{"shopid":1377647259,"shopName":"Nano Hub SG","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":211976056,"shopName":"Harga Borong","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyi-m1f4bjyafgbhd3.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":298673102,"shopName":"minimalistkk","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvk-m1f4auzl004778.webp"}
+{"shopid":236813629,"shopName":"TMAL1688","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvk-m1f4auzl004778.webp"}
+{"shopid":4946603,"shopName":"Gamer_kitty","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":17773572,"shopName":"primeprod","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":1481759735,"shopName":"Rcob4a1es2.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":314269550,"shopName":"Bom Beep Beep","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":77305725,"shopName":"MAXSOFT FLAGSHIP STORE","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1504678511,"shopName":"Lily\u0027s Boutique.sg","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":819813365,"shopName":"Harse.SG","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":623039333,"shopName":"ArchWizard","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":636208593,"shopName":"Venus-SG","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":7368228,"shopName":"Cool Stash","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":290077361,"shopName":"W Digital Market ","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":1346077634,"shopName":"Kiibo Store","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1006220784,"shopName":"Shopee Choice Global","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":1419165954,"shopName":"Ningda Sanyou1","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":214028887,"shopName":"2Dfire","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":736669374,"shopName":"OG GAMER SHOP 2","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":832350748,"shopName":"Sgsqss Pte Ltd","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":957235265,"shopName":"9AME 5TATION","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":758527384,"shopName":"akaraphonhuarungsipanichce.sg","shopLocation":"Thailand","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":1457604776,"shopName":"Fuqinghui2","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy6-m1f4aslajorc1f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyi-m1f4bjyafgbhd3.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwd-m1f47u1ceblmf2.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvk-m1f4auzl004778.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":1426070518,"shopName":"Gamers Fantasy","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":1202397081,"shopName":"MTstore.sg","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":1189320599,"shopName":"Good life.sg","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":1299445769,"shopName":"Shopee Choice MY","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":293608330,"shopName":"Drea M","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":1120509684,"shopName":"Anbernic Official Store.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1489038588,"shopName":"欣欣欢乐购","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":1478782073,"shopName":"CyberLane SG","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":1377647259,"shopName":"Nano Hub SG","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":211976056,"shopName":"Harga Borong","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy3-m1f49c37c7b9d5.webp"}
+{"shopid":298673102,"shopName":"minimalistkk","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyi-m1f4bjyafgbhd3.webp"}
+{"shopid":236813629,"shopName":"TMAL1688","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy6-m1f4aslajorc1f.webp"}
+{"shopid":4946603,"shopName":"Gamer_kitty","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":17773572,"shopName":"primeprod","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":1481759735,"shopName":"Rcob4a1es2.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":314269550,"shopName":"Bom Beep Beep","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":77305725,"shopName":"MAXSOFT FLAGSHIP STORE","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwd-m1f47u1ceblmf2.webp"}
+{"shopid":1504678511,"shopName":"Lily\u0027s Boutique.sg","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":819813365,"shopName":"Harse.SG","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":623039333,"shopName":"ArchWizard","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":636208593,"shopName":"Venus-SG","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":7368228,"shopName":"Cool Stash","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy3-m1f49c37c7b9d5.webp"}
+{"shopid":1258469014,"shopName":"The Bro","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdw8-m1f47mg1i9mm82.webp"}
+{"shopid":290077361,"shopName":"W Digital Market ","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1346077634,"shopName":"Kiibo Store","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdw8-m1f47mg1i9mm82.webp"}
+{"shopid":1006220784,"shopName":"Shopee Choice Global","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":1419165954,"shopName":"Ningda Sanyou1","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":214028887,"shopName":"2Dfire","shopLocation":"Malaysia","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":736669374,"shopName":"OG GAMER SHOP 2","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":832350748,"shopName":"Sgsqss Pte Ltd","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":957235265,"shopName":"9AME 5TATION","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":758527384,"shopName":"akaraphonhuarungsipanichce.sg","shopLocation":"Thailand","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":52213857,"shopName":"META Digital","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":1457604776,"shopName":"Fuqinghui2","shopLocation":"","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}

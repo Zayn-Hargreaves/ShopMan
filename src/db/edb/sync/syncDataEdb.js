@@ -1,5 +1,5 @@
 const initializeModels = require('../../dbs/associations')
-const { Products, Discounts, ProductVariation, DiscountsProducts } = await initializeModels
+const { Products, Discounts, ProductVariation, DiscountsProducts } = await initializeModels()
 const {getClient} = require("../edb")
 const bulkSyncProduct = async () => {
     const products = await Products.findAll({

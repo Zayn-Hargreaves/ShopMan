@@ -30,16 +30,15 @@ class SearchController {
             })
         }).send(res);
     }
-
     getProductByCategory = async (req, res, next) => {
         const { slug } = req.params;
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by category successfully",
             metadata: await ElasticSearchService.searchProducts({
+                CategorySlug: slug,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                categorySlug: slug,
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,
@@ -49,7 +48,7 @@ class SearchController {
     }
 
     getProductByShop = async (req, res, next) => {
-        const { slug} = req.params;
+        const { slug } = req.params;
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by shop successfully",

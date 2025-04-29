@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require("@sequelize/core")
+const {DataTypes, Model} = require('sequelize')
 
 class Sku extends Model{}
 const initializeSku = async(sequelize)=>{
@@ -8,11 +8,14 @@ const initializeSku = async(sequelize)=>{
             primaryKey:true,
             autoIncrement:true
         },
+        ProductId:{
+            type:DataTypes.INTEGER,
+            allowNull:false
+        },
         sku_no:{
             type:DataTypes.STRING,
             allowNull:false,
             unique:true,
-            default:""
         },
         sku_name:{
             type:DataTypes.STRING,
@@ -23,7 +26,7 @@ const initializeSku = async(sequelize)=>{
             allowNull:true,
         },
         sku_type:{
-            type:DataTypes.TINYINT,
+            type:DataTypes.INTEGER,
             allowNull:true,
         },
         status:{
@@ -51,9 +54,8 @@ const initializeSku = async(sequelize)=>{
         sequelize,
         modelName:"Sku",
         tableName:"Sku",
+        timestamps:false,
         freezeTableName:true,
-        timestamps:true,
-        underscored:true,
         indexes:[]
     })
     return Sku;

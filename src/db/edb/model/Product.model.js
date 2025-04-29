@@ -57,7 +57,13 @@ async function createProductIndex() {
                         rating: { type: 'float' },
                         sale_count: { type: 'integer' },
                         has_variations: { type: 'boolean' },
-                        attrs: { type: 'object' },
+                        attrs: {
+                            type: 'keyword',
+                        },
+                        CategoryPath: {
+                            type: "keyword"
+                        },
+
                         createdAt: { type: 'date' },
                         sort: { type: 'integer' }
                     }
@@ -136,7 +142,12 @@ async function createProductIndex() {
                             rating: { type: 'float' },
                             sale_count: { type: 'integer' },
                             has_variations: { type: 'boolean' },
-                            attrs: { type: 'object' },
+                            attrs: {
+                                type: 'keyword',
+                            },
+                            CategoryPath: {
+                                type: "keyword"
+                            },
                             createdAt: { type: 'date' },
                             sort: { type: 'integer' }
                         }

@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const {DataTypes, Model} = require('sequelize');
 
 class Shop extends Model {}
 const initializeShop = async(sequelize)=>{
@@ -33,6 +33,9 @@ const initializeShop = async(sequelize)=>{
             type: DataTypes.STRING,
         },
         logo:{
+            type:DataTypes.STRING
+        },
+        shopLocation:{
             type:DataTypes.STRING
         },
         rating: {

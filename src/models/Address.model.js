@@ -1,4 +1,5 @@
-const {DataTypes,Model} = require("@sequelize/core")
+
+const {DataTypes,Model} = require('sequelize')
 class Address extends Model{}
 const initializeAddress = async(sequelize)=>{
     Address.init({
@@ -12,7 +13,7 @@ const initializeAddress = async(sequelize)=>{
             allowNull:false,
         },
         address_type:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.STRING,
             allowNull:false
         },
         pincode:{

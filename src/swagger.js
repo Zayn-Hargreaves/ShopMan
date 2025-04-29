@@ -30,6 +30,8 @@ const options = {
     "./src/routes/client/user/index.js",
     "./src/routes/client/product/index.js",
     "./src/routes/client/category/index.js",
+    "./src/routes/client/banner/index.js",
+    "./src/routes/client/campaign/index.js",
 
   ]
 };

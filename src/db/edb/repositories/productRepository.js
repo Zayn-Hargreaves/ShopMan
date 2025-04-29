@@ -30,8 +30,8 @@ class ProductRepositoryEdb {
         { '_id': 'asc' } // Tie-breaker
       ],
       _source: isAndroid
-        ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt']
-        : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt'],
+        ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath',]
+        : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath'],
       suggest: query ? buildAutoCompleteQuery(query) : undefined
     };
 

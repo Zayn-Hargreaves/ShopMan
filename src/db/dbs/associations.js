@@ -105,12 +105,19 @@ const initializeModels = async () => {
         Discounts.belongsTo(Shop, { foreignKey: { name: "ShopId" }, as: "shop" });
 
         // Quan hệ Discounts - DiscountsProducts (1-n)
-        Discounts.hasMany(DiscountsProducts, { foreignKey: { name: "DiscountId" }, as: "discountProducts" });
-        DiscountsProducts.belongsTo(Discounts, { foreignKey: { name: "DiscountId" }, as: "discount" });
+        Products.belongsToMany(Discounts, {
+            through: DiscountsProducts,
+            foreignKey: 'ProductId',
+            otherKey: 'DiscountId',
+            as: 'discounts'
+        });
 
-        // Quan hệ Products - DiscountsProducts (1-n)
-        Products.hasMany(DiscountsProducts, { foreignKey: { name: "ProductId" }, as: "discountProducts" });
-        DiscountsProducts.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
+        Discounts.belongsToMany(Products, {
+            through: DiscountsProducts,
+            foreignKey: 'DiscountId',
+            otherKey: 'ProductId',
+            as: 'products'
+        });
 
         // Quan hệ User - Follows (1-n)
         User.hasMany(Follows, { foreignKey: { name: "UserId" }, as: "follows" });
@@ -196,46 +203,46 @@ const initializeModels = async () => {
         Products.hasMany(Wishlists, { foreignKey: { name: "ProductId" }, as: "wishlists" });
         Wishlists.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
 
-        Shop.hasMany(Banner,{foreignKey : {name :"ShopId"}, as :'banners'})
-        Banner.belongsTo(Shop,{foreignKey:{name:'ShopId'}, as:'shops'})
-        
-        Partner.hasMany(Banner,{foreignKey:{name:"PartnerId"}, as:'banners'})
-        Banner.belongsTo(Partner,{foreignKey:{name:"PartnerId"}, as:'partners'})
-        
-        User.hasMany(Address,{foreignKey:'UserId', as:"address"})
-        Address.belongsTo(User,{foreignKey:"UserId",as:"users"})
-        
-        Discounts.hasMany(Banner,{foreignKey:{name:"DiscountId"}, as:'banners'})
-        Banner.belongsTo(Discounts,{foreignKey:{name:"DiscountId"}, as:'discount'})
-        
-        Products.hasMany(SpuToSku,{foreignKey:'spu_no',sourceKey:'id', foreignKeyConstraints: false})
-        SpuToSku.belongsTo(Products,{foreignKey:'spu_no',targetKey:'id', foreignKeyConstraints: false})
+        Shop.hasMany(Banner, { foreignKey: { name: "ShopId" }, as: 'banners' })
+        Banner.belongsTo(Shop, { foreignKey: { name: 'ShopId' }, as: 'shops' })
 
-        Sku.hasMany(SpuToSku,{foreignKey:'sku_no',sourceKey:'sku_no', foreignKeyConstraints: false})
-        SpuToSku.belongsTo(Sku,{foreignKey:'sku_no',targetKey:'sku_no', foreignKeyConstraints: false})
-        
-        Sku.hasOne(SkuAttr,{foreignKey:'sku_no',sourceKey:'sku_no', foreignKeyConstraints: false})
-        SkuAttr.belongsTo(Sku,{foreignKey:'sku_no',targetKey:'sku_no', foreignKeyConstraints: false})
+        Partner.hasMany(Banner, { foreignKey: { name: "PartnerId" }, as: 'banners' })
+        Banner.belongsTo(Partner, { foreignKey: { name: "PartnerId" }, as: 'partners' })
 
-        Products.hasOne(SkuSpecs,{foreignKey:'id',sourceKey:'id', foreignKeyConstraints: false})
-        SkuSpecs.belongsTo(Products,{foreignKey:'id',targetKey:'id', foreignKeyConstraints: false})
-        
-        Campaign.hasMany(Discounts,{foreignKey:{name:'CampaignId'}, as:'discount'})
-        Discounts.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaign'})
+        User.hasMany(Address, { foreignKey: 'UserId', as: "address" })
+        Address.belongsTo(User, { foreignKey: "UserId", as: "users" })
 
-        Campaign.hasMany(CampaignCategory,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
-        CampaignCategory.belongsTo(Campaign,{foreignKey:{name:'CampaignId'}, as:'campaignCategory'})
+        Discounts.hasMany(Banner, { foreignKey: { name: "DiscountId" }, as: 'banners' })
+        Banner.belongsTo(Discounts, { foreignKey: { name: "DiscountId" }, as: 'discount' })
 
-        Category.hasMany(CampaignCategory,{foreignKey:{name:'CategoryId'}, as:'category'})
-        CampaignCategory.belongsTo(Category,{foreignKey:{name:'CategoryId'}, as:'category'})
+        Products.hasMany(SpuToSku, { foreignKey: 'ProductId', sourceKey: 'id', as: 'SpuToSkus', foreignKeyConstraints: false })
+        SpuToSku.belongsTo(Products, { foreignKey: 'ProductId', targetKey: 'id', as: 'Product', foreignKeyConstraints: false })
+
+        Sku.hasMany(SpuToSku, { foreignKey: 'sku_no', sourceKey: 'sku_no', foreignKeyConstraints: false })
+        SpuToSku.belongsTo(Sku, { foreignKey: 'sku_no', targetKey: 'sku_no', as: 'Sku', foreignKeyConstraints: false })
+
+        Sku.hasOne(SkuAttr, { foreignKey: 'sku_no', sourceKey: 'sku_no', as: 'SkuAttr', foreignKeyConstraints: false })
+        SkuAttr.belongsTo(Sku, { foreignKey: 'sku_no', targetKey: 'sku_no', foreignKeyConstraints: false })
+
+        Sku.hasOne(SkuSpecs, { foreignKey: 'SkuId', sourceKey: 'id', as: 'SkuSpecs', foreignKeyConstraints: false });
+        SkuSpecs.belongsTo(Sku, { foreignKey: 'SkuId', targetKey: 'id', foreignKeyConstraints: false });
+
+        Campaign.hasMany(Discounts, { foreignKey: { name: 'CampaignId' }, as: 'discount' })
+        Discounts.belongsTo(Campaign, { foreignKey: { name: 'CampaignId' }, as: 'campaign' })
+
+        Campaign.hasMany(CampaignCategory, { foreignKey: { name: 'CampaignId' }, as: 'campaignCategory' })
+        CampaignCategory.belongsTo(Campaign, { foreignKey: { name: 'CampaignId' }, as: 'campaignCategory' })
+
+        Category.hasMany(CampaignCategory, { foreignKey: { name: 'CategoryId' }, as: 'category' })
+        CampaignCategory.belongsTo(Category, { foreignKey: { name: 'CategoryId' }, as: 'category' })
 
         await sequelize.sync();
 
         return {
             Cart, CartDetails, Category, Comment, Discounts, DiscountsProducts,
             Follows, Inventories, Notifications, Order, OrderDetails,
-            Otp, Payment, PaymentMethod, Products,Resource, RoleGrants,
-            Roles, Shop, User, Wishlists, Partner, Banner, Address,Sku,SpuToSku,SkuAttr,SkuSpecs,Campaign,CampaignCategory,CampaignShop,
+            Otp, Payment, PaymentMethod, Products, Resource, RoleGrants,
+            Roles, Shop, User, Wishlists, Partner, Banner, Address, Sku, SpuToSku, SkuAttr, SkuSpecs, Campaign, CampaignCategory, CampaignShop,
         };
     } catch (error) {
         console.error("Error initializing models:", error);

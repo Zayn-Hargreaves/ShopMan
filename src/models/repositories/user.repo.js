@@ -1,4 +1,3 @@
-const initializeModels = require("../../db/dbs/associations");
 const { getUnselectData } = require("../../utils/index");
 
 class UserRepository {
@@ -40,7 +39,7 @@ class UserRepository {
                 model: this.Address,
                 as: 'address',
                 where:{
-                    address_type:'Main',
+                    address_type:'main',
                 },
                 required: false,
                 raw:true

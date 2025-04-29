@@ -1,0 +1,3 @@
+{"catid":100535,"name":"Electronics kind of Summer","status":"active"}
+{"catid":100010,"name":"Electronics kind Premium","status":"active"}
+{"catid":100636,"name":"Electronics for people who love Summer","status":"active"}

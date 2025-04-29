@@ -2,8 +2,7 @@ const { NotFoundError } = require("../cores/error.response");
 const analysticsRepository = require("../db/edb/repositories/analysticsRepository");
 const ProductRepositoryEdb = require("../db/edb/repositories/productRepository");
 const userEventRepository = require("../db/edb/repositories/userEventRepository");
-const ShopRepo = require("../models/repositories/shop.repo.js")
-const CategoryRepo = require("../models/repositories/category.repo.js")
+const RepositoryFactory = require("../models/repositories/repositoryFactory.js")
 class ElasticSearchService {
     async searchProducts({
         query,
@@ -16,8 +15,13 @@ class ElasticSearchService {
         pageSize = 10,
         isAndroid = false
     }) {
-        const shop = await ShopRepo.findShopBySlug(CategorySlug)
-        const category = await CategoryRepo.findCategoryBySlug(ShopSlug)
+        await RepositoryFactory.initialize()
+        const ShopRepo = RepositoryFactory.getRepository("ShopRepository")
+        const CategoryRepo = RepositoryFactory.getRepository("CategoryRepository")
+        let shop
+        if (ShopSlug) {
+            shop = await ShopRepo.findShopBySlug(CategorySlug)
+        }
         if (minPrice !== undefined && (isNaN(minPrice) || minPrice < 0)) {
             throw new Error("minPrice must be a non-negative number");
         }
@@ -33,12 +37,22 @@ class ElasticSearchService {
         if (sortBy && sortBy.order && !['asc', 'desc'].includes(sortBy.order)) {
             throw new Error("sortBy.order must be 'asc' or 'desc'");
         }
+        let categoryIds = [];
+        let category
+        console.log(CategorySlug)
+        if (CategorySlug) {
+            category = await CategoryRepo.findCategoryBySlug(CategorySlug);
+            if (!category) throw new Error("Category not found");
 
+            categoryIds = await CategoryRepo.getAllDescendantCategoryIds(category.id);
+            console.log("elastic:::::",categoryIds)
+        }
         const filters = {
             minPrice: minPrice !== undefined ? Number(minPrice) : undefined,
             maxPrice: maxPrice !== undefined ? Number(maxPrice) : undefined,
-            category: category.id !== undefined ? Number(category.id) : undefined,
-            shop: shop.id !== undefined ? Number(category.id) : undefined
+            category: category !== undefined ? Number(category.id) : undefined,
+            shop: shop !== undefined ? Number(category.id) : undefined,
+            categoryPath: categoryIds.length > 0 ? categoryIds : undefined
         };
         const result = await ProductRepositoryEdb.searchProducts({
             query,
@@ -48,7 +62,7 @@ class ElasticSearchService {
             pageSize,
             isAndroid
         });
-        return{
+        return {
             data: result.results,
             total: result.total,
             suggest: result.suggest,

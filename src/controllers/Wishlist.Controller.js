@@ -4,15 +4,15 @@ const WishlistService = require("../services/Wishlist.service")
 class wishlistController {
     getProductInWishlist = async (req, res, next) => {
         const userId = req.userId
-        const { page, pageSize } = req.query
+        const { page, limit } = req.query
         new OkResponse({
             message: "get wishlist success",
-            metadata: await WishlistService.getWishlist(userId, page, pageSize)
+            metadata: await WishlistService.getWishlist(userId, page, limit)
         }).send(res)
     }
     addProductToWishlist = async (req, res, next) => {
         const userId = req.userId
-        const productId = req.body
+        const productId = req.body.productId
         new OkResponse({
             message: "add product to wishlist success",
             metadata: await WishlistService.addProductToWishlist(userId, productId)
@@ -37,7 +37,7 @@ class wishlistController {
         const userId = req.userId
         new OkResponse({
             message:"get number of product in wishlist success",
-            metadata:await WishlistService.getCountProductInWishlist(this.userId)
+            metadata:await WishlistService.getCountProductInWishlist(userId)
         }).send(res)
     }
 }

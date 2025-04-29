@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require("@sequelize/core");
+const { DataTypes, Model } = require('sequelize');
 
 class Product extends Model { }
 
@@ -16,22 +16,22 @@ const initializeProducts = async (sequelize) => {
         desc: {
             type: DataTypes.STRING,
         },
-        desc_plain:{
+        desc_plain: {
             type: DataTypes.STRING,
         },
         price: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        discount_percentage:{
+        discount_percentage: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
         thumb: {
             type: DataTypes.STRING,
         },
-        attrs:{
-            type: DataTypes.JSON,
+        attrs: {
+            type: DataTypes.JSONB,
         },
         status: {
             type: DataTypes.STRING,
@@ -47,16 +47,21 @@ const initializeProducts = async (sequelize) => {
 
             allowNull: false
         },
-        sort:{
+        CategoryPath: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: true
+        },
+        sort: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 10
         },
         ShopId: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
         rating: {
-            type: DataTypes.DECIMAL(2, 1),
+            type: DataTypes.FLOAT,
             defaultValue: 4.5,
             validate: {
                 min: 1,
@@ -85,7 +90,7 @@ const initializeProducts = async (sequelize) => {
     Product.addHook("beforeCreate", (product) => {
         product.slug = product.name.toLowerCase().replace(/ /g, "-");
     })
-return Product
+    return Product
 }
 
 module.exports = initializeProducts;

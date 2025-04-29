@@ -1,6 +1,5 @@
-const { NotFoundError } = require("../../cores/error.response");
-const initializeModels = require("../../db/dbs/associations");
 const { getSelectData } = require("../../utils");
+const { Op } = require("sequelize")
 class ProductRepository {
     constructor(models) {
         this.Products = models.Products
@@ -21,7 +20,7 @@ class ProductRepository {
             include: [
                 {
                     model: this.SpuToSku,
-                    as: 'SpuToSku',
+                    as: 'SpuToSkus',
                     required: false,
                     include: [
                         {
@@ -35,136 +34,114 @@ class ProductRepository {
                                     required: false,
                                 },
                                 {
-                                    model: this.SkuSpec,
-                                    as: 'SkuSpec',
+                                    model: this.SkuSpecs,
+                                    as: 'SkuSpecs',
                                     required: false,
                                 }
-                            ]
-                        },
-
-                    ]
-                }
-            ],
-            raw: true,
-        })
-        return product
-    }
-    
-    async getDealOfTheDayProducts(limit = 10){
-        return await this.Products.findAll({
-            include:[
-                {
-                    model:this.Discounts,
-                    through:{attributes:[]},
-                    where:{
-                        status:"active",
-                        StartDate:{[Op.lte]: new Date()},
-                        EndDate:{[Op.gte]: new Date()},
-                        MaxUses:{[Op.gt]:this.Discounts.UserCounts}
-                    }
-                }
-            ],
-            where:{
-                status:'active',
-            },
-            limit,
-            order:[["sale_count","DESC"]]
-        })
-    }
-    
-    async getAllDealProducts(page = 1, size = 20){
-        const offset = (page -1) * size
-        const {count, rows} = await this.Products.findAndCountAll({
-            include:[
-                {
-                    model:this.Discounts,
-                    through:{ attributes:[]},
-                    where:{
-                        status:'active',
-                        StartDate:{[Op.lte]:new Date()},
-                        EndDate:{[Op.gte]:new Date()},
-                        MaxUses:{[Op.gt]: this.Discounts.UserCounts}
-                    }
-                }
-            ],
-            where:{
-                status:"active"
-            },
-            offset,
-            limit:size,
-            order:[['sale_count',"DESC"]],
-        })
-        return {
-            totalItems:count,
-            totalPages:Math.ceil(count/size),
-            currentPage:page,
-            product:rows
-        }
-    }
-    async getProductMetrics(productIds){
-        return await this.Products.findAll({
-            where:{
-                id:productIds,
-                status:'active'
-            },
-            attributes:getSelectData(['id','sale_count'])
-        })
-    }
-    async findProductByIds(productIds){
-        return await this.Products.findAll({
-            where:{
-                id:productIds,
-                status:'active'
-            },
-            attributes:getSelectData(['id','slug','name', 'sale_count']),
-            include:[
-                {
-                    model:this.SpuToSku,
-                    as:'SpuToSku',
-                    require:false,
-                    include:[
-                        {
-                            model:this.Sku,
-                            as:"Sku",
-                            require:false,
-                            include:[
-                                {model:this.SkuAttr, as :"SkuAttr", require:false},
-                                {model:this.SkuSpec, as:"SkuSpec", require:false}
                             ]
                         }
                     ]
                 }
             ]
-        })
+        });
+        return product;
     }
-    async findNewArrivalsProduct(page, size){
-        const offset = (page - 1) * size
-        const {count, rows} = await this.Products.findAndCountAll({
-            where:{
-                status:"active",
+
+    async getDealOfTheDayProducts(page = 1, limit = 10) {
+
+        const offset = (page - 1) * limit;
+        const { count, rows } = await this.Products.findAndCountAll({
+            where: {
+                status: 'active',
             },
-            attributes:getSelectData(['id','slug','name','price','discount_percentage', 'thumb','rating','sale_count']),
-            include:[
+            offset,
+            limit,
+            order: [["sale_count", "DESC"]],
+            include: [
                 {
-                    model:this.SpuToSku,
-                    require:false,
-                    include:{
-                        model:this.Sku,
-                        require:false,
-                        include:[
-                            {model:this.SkuAttr, require:false},
-                            {model:this.SkuSpec, require:false}
-                        ]
+                    model: this.Discounts,
+                    as: 'discounts',
+                    through: { attributes: [] },
+                    where: {
+                        status: "active",
+                        StartDate: { [Op.lte]: new Date() },
+                        EndDate: { [Op.gte]: new Date() },
+                    }
+                }
+            ]
+        });
+        return {
+            totalItems: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: parseInt(page),
+            products: rows
+        }
+    }
+
+    async getAllDealProducts(page = 1, limit = 20) {
+        const offset = (page - 1) * limit
+        const { count, rows } = await this.Products.findAndCountAll({
+            include: [
+                {
+                    model: this.Discounts,
+                    through: { attributes: [] },
+                    as: "discounts",
+                    where: {
+                        status: 'active',
+                        StartDate: { [Op.lte]: new Date() },
+                        EndDate: { [Op.gte]: new Date() },
                     }
                 }
             ],
-            order:[['createAt','DESC']],
+            where: {
+                status: "active"
+            },
             offset,
-            limit:size
+            limit: limit,
+            order: [['sale_count', "DESC"]],
+        })
+
+        return {
+            totalItems: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: parseInt(page),
+            products: rows
+        }
+    }
+    async getProductMetrics(productIds) {
+        return await this.Products.findAll({
+            where: {
+                id: productIds,
+                status: 'active'
+            },
+            attributes: getSelectData(['id', 'sale_count'])
+        })
+    }
+    async findProductByIds(productIds) {
+        return await this.Products.findAll({
+            where: {
+                id: productIds,
+                status: 'active'
+            },
+            attributes: getSelectData(['id', 'slug', 'name', 'sale_count', 'price', 'discount_percentage', 'thumb', 'rating', 'sale_count']),
+        })
+    }
+    async findNewArrivalsProduct(page, limit) {
+        const offset = (page - 1) * limit
+        const { count, rows } = await this.Products.findAndCountAll({
+            where: {
+                status: "active",
+            },
+            attributes: getSelectData(['id', 'slug', 'name', 'price', 'discount_percentage', 'thumb', 'rating', 'sale_count', 'rating']),
+            order: [['createdAt', 'DESC']],
+            offset,
+            limit: limit
         })
         return {
-            totalItems:count,
-            product:rows
+            totalItems: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: parseInt(page),
+            products: rows
         }
     }
 }

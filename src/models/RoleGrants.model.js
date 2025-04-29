@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require("@sequelize/core");
+const { DataTypes, Model } = require('sequelize');
 
 class RoleGrant extends Model {}
 
@@ -24,7 +24,7 @@ const  initializeRoleGrant= async(sequelize)=>{
                 comment: "resource id",
             },
             actions: {
-                type: DataTypes.JSON, // Lưu mảng actions như ["read:any", "update:any"]
+                type: DataTypes.JSONB, // Lưu mảng actions như ["read:any", "update:any"]
                 allowNull: false,
                 comment: "list of actions",
             },

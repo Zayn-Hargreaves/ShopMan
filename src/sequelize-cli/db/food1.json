@@ -1,0 +1,1044 @@
+{
+    "Products": [
+        {
+            "id": 129,
+            "name": "Silversea Cod Fish Steak",
+            "desc": "Premium Patagonian Toothfish cod fish steak, 1KG, frozen seafood, wild-caught.",
+            "desc_plain": "Cod fish steak, Patagonian Toothfish, 1KG, frozen",
+            "price": 6520000,
+            "discount_percentage": 27,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rd4i-lug0y36crzo569@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Seafood",
+                "weight": "1KG",
+                "features": [
+                    "Wild-Caught",
+                    "Frozen"
+                ],
+                "style": "Seafood"
+            },
+            "status": "active",
+            "slug": "silversea-cod-fish-steak",
+            "CategoryId": 100629,
+            "ShopId": 216221710,
+            "rating": 4.8,
+            "sale_count": 506,
+            "has_variations": false
+        },
+        {
+            "id": 130,
+            "name": "Silversea Premium Cod Fish Portion",
+            "desc": "Premium Patagonian Toothfish cod fish portion, 1KG, wild-caught, sea-frozen fresh seafood.",
+            "desc_plain": "Cod fish portion, Patagonian Toothfish, 1KG, frozen",
+            "price": 7650000,
+            "discount_percentage": 24,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rd4t-lug16ffj2ttlc3@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Seafood",
+                "weight": "1KG",
+                "features": [
+                    "Wild-Caught",
+                    "Frozen"
+                ],
+                "style": "Seafood"
+            },
+            "status": "active",
+            "slug": "silversea-premium-cod-fish-portion",
+            "CategoryId": 100629,
+            "ShopId": 216221710,
+            "rating": 4.7,
+            "sale_count": 113,
+            "has_variations": false
+        },
+        {
+            "id": 131,
+            "name": "Zi Hai Guo Self Heating Claypot Rice",
+            "desc": "Self-heating claypot rice with 16 flavors, instant meal solution, no cooking required.",
+            "desc_plain": "Self-heating claypot rice, 16 flavors, instant",
+            "price": 300000,
+            "discount_percentage": 32,
+            "thumb": "https://down-sg.img.susercontent.com/file/b9233d7280763c5f6465dca47d41aa2e@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Rice, Seasonings",
+                "features": [
+                    "Self-Heating",
+                    "Multiple Flavors"
+                ],
+                "style": "Instant Meal"
+            },
+            "status": "active",
+            "slug": "zi-hai-guo-self-heating-claypot-rice",
+            "CategoryId": 100629,
+            "ShopId": 261745748,
+            "rating": 4.6,
+            "sale_count": 336,
+            "has_variations": true
+        },
+        {
+            "id": 132,
+            "name": "Morimoto Haskap Strawberry Melon",
+            "desc": "Directly shipped from Japan, Morimoto North Promenade Haskap, Strawberry, and Melon sweets, 8 pieces.",
+            "desc_plain": "Haskap, Strawberry, Melon sweets, 8 pieces",
+            "price": 2878000,
+            "discount_percentage": 20,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rfey-m3bjqn7jrl93a7@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Sugar, Fruit Extracts",
+                "weight": "8 pieces",
+                "features": [
+                    "Imported from Japan"
+                ],
+                "style": "Confectionery"
+            },
+            "status": "active",
+            "slug": "morimoto-haskap-strawberry-melon",
+            "CategoryId": 100629,
+            "ShopId": 302701096,
+            "rating": 4.5,
+            "sale_count": 0,
+            "has_variations": false
+        },
+        {
+            "id": 133,
+            "name": "Haidilao Instant Rice",
+            "desc": "6 flavors of Haidilao instant rice, ready in 8 minutes, perfect for quick meals.",
+            "desc_plain": "Instant rice, 6 flavors, quick preparation",
+            "price": 245000,
+            "discount_percentage": 60,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7ra1u-m4yet0cey2yc1a@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Rice, Seasonings",
+                "features": [
+                    "Quick Preparation",
+                    "Multiple Flavors"
+                ],
+                "style": "Instant Meal"
+            },
+            "status": "active",
+            "slug": "haidilao-instant-rice",
+            "CategoryId": 100629,
+            "ShopId": 1384508898,
+            "rating": 4.6,
+            "sale_count": 49,
+            "has_variations": false
+        },
+        {
+            "id": 134,
+            "name": "Ready Meals Bundle",
+            "desc": "Mix and match ready meals bundle, minimum 5 packets, convenient for quick meals.",
+            "desc_plain": "Ready meals bundle, mix and match, minimum 5 packets",
+            "price": 500000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rcf9-m6htc4gn02hmd8@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Various Ingredients",
+                "features": [
+                    "Mix and Match"
+                ],
+                "style": "Ready Meal"
+            },
+            "status": "active",
+            "slug": "ready-meals-bundle",
+            "CategoryId": 100629,
+            "ShopId": 1020971064,
+            "rating": 4.5,
+            "sale_count": 338,
+            "has_variations": true
+        },
+        {
+            "id": 135,
+            "name": "Zi Hai Guo Self-Heating Claypot Rice",
+            "desc": "Self-heating claypot rice with 10 flavors, instant rice meal for convenience.",
+            "desc_plain": "Self-heating claypot rice, 10 flavors, instant",
+            "price": 398000,
+            "discount_percentage": 49,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rbm7-m62e22nbnhxca7@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Rice, Seasonings",
+                "features": [
+                    "Self-Heating",
+                    "Multiple Flavors"
+                ],
+                "style": "Instant Meal"
+            },
+            "status": "active",
+            "slug": "zi-hai-guo-self-heating-claypot-rice-135",
+            "CategoryId": 100629,
+            "ShopId": 1384508898,
+            "rating": 4.6,
+            "sale_count": 173,
+            "has_variations": true
+        },
+        {
+            "id": 136,
+            "name": "Yongle Xiao Long Bao",
+            "desc": "Traditional soup Xiao Long Bao, 1KG, approximately 40 pieces, frozen dumplings.",
+            "desc_plain": "Xiao Long Bao, 1KG, 40 pieces, frozen",
+            "price": 1800000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7ra3v-m4sc37c1vnsx20@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Dough, Pork",
+                "weight": "1KG",
+                "features": [
+                    "Frozen"
+                ],
+                "style": "Dumplings"
+            },
+            "status": "active",
+            "slug": "yongle-xiao-long-bao",
+            "CategoryId": 100629,
+            "ShopId": 142011724,
+            "rating": 4.7,
+            "sale_count": 199,
+            "has_variations": false
+        },
+        {
+            "id": 137,
+            "name": "Haifusheng Instant Porridge",
+            "desc": "Freeze-dried instant porridge, convenient for breakfast or late-night meals.",
+            "desc_plain": "Instant porridge, freeze-dried, quick preparation",
+            "price": 112000,
+            "discount_percentage": 74,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rcf9-m6f96opz1f5e72@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Grains, Seasonings",
+                "features": [
+                    "Freeze-Dried",
+                    "Quick Preparation"
+                ],
+                "style": "Instant Meal"
+            },
+            "status": "active",
+            "slug": "haifusheng-instant-porridge",
+            "CategoryId": 100629,
+            "ShopId": 1384508898,
+            "rating": 4.5,
+            "sale_count": 355,
+            "has_variations": true
+        },
+        {
+            "id": 138,
+            "name": "Multi Golden Crispy Chicken Karaage",
+            "desc": "Halal crispy chicken karaage, 1KG, perfect for snacks or meals.",
+            "desc_plain": "Chicken karaage, 1KG, halal, crispy",
+            "price": 1399000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-22110-abkzxeiowfjvc0@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Chicken",
+                "weight": "1KG",
+                "features": [
+                    "Halal",
+                    "Frozen"
+                ],
+                "style": "Frozen Food"
+            },
+            "status": "active",
+            "slug": "multi-golden-crispy-chicken-karaage",
+            "CategoryId": 100629,
+            "ShopId": 554085108,
+            "rating": 4.6,
+            "sale_count": 105,
+            "has_variations": false
+        },
+        {
+            "id": 139,
+            "name": "Kai Xiao Zao Self Heating Claypot Rice",
+            "desc": "Self-heating claypot rice with 9 flavors, instant meal endorsed by Xiao Zhan.",
+            "desc_plain": "Self-heating claypot rice, 9 flavors, instant",
+            "price": 690000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/c86a19227b0426b99c5057bea907b249@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Rice, Seasonings",
+                "features": [
+                    "Self-Heating",
+                    "Multiple Flavors"
+                ],
+                "style": "Instant Meal"
+            },
+            "status": "active",
+            "slug": "kai-xiao-zao-self-heating-claypot-rice",
+            "CategoryId": 100629,
+            "ShopId": 261745748,
+            "rating": 4.6,
+            "sale_count": 154,
+            "has_variations": false
+        },
+        {
+            "id": 140,
+            "name": "I'M BULGOGI Korean Meat",
+            "desc": "Korean-style meat options including beef, chicken, spicy pork, and galbi, frozen.",
+            "desc_plain": "Korean meat, beef, chicken, pork, frozen",
+            "price": 470000,
+            "discount_percentage": 50,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rdy3-m08dxng5xm0q02@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Meat",
+                "features": [
+                    "Multiple Variants",
+                    "Frozen"
+                ],
+                "style": "Frozen Food"
+            },
+            "status": "active",
+            "slug": "im-bulgogi-korean-meat",
+            "CategoryId": 100629,
+            "ShopId": 151409130,
+            "rating": 4.8,
+            "sale_count": 2850,
+            "has_variations": true
+        },
+        {
+            "id": 141,
+            "name": "MAGGI BIG Chicken Noodles",
+            "desc": "MAGGI BIG Chicken Noodles, 5 packs of 103g, instant noodle meal.",
+            "desc_plain": "Chicken noodles, 5x103g, instant",
+            "price": 363000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/fb377d0dc832b82651e047ee4be63629@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Noodles, Seasonings",
+                "weight": "5x103g",
+                "features": [
+                    "Instant"
+                ],
+                "style": "Instant Noodles"
+            },
+            "status": "active",
+            "slug": "maggi-big-chicken-noodles",
+            "CategoryId": 100629,
+            "ShopId": 91799978,
+            "rating": 4.5,
+            "sale_count": 27,
+            "has_variations": false
+        },
+        {
+            "id": 142,
+            "name": "Multi Steamed Chicken Breast Fillet",
+            "desc": "Halal steamed chicken breast fillet, 1KG, healthier choice, frozen.",
+            "desc_plain": "Chicken breast fillet, 1KG, halal, frozen",
+            "price": 1590000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-22110-qjl7zdos6gjvc3@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Chicken",
+                "weight": "1KG",
+                "features": [
+                    "Halal",
+                    "Healthier Choice"
+                ],
+                "style": "Frozen Food"
+            },
+            "status": "active",
+            "slug": "multi-steamed-chicken-breast-fillet",
+            "CategoryId": 100629,
+            "ShopId": 554085108,
+            "rating": 4.8,
+            "sale_count": 2836,
+            "has_variations": false
+        },
+        {
+            "id": 143,
+            "name": "Multi Tater Tots",
+            "desc": "Halal tater tots/mini hashbrowns, 750g, frozen, perfect for snacks or sides.",
+            "desc_plain": "Tater tots, 750g, halal, frozen",
+            "price": 760000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-22120-l2t79slfj0kv42@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Potato",
+                "weight": "750g",
+                "features": [
+                    "Halal",
+                    "Frozen"
+                ],
+                "style": "Frozen Food"
+            },
+            "status": "active",
+            "slug": "multi-tater-tots",
+            "CategoryId": 100629,
+            "ShopId": 554085108,
+            "rating": 4.6,
+            "sale_count": 351,
+            "has_variations": false
+        },
+        {
+            "id": 144,
+            "name": "Lay's Sour Cream and Onion Chips",
+            "desc": "Lay's Sour Cream and Onion potato chips, 28.3g, perfect for snacking.",
+            "desc_plain": "Potato chips, sour cream and onion, 28.3g",
+            "price": 80000,
+            "discount_percentage": 11,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-22110-3178ksflxpjvf1@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Potato",
+                "weight": "28.3g",
+                "features": [
+                    "Snack"
+                ],
+                "style": "Chips"
+            },
+            "status": "active",
+            "slug": "lays-sour-cream-onion-chips",
+            "CategoryId": 100629,
+            "ShopId": 91799978,
+            "rating": 4.5,
+            "sale_count": 100,
+            "has_variations": false
+        },
+        {
+            "id": 145,
+            "name": "MAGGI 2-Min Curry Noodles",
+            "desc": "MAGGI 2-Minute Curry Noodles, 5 packs of 79g, quick and tasty instant noodles.",
+            "desc_plain": "Curry noodles, 5x79g, instant",
+            "price": 267000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/32753e98891ad7b5b5713abe31a36290@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Noodles, Seasonings",
+                "weight": "5x79g",
+                "features": [
+                    "Instant"
+                ],
+                "style": "Instant Noodles"
+            },
+            "status": "active",
+            "slug": "maggi-2-min-curry-noodles",
+            "CategoryId": 100629,
+            "ShopId": 91799978,
+            "rating": 4.5,
+            "sale_count": 53,
+            "has_variations": false
+        },
+        {
+            "id": 146,
+            "name": "Flying Wheel Abalone in Brine",
+            "desc": "Flying Wheel Abalone in Brine, 425g, bundle of 3 cans, 7-10 pieces per can.",
+            "desc_plain": "Abalone in brine, 425g, 3 cans",
+            "price": 3990000,
+            "discount_percentage": 31,
+            "thumb": "https://down-sg.img.susercontent.com/file/3d5c1f683fed87b68a75bbac44ff80b2@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Abalone",
+                "weight": "425g x 3",
+                "features": [
+                    "Canned"
+                ],
+                "style": "Seafood"
+            },
+            "status": "active",
+            "slug": "flying-wheel-abalone-in-brine",
+            "CategoryId": 100629,
+            "ShopId": 204395337,
+            "rating": 4.7,
+            "sale_count": 12,
+            "has_variations": false
+        },
+        {
+            "id": 147,
+            "name": "Silversea Boneless Chicken Breast",
+            "desc": "Boneless, skinless chicken breast, 2KG, fresh frozen, high protein.",
+            "desc_plain": "Chicken breast, 2KG, boneless, frozen",
+            "price": 1800000,
+            "discount_percentage": 29,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rfhp-m3n1nmanz51ze6@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Chicken",
+                "weight": "2KG",
+                "features": [
+                    "High Protein",
+                    "Frozen"
+                ],
+                "style": "Frozen Food"
+            },
+            "status": "active",
+            "slug": "silversea-boneless-chicken-breast",
+            "CategoryId": 100629,
+            "ShopId": 216221710,
+            "rating": 4.6,
+            "sale_count": 139,
+            "has_variations": false
+        },
+        {
+            "id": 148,
+            "name": "LeTAO Otaru Cheese Biscuits",
+            "desc": "Directly shipped from Japan, LeTAO Otaru Cheese and Cheese Sandwich Biscuits, available in 9, 16, or 20 pieces.",
+            "desc_plain": "Cheese biscuits, 9-20 pieces, imported",
+            "price": 3226000,
+            "discount_percentage": 20,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rfey-m3c1pmhjrg4o61@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Cheese, Flour",
+                "features": [
+                    "Imported from Japan"
+                ],
+                "style": "Confectionery"
+            },
+            "status": "active",
+            "slug": "letao-otaru-cheese-biscuits",
+            "CategoryId": 100629,
+            "ShopId": 302701096,
+            "rating": 4.5,
+            "sale_count": 0,
+            "has_variations": true
+        }
+    ],
+    "Skus": [
+        {
+            "id": 1,
+            "sku_no": "SKU-SEAFOOD-129",
+            "sku_name": "Cod Fish Steak",
+            "sku_desc": "Patagonian Toothfish cod fish steak, 1KG",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 6520000,
+            "ProductId": 129,
+            "sku_attrs": {}
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-SEAFOOD-130",
+            "sku_name": "Premium Cod Fish Portion",
+            "sku_desc": "Patagonian Toothfish cod fish portion, 1KG",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 7650000,
+            "ProductId": 130,
+            "sku_attrs": {}
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-RICE-131",
+            "sku_name": "Zi Hai Guo Claypot Rice",
+            "sku_desc": "Self-heating claypot rice, 16 flavors",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 200,
+            "sku_price": 300000,
+            "ProductId": 131,
+            "sku_attrs": {
+                "flavors": "16"
+            }
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-SWEETS-132",
+            "sku_name": "Morimoto Haskap Sweets",
+            "sku_desc": "Haskap, Strawberry, Melon sweets, 8 pieces",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 2878000,
+            "ProductId": 132,
+            "sku_attrs": {}
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-RICE-133",
+            "sku_name": "Haidilao Instant Rice",
+            "sku_desc": "Instant rice with 6 flavors",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 150,
+            "sku_price": 245000,
+            "ProductId": 133,
+            "sku_attrs": {}
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-MEAL-134",
+            "sku_name": "Ready Meals Bundle",
+            "sku_desc": "Mix and match ready meals, minimum 5 packets",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 500000,
+            "ProductId": 134,
+            "sku_attrs": {
+                "minimum": "5 packets"
+            }
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-RICE-135",
+            "sku_name": "Zi Hai Guo Claypot Rice",
+            "sku_desc": "Self-heating claypot rice, 10 flavors",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 150,
+            "sku_price": 398000,
+            "ProductId": 135,
+            "sku_attrs": {
+                "flavors": "10"
+            }
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-DUMPLINGS-136",
+            "sku_name": "Yongle Xiao Long Bao",
+            "sku_desc": "Traditional soup Xiao Long Bao, 1KG, 40 pieces",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 1800000,
+            "ProductId": 136,
+            "sku_attrs": {}
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-PORRIDGE-137",
+            "sku_name": "Haifusheng Instant Porridge",
+            "sku_desc": "Freeze-dried instant porridge",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 200,
+            "sku_price": 112000,
+            "ProductId": 137,
+            "sku_attrs": {}
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-CHICKEN-138",
+            "sku_name": "Crispy Chicken Karaage",
+            "sku_desc": "Halal crispy chicken karaage, 1KG",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 1399000,
+            "ProductId": 138,
+            "sku_attrs": {}
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-RICE-139",
+            "sku_name": "Kai Xiao Zao Claypot Rice",
+            "sku_desc": "Self-heating claypot rice, 9 flavors",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 150,
+            "sku_price": 690000,
+            "ProductId": 139,
+            "sku_attrs": {}
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-MEAT-140",
+            "sku_name": "I'M BULGOGI Korean Meat",
+            "sku_desc": "Korean-style meat, multiple variants",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 200,
+            "sku_price": 470000,
+            "ProductId": 140,
+            "sku_attrs": {
+                "variants": "Beef, Chicken, Spicy Pork, Galbi"
+            }
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-NOODLES-141",
+            "sku_name": "MAGGI BIG Chicken Noodles",
+            "sku_desc": "Instant chicken noodles, 5x103g",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 363000,
+            "ProductId": 141,
+            "sku_attrs": {}
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-CHICKEN-142",
+            "sku_name": "Steamed Chicken Breast Fillet",
+            "sku_desc": "Halal steamed chicken breast fillet, 1KG",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 1590000,
+            "ProductId": 142,
+            "sku_attrs": {}
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-TATERTOTS-143",
+            "sku_name": "Multi Tater Tots",
+            "sku_desc": "Halal tater tots, 750g",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 760000,
+            "ProductId": 143,
+            "sku_attrs": {}
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-CHIPS-144",
+            "sku_name": "Lay's Sour Cream Chips",
+            "sku_desc": "Sour cream and onion potato chips, 28.3g",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 200,
+            "sku_price": 80000,
+            "ProductId": 144,
+            "sku_attrs": {}
+        },
+        {
+            "id": 17,
+            "sku_no": "SKU-NOODLES-145",
+            "sku_name": "MAGGI 2-Min Curry Noodles",
+            "sku_desc": "Instant curry noodles, 5x79g",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 267000,
+            "ProductId": 145,
+            "sku_attrs": {}
+        },
+        {
+            "id": 18,
+            "sku_no": "SKU-SEAFOOD-146",
+            "sku_name": "Flying Wheel Abalone",
+            "sku_desc": "Abalone in brine, 425g, 3 cans",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 3990000,
+            "ProductId": 146,
+            "sku_attrs": {}
+        },
+        {
+            "id": 19,
+            "sku_no": "SKU-CHICKEN-147",
+            "sku_name": "Boneless Chicken Breast",
+            "sku_desc": "Boneless skinless chicken breast, 2KG",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 1800000,
+            "ProductId": 147,
+            "sku_attrs": {}
+        },
+        {
+            "id": 20,
+            "sku_no": "SKU-BISCUITS-148",
+            "sku_name": "LeTAO Cheese Biscuits",
+            "sku_desc": "Cheese and cheese sandwich biscuits, 9-20 pieces",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 3226000,
+            "ProductId": 148,
+            "sku_attrs": {
+                "pieces": "9, 16, 20"
+            }
+        }
+    ],
+    "SkuSpecs": [
+        {
+            "id": 1,
+            "sku_specs": {
+                "material": "Seafood",
+                "weight": "1KG",
+                "features": "Wild-Caught"
+            },
+            "SkuId": 1
+        },
+        {
+            "id": 2,
+            "sku_specs": {
+                "material": "Seafood",
+                "weight": "1KG",
+                "features": "Wild-Caught"
+            },
+            "SkuId": 2
+        },
+        {
+            "id": 3,
+            "sku_specs": {
+                "material": "Rice",
+                "weight": "Varies",
+                "features": "Self-Heating"
+            },
+            "SkuId": 3
+        },
+        {
+            "id": 4,
+            "sku_specs": {
+                "material": "Sugar",
+                "weight": "8 pieces",
+                "features": "Imported"
+            },
+            "SkuId": 4
+        },
+        {
+            "id": 5,
+            "sku_specs": {
+                "material": "Rice",
+                "weight": "Varies",
+                "features": "Quick Preparation"
+            },
+            "SkuId": 5
+        },
+        {
+            "id": 6,
+            "sku_specs": {
+                "material": "Various",
+                "weight": "Varies",
+                "features": "Mix and Match"
+            },
+            "SkuId": 6
+        },
+        {
+            "id": 7,
+            "sku_specs": {
+                "material": "Rice",
+                "weight": "Varies",
+                "features": "Self-Heating"
+            },
+            "SkuId": 7
+        },
+        {
+            "id": 8,
+            "sku_specs": {
+                "material": "Dough, Pork",
+                "weight": "1KG",
+                "features": "Frozen"
+            },
+            "SkuId": 8
+        },
+        {
+            "id": 9,
+            "sku_specs": {
+                "material": "Grains",
+                "weight": "Varies",
+                "features": "Freeze-Dried"
+            },
+            "SkuId": 9
+        },
+        {
+            "id": 10,
+            "sku_specs": {
+                "material": "Chicken",
+                "weight": "1KG",
+                "features": "Halal"
+            },
+            "SkuId": 10
+        },
+        {
+            "id": 11,
+            "sku_specs": {
+                "material": "Rice",
+                "weight": "Varies",
+                "features": "Self-Heating"
+            },
+            "SkuId": 11
+        },
+        {
+            "id": 12,
+            "sku_specs": {
+                "material": "Meat",
+                "weight": "Varies",
+                "features": "Frozen"
+            },
+            "SkuId": 12
+        },
+        {
+            "id": 13,
+            "sku_specs": {
+                "material": "Noodles",
+                "weight": "5x103g",
+                "features": "Instant"
+            },
+            "SkuId": 13
+        },
+        {
+            "id": 14,
+            "sku_specs": {
+                "material": "Chicken",
+                "weight": "1KG",
+                "features": "Halal"
+            },
+            "SkuId": 14
+        },
+        {
+            "id": 15,
+            "sku_specs": {
+                "material": "Potato",
+                "weight": "750g",
+                "features": "Halal"
+            },
+            "SkuId": 15
+        },
+        {
+            "id": 16,
+            "sku_specs": {
+                "material": "Potato",
+                "weight": "28.3g",
+                "features": "Snack"
+            },
+            "SkuId": 16
+        },
+        {
+            "id": 17,
+            "sku_specs": {
+                "material": "Noodles",
+                "weight": "5x79g",
+                "features": "Instant"
+            },
+            "SkuId": 17
+        },
+        {
+            "id": 18,
+            "sku_specs": {
+                "material": "Abalone",
+                "weight": "425g x 3",
+                "features": "Canned"
+            },
+            "SkuId": 18
+        },
+        {
+            "id": 19,
+            "sku_specs": {
+                "material": "Chicken",
+                "weight": "2KG",
+                "features": "High Protein"
+            },
+            "SkuId": 19
+        },
+        {
+            "id": 20,
+            "sku_specs": {
+                "material": "Cheese, Flour",
+                "weight": "Varies",
+                "features": "Imported"
+            },
+            "SkuId": 20
+        }
+    ],
+    "SpuToSku": [
+        {
+            "id": 1,
+            "sku_no": "SKU-SEAFOOD-129",
+            "spu_no": "SPU-SEAFOOD-129"
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-SEAFOOD-130",
+            "spu_no": "SPU-SEAFOOD-130"
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-RICE-131",
+            "spu_no": "SPU-RICE-131"
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-SWEETS-132",
+            "spu_no": "SPU-SWEETS-132"
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-RICE-133",
+            "spu_no": "SPU-RICE-133"
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-MEAL-134",
+            "spu_no": "SPU-MEAL-134"
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-RICE-135",
+            "spu_no": "SPU-RICE-135"
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-DUMPLINGS-136",
+            "spu_no": "SPU-DUMPLINGS-136"
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-PORRIDGE-137",
+            "spu_no": "SPU-PORRIDGE-137"
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-CHICKEN-138",
+            "spu_no": "SPU-CHICKEN-138"
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-RICE-139",
+            "spu_no": "SPU-RICE-139"
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-MEAT-140",
+            "spu_no": "SPU-MEAT-140"
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-NOODLES-141",
+            "spu_no": "SPU-NOODLES-141"
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-CHICKEN-142",
+            "spu_no": "SPU-CHICKEN-142"
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-TATERTOTS-143",
+            "spu_no": "SPU-TATERTOTS-143"
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-CHIPS-144",
+            "spu_no": "SPU-CHIPS-144"
+        },
+        {
+            "id": 17,
+            "sku_no": "SKU-NOODLES-145",
+            "spu_no": "SPU-NOODLES-145"
+        },
+        {
+            "id": 18,
+            "sku_no": "SKU-SEAFOOD-146",
+            "spu_no": "SPU-SEAFOOD-146"
+        },
+        {
+            "id": 19,
+            "sku_no": "SKU-CHICKEN-147",
+            "spu_no": "SPU-CHICKEN-147"
+        },
+        {
+            "id": 20,
+            "sku_no": "SKU-BISCUITS-148",
+            "spu_no": "SPU-BISCUITS-148"
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require("@sequelize/core")
+const {DataTypes, Model} = require('sequelize')
 const slugify = require("slugify")
 class Campaign extends Model{}
 const initializeCampaign = async(sequelize)=>{

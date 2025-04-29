@@ -1,4 +1,5 @@
-const {DataTypes, Model} = require("@sequelize/core");
+
+const {DataTypes, Model} = require('sequelize');
 const RedisService = require("../services/Redis.Service");
 
 class Discounts extends Model {}
@@ -55,7 +56,7 @@ const initializeDiscounts = async(sequelize)=>{
         },
         ShopId:{
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true
         },
         CampaignId:{
             type: DataTypes.INTEGER,

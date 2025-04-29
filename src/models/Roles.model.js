@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const {DataTypes, Model} = require('sequelize');
 
 class Role extends Model {}
 const initializeRole = async(sequelize)=>{

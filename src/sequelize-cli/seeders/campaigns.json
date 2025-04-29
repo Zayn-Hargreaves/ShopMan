@@ -1,0 +1,12 @@
+[
+  {
+    "title": "5/5 Super Sale Campaign",
+    "description": "Mega sale 5/5 với hàng ngàn ưu đãi hấp dẫn",
+    "start_time": "2025-05-01T00:00:00.000Z",
+    "end_time": "2025-05-05T23:59:59.000Z",
+    "status": "active",
+    "slug": "5-5-super-sale-campaign",
+    "createdAt": "2025-01-24T19:43:34.982812",
+    "updatedAt": "2025-02-23T03:34:17.741592"
+  }
+]

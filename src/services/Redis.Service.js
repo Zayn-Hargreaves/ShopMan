@@ -1,5 +1,4 @@
 
-const { get } = require("lodash");
 const { BadGatewayError } = require("../cores/error.response");
 const { getRedis } = require("../db/rdb");
 
@@ -48,15 +47,15 @@ class RedisService {
       }
       return true
     } catch (error) {
-      throw new BadGatewayError(`Error upserting item into ZSET ${key}`)
+      throw new BadGatewayError(`Error upserting item into ZSET ${key}:`,error)
     }
   }
-  static async getZsetRange(key, start, limit = -1, withScores = true) {
+  static async getZsetRange(key, start, end = -1, withScores = true) {
     const redis = await getRedis()
     try {
       return await redis.zrevrange(key, start, end, withScores ? "WITHSCORES" : '"')
     } catch (error) {
-      throw new BadGatewayError(`Error getting ZSET range ${key}:`,)
+      throw new BadGatewayError(`Error getting ZSET range ${key}:`,error)
     }
   }
   static async getZsetScore(key, member) {
@@ -93,26 +92,23 @@ class RedisService {
     }
   }
   static async getCachedData(key) {
-    const redis = getRedis()
-    try {
-      const data = await redis.get(key)
-      return data ? JSON.parse(data) : null
-    } catch (error) {
-      throw new BadGatewayError(`Error getting cached data for key ${key}:`, error)
-    }
+    const redis = await getRedis()
+    const data = await redis.get(key)
+    return JSON.parse(data)
   }
   static async setTrendingScore(zsetkey, productId, score, ttl = null) {
     const redis = await getRedis()
     try {
       await redis.zadd(zsetkey, score, `product:${productId}`)
-      if (ttl && Number.isInteger(tll) && ttl > 0) {
-        const exist = await redis.exist(zsetkey)
+      if (ttl && Number.isInteger(ttl) && ttl > 0) {
+        const exist = await redis.exists(zsetkey)
         if (!exist) {
           await redis.expire(zsetkey, ttl)
         }
       }
       return true
     } catch (error) {
+      console.log(error)
       throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:`, error)
     }
   }

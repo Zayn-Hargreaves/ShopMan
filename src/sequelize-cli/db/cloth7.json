@@ -1,0 +1,714 @@
+{
+    "Products": [
+        {
+            "id": 61,
+            "name": "Y2K Chiffon Long-Sleeve Blouse",
+            "desc": "Women's long-sleeve chiffon blouse with a patterned design, ideal for formal office wear with a Y2K twist.",
+            "desc_plain": "Women's blouse, long sleeve, chiffon, Y2K style",
+            "price": 1468000,
+            "discount_percentage": 48,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7r98o-lmh7edmkuy1wd4@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Chiffon",
+                "colors": [
+                    "Black",
+                    "White"
+                ],
+                "sizes": [
+                    "S",
+                    "M"
+                ],
+                "style": "Y2K Formal"
+            },
+            "status": "active",
+            "slug": "y2k-chiffon-long-sleeve-blouse",
+            "CategoryId": 100017,
+            "ShopId": 528461070,
+            "rating": 4.6,
+            "sale_count": 20,
+            "has_variations": true
+        },
+        {
+            "id": 62,
+            "name": "Oversized Waffle Fabric T-Shirt Set",
+            "desc": "Unisex short-sleeve T-shirt set with waffle fabric and logo pattern, designed for a loose, oversized couple style.",
+            "desc_plain": "Unisex T-shirt set, short sleeve, waffle fabric, oversized",
+            "price": 820000,
+            "discount_percentage": 49,
+            "thumb": "https://down-sg.img.susercontent.com/file/th-11134207-7qul9-ljnupqpezjty3d@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Cotton Blend",
+                "colors": [
+                    "White",
+                    "Grey"
+                ],
+                "sizes": [
+                    "L",
+                    "XL"
+                ],
+                "style": "Casual Oversized"
+            },
+            "status": "active",
+            "slug": "oversized-waffle-fabric-t-shirt-set",
+            "CategoryId": 100011,
+            "ShopId": 732432687,
+            "rating": 4.4,
+            "sale_count": 3,
+            "has_variations": true
+        },
+        {
+            "id": 63,
+            "name": "Cotton Linen Embroidered Top",
+            "desc": "Women's short-sleeve cotton linen top with retro ethnic embroidery and disc buttons, perfect for a literary look.",
+            "desc_plain": "Women's top, short sleeve, cotton linen, embroidered",
+            "price": 1719000,
+            "discount_percentage": 2,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7r98o-loryb2ycf6a9f2@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Cotton Linen",
+                "colors": [
+                    "Beige",
+                    "White"
+                ],
+                "sizes": [
+                    "M",
+                    "L"
+                ],
+                "style": "Retro Ethnic"
+            },
+            "status": "active",
+            "slug": "cotton-linen-embroidered-top",
+            "CategoryId": 100017,
+            "ShopId": 754157465,
+            "rating": 4.2,
+            "sale_count": 1,
+            "has_variations": true
+        },
+        {
+            "id": 64,
+            "name": "Korean Hanbok Wrap Top",
+            "desc": "Women's traditional Korean hanbok-inspired wrap top, designed for cultural and elegant wear.",
+            "desc_plain": "Women's top, hanbok style, wrap design",
+            "price": 14715000,
+            "discount_percentage": 25,
+            "thumb": "https://down-sg.img.susercontent.com/file/0e7b0f2399aa67897f1d795c9d55d8e4@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Cotton Blend",
+                "colors": [
+                    "White",
+                    "Blue"
+                ],
+                "sizes": [
+                    "M",
+                    "L"
+                ],
+                "style": "Traditional Korean"
+            },
+            "status": "active",
+            "slug": "korean-hanbok-wrap-top",
+            "CategoryId": 100017,
+            "ShopId": 328337766,
+            "rating": 4.3,
+            "sale_count": 0,
+            "has_variations": true
+        },
+        {
+            "id": 65,
+            "name": "Japanese Vintage Printed T-Shirt",
+            "desc": "Women's short-sleeve T-shirt with Japanese vintage prints, designed in a loose Harajuku style for summer.",
+            "desc_plain": "Women's T-shirt, short sleeve, vintage print, loose fit",
+            "price": 638000,
+            "discount_percentage": 54,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rd3v-m7bp7htityie5d@resize_w450_nl.webp",
+            "attrs": {
+                "material": "100% Cotton",
+                "colors": [
+                    "White",
+                    "Black"
+                ],
+                "sizes": [
+                    "M",
+                    "L"
+                ],
+                "style": "Harajuku Casual"
+            },
+            "status": "active",
+            "slug": "japanese-vintage-printed-t-shirt",
+            "CategoryId": 100017,
+            "ShopId": 58390723,
+            "rating": 4.7,
+            "sale_count": 12,
+            "has_variations": true
+        },
+        {
+            "id": 66,
+            "name": "Chinese Vintage Embroidered Shirt",
+            "desc": "Women's short-sleeve cotton linen shirt with jacquard embroidery and stand collar, featuring a Chinese vintage style.",
+            "desc_plain": "Women's shirt, short sleeve, embroidered, vintage style",
+            "price": 1695000,
+            "discount_percentage": 2,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7r98o-lvzhu3ckl5j9dd@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Cotton Linen",
+                "colors": [
+                    "White",
+                    "Beige"
+                ],
+                "sizes": [
+                    "M",
+                    "L"
+                ],
+                "style": "Chinese Vintage"
+            },
+            "status": "active",
+            "slug": "chinese-vintage-embroidered-shirt",
+            "CategoryId": 100017,
+            "ShopId": 754157465,
+            "rating": 4.2,
+            "sale_count": 0,
+            "has_variations": true
+        },
+        {
+            "id": 67,
+            "name": "GTR Modified Car T-Shirt",
+            "desc": "Men's short-sleeve T-shirt with GTR car-themed prints, designed for a loose, street-style racing look.",
+            "desc_plain": "Men's T-shirt, short sleeve, car print, street style",
+            "price": 1320000,
+            "discount_percentage": 49,
+            "thumb": "https://down-sg.img.susercontent.com/file/4f8deffdbdcda2c9321cca63dab776e4@resize_w450_nl.webp",
+            "attrs": {
+                "material": "100% Cotton",
+                "colors": [
+                    "White",
+                    "Black"
+                ],
+                "sizes": [
+                    "M",
+                    "L"
+                ],
+                "style": "Street Racing"
+            },
+            "status": "active",
+            "slug": "gtr-modified-car-t-shirt",
+            "CategoryId": 100011,
+            "ShopId": 366418473,
+            "rating": 4.3,
+            "sale_count": 1,
+            "has_variations": true
+        },
+        {
+            "id": 68,
+            "name": "Plus Size Retro Printed T-Shirt",
+            "desc": "Women's plus-size short-sleeve T-shirt with retro vintage prints, designed for a loose, casual Korean style.",
+            "desc_plain": "Women's T-shirt, short sleeve, retro print, plus size",
+            "price": 2594000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7qvd9-lgci70yiqwhx9e@resize_w450_nl.webp",
+            "attrs": {
+                "material": "100% Cotton",
+                "colors": [
+                    "White",
+                    "Grey"
+                ],
+                "sizes": [
+                    "XL",
+                    "XXL"
+                ],
+                "style": "Korean Casual"
+            },
+            "status": "active",
+            "slug": "plus-size-retro-printed-t-shirt",
+            "CategoryId": 100017,
+            "ShopId": 702407468,
+            "rating": 4.3,
+            "sale_count": 1,
+            "has_variations": true
+        }
+    ],
+    "Skus": [
+        {
+            "id": 1,
+            "sku_no": "SKU-BLOUSE-061-BLACK-S",
+            "sku_name": "Chiffon Blouse Black S",
+            "sku_desc": "Black long-sleeve chiffon blouse, size S",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 1468000,
+            "ProductId": 61,
+            "sku_attrs": {
+                "color": "Black",
+                "size": "S"
+            }
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-BLOUSE-061-WHITE-M",
+            "sku_name": "Chiffon Blouse White M",
+            "sku_desc": "White long-sleeve chiffon blouse, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 45,
+            "sku_price": 1468000,
+            "ProductId": 61,
+            "sku_attrs": {
+                "color": "White",
+                "size": "M"
+            }
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-TSHIRT-062-WHITE-L",
+            "sku_name": "Waffle T-Shirt White L",
+            "sku_desc": "White short-sleeve waffle fabric T-shirt, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 40,
+            "sku_price": 820000,
+            "ProductId": 62,
+            "sku_attrs": {
+                "color": "White",
+                "size": "L"
+            }
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-TSHIRT-062-GREY-XL",
+            "sku_name": "Waffle T-Shirt Grey XL",
+            "sku_desc": "Grey short-sleeve waffle fabric T-shirt, size XL",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 35,
+            "sku_price": 820000,
+            "ProductId": 62,
+            "sku_attrs": {
+                "color": "Grey",
+                "size": "XL"
+            }
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-TOP-063-BEIGE-M",
+            "sku_name": "Embroidered Top Beige M",
+            "sku_desc": "Beige short-sleeve embroidered top, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 1719000,
+            "ProductId": 63,
+            "sku_attrs": {
+                "color": "Beige",
+                "size": "M"
+            }
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-TOP-063-WHITE-L",
+            "sku_name": "Embroidered Top White L",
+            "sku_desc": "White short-sleeve embroidered top, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 45,
+            "sku_price": 1719000,
+            "ProductId": 63,
+            "sku_attrs": {
+                "color": "White",
+                "size": "L"
+            }
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-TOP-064-WHITE-M",
+            "sku_name": "Hanbok Top White M",
+            "sku_desc": "White hanbok-inspired wrap top, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 30,
+            "sku_price": 14715000,
+            "ProductId": 64,
+            "sku_attrs": {
+                "color": "White",
+                "size": "M"
+            }
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-TOP-064-BLUE-L",
+            "sku_name": "Hanbok Top Blue L",
+            "sku_desc": "Blue hanbok-inspired wrap top, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 25,
+            "sku_price": 14715000,
+            "ProductId": 64,
+            "sku_attrs": {
+                "color": "Blue",
+                "size": "L"
+            }
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-TSHIRT-065-WHITE-M",
+            "sku_name": "Vintage T-Shirt White M",
+            "sku_desc": "White short-sleeve vintage printed T-shirt, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 55,
+            "sku_price": 638000,
+            "ProductId": 65,
+            "sku_attrs": {
+                "color": "White",
+                "size": "M"
+            }
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-TSHIRT-065-BLACK-L",
+            "sku_name": "Vintage T-Shirt Black L",
+            "sku_desc": "Black short-sleeve vintage printed T-shirt, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 50,
+            "sku_price": 638000,
+            "ProductId": 65,
+            "sku_attrs": {
+                "color": "Black",
+                "size": "L"
+            }
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-SHIRT-066-WHITE-M",
+            "sku_name": "Embroidered Shirt White M",
+            "sku_desc": "White short-sleeve embroidered shirt, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 1695000,
+            "ProductId": 66,
+            "sku_attrs": {
+                "color": "White",
+                "size": "M"
+            }
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-SHIRT-066-BEIGE-L",
+            "sku_name": "Embroidered Shirt Beige L",
+            "sku_desc": "Beige short-sleeve embroidered shirt, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 45,
+            "sku_price": 1695000,
+            "ProductId": 66,
+            "sku_attrs": {
+                "color": "Beige",
+                "size": "L"
+            }
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-TSHIRT-067-WHITE-M",
+            "sku_name": "GTR T-Shirt White M",
+            "sku_desc": "White short-sleeve GTR car T-shirt, size M",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 1320000,
+            "ProductId": 67,
+            "sku_attrs": {
+                "color": "White",
+                "size": "M"
+            }
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-TSHIRT-067-BLACK-L",
+            "sku_name": "GTR T-Shirt Black L",
+            "sku_desc": "Black short-sleeve GTR car T-shirt, size L",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 45,
+            "sku_price": 1320000,
+            "ProductId": 67,
+            "sku_attrs": {
+                "color": "Black",
+                "size": "L"
+            }
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-TSHIRT-068-WHITE-XL",
+            "sku_name": "Retro T-Shirt White XL",
+            "sku_desc": "White short-sleeve retro printed T-shirt, size XL",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 2594000,
+            "ProductId": 68,
+            "sku_attrs": {
+                "color": "White",
+                "size": "XL"
+            }
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-TSHIRT-068-GREY-XXL",
+            "sku_name": "Retro T-Shirt Grey XXL",
+            "sku_desc": "Grey short-sleeve retro printed T-shirt, size XXL",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 45,
+            "sku_price": 2594000,
+            "ProductId": 68,
+            "sku_attrs": {
+                "color": "Grey",
+                "size": "XXL"
+            }
+        }
+    ],
+    "SkuSpecs": [
+        {
+            "id": 1,
+            "sku_specs": {
+                "material": "Chiffon",
+                "weight": "180g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 1
+        },
+        {
+            "id": 2,
+            "sku_specs": {
+                "material": "Chiffon",
+                "weight": "190g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 2
+        },
+        {
+            "id": 3,
+            "sku_specs": {
+                "material": "Cotton Blend",
+                "weight": "230g",
+                "fit": "Oversize Fit"
+            },
+            "SkuId": 3
+        },
+        {
+            "id": 4,
+            "sku_specs": {
+                "material": "Cotton Blend",
+                "weight": "240g",
+                "fit": "Oversize Fit"
+            },
+            "SkuId": 4
+        },
+        {
+            "id": 5,
+            "sku_specs": {
+                "material": "Cotton Linen",
+                "weight": "220g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 5
+        },
+        {
+            "id": 6,
+            "sku_specs": {
+                "material": "Cotton Linen",
+                "weight": "230g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 6
+        },
+        {
+            "id": 7,
+            "sku_specs": {
+                "material": "Cotton Blend",
+                "weight": "300g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 7
+        },
+        {
+            "id": 8,
+            "sku_specs": {
+                "material": "Cotton Blend",
+                "weight": "310g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 8
+        },
+        {
+            "id": 9,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "210g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 9
+        },
+        {
+            "id": 10,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "220g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 10
+        },
+        {
+            "id": 11,
+            "sku_specs": {
+                "material": "Cotton Linen",
+                "weight": "220g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 11
+        },
+        {
+            "id": 12,
+            "sku_specs": {
+                "material": "Cotton Linen",
+                "weight": "230g",
+                "fit": "Regular Fit"
+            },
+            "SkuId": 12
+        },
+        {
+            "id": 13,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "210g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 13
+        },
+        {
+            "id": 14,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "220g",
+                "fit": "Loose Fit"
+            },
+            "SkuId": 14
+        },
+        {
+            "id": 15,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "230g",
+                "fit": "Oversize Fit"
+            },
+            "SkuId": 15
+        },
+        {
+            "id": 16,
+            "sku_specs": {
+                "material": "100% Cotton",
+                "weight": "240g",
+                "fit": "Oversize Fit"
+            },
+            "SkuId": 16
+        }
+    ],
+    "SpuToSku": [
+        {
+            "id": 1,
+            "sku_no": "SKU-BLOUSE-061-BLACK-S",
+            "spu_no": "SPU-BLOUSE-061"
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-BLOUSE-061-WHITE-M",
+            "spu_no": "SPU-BLOUSE-061"
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-TSHIRT-062-WHITE-L",
+            "spu_no": "SPU-TSHIRT-062"
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-TSHIRT-062-GREY-XL",
+            "spu_no": "SPU-TSHIRT-062"
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-TOP-063-BEIGE-M",
+            "spu_no": "SPU-TOP-063"
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-TOP-063-WHITE-L",
+            "spu_no": "SPU-TOP-063"
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-TOP-064-WHITE-M",
+            "spu_no": "SPU-TOP-064"
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-TOP-064-BLUE-L",
+            "spu_no": "SPU-TOP-064"
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-TSHIRT-065-WHITE-M",
+            "spu_no": "SPU-TSHIRT-065"
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-TSHIRT-065-BLACK-L",
+            "spu_no": "SPU-TSHIRT-065"
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-SHIRT-066-WHITE-M",
+            "spu_no": "SPU-SHIRT-066"
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-SHIRT-066-BEIGE-L",
+            "spu_no": "SPU-SHIRT-066"
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-TSHIRT-067-WHITE-M",
+            "spu_no": "SPU-TSHIRT-067"
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-TSHIRT-067-BLACK-L",
+            "spu_no": "SPU-TSHIRT-067"
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-TSHIRT-068-WHITE-XL",
+            "spu_no": "SPU-TSHIRT-068"
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-TSHIRT-068-GREY-XXL",
+            "spu_no": "SPU-TSHIRT-068"
+        }
+    ]
+}

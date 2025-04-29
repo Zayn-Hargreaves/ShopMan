@@ -1,7 +1,8 @@
-const bannerRepo = require("../models/repositories/banner.repo")
-
+const RepositoryFactory = require("../models/repositories/repositoryFactory")
 class BannerService {
     static async getListBanner(){
+        await RepositoryFactory.initialize()
+        const bannerRepo = RepositoryFactory.getRepository("BannerRepository")
         return await bannerRepo.getListBanner()
     }
 }

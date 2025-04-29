@@ -1,0 +1,60 @@
+{"shopid":1228932792,"shopName":"FUKKUDA","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":182624414,"shopName":"Mega Discount Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f46jm6bvdj56.webp"}
+{"shopid":134390888,"shopName":"Audio House Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":134390888,"shopName":"Audio House Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":258397439,"shopName":"LG Singapore Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":269597886,"shopName":"T2 ELECTRONICS","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":84208113,"shopName":"Parisilk Electronics \u0026 Computers","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":306377806,"shopName":"mÖnStĘr923","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":134390888,"shopName":"Audio House Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":182624414,"shopName":"Mega Discount Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1057665362,"shopName":"Smart Local","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvk-m1f4auzl004778.webp"}
+{"shopid":269597886,"shopName":"T2 ELECTRONICS","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":306377806,"shopName":"mÖnStĘr923","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":117152908,"shopName":"Asia Excel","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy5-m1f4ea1kvtv5be.webp"}
+{"shopid":84208113,"shopName":"Parisilk Electronics \u0026 Computers","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":117152908,"shopName":"Asia Excel","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":182624414,"shopName":"Mega Discount Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy6-m1f4aslajorc1f.webp"}
+{"shopid":117152908,"shopName":"Asia Excel","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":1081759069,"shopName":"SPOETRY Toptech Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":631005917,"shopName":"MGM_Products Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwd-m1f47u1ceblmf2.webp"}
+{"shopid":240549939,"shopName":"utilizing.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwd-m1f47u1ceblmf2.webp"}
+{"shopid":285070199,"shopName":"QrhYK","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":260983579,"shopName":"Italian Home \u0026 Automotive Shop","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":1006220784,"shopName":"Shopee Choice Global","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":1097307289,"shopName":"SweetDreams1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":123551298,"shopName":"titigo.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":327824361,"shopName":"gracekarin1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy6-m1f4aslajorc1f.webp"}
+{"shopid":135251650,"shopName":"musdoing.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":310018469,"shopName":"nathanguo2.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvk-m1f4auzl004778.webp"}
+{"shopid":327824361,"shopName":"gracekarin1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":96755478,"shopName":"nearbuy.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyp-m1f4aqflmkk5b2.webp"}
+{"shopid":854413814,"shopName":"toolwe.sg.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdx6-m1f49vi4xe6wf9.webp"}
+{"shopid":340360545,"shopName":"daisygirl1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}
+{"shopid":29238238,"shopName":"blueriver.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":313937717,"shopName":"funygame1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwt-m1f4e4h90zo73f.webp"}
+{"shopid":44824129,"shopName":"ladyfrist.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-50009109-d6b6e5bb7408acddf0abf8b763acb67b.webp"}
+{"shopid":100028984,"shopName":"myhomever.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy3-m1f49c37c7b9d5.webp"}
+{"shopid":123551298,"shopName":"titigo.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":328929877,"shopName":"Promise2.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":123551298,"shopName":"titigo.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":123551298,"shopName":"titigo.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":112886040,"shopName":"rcfans.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwz-m1f49jv5yi297d.webp"}
+{"shopid":135251594,"shopName":"sellwell.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy3-m1f49c37c7b9d5.webp"}
+{"shopid":112886040,"shopName":"rcfans.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":167385468,"shopName":"xia99522.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":135251594,"shopName":"sellwell.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwn-m1f4bc43we51a1.webp"}
+{"shopid":156715535,"shopName":"Soundteoh Official Store","shopLocation":"SG","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":288255792,"shopName":"house2020.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":143897762,"shopName":"ayeshow.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy9-m1f4bcxsoxoeb7.webp"}
+{"shopid":93950878,"shopName":"allinit.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":286152589,"shopName":"bestshoppingland.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdw8-m1f47mg1i9mm82.webp"}
+{"shopid":116630439,"shopName":"cozyroomss.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxl-m1f481zorab57e.webp"}
+{"shopid":243573948,"shopName":"xiaomihome1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdxe-m1f4aydxzjfc0f.webp"}
+{"shopid":243573948,"shopName":"xiaomihome1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f4e36cxm4a6c.webp"}
+{"shopid":80006666,"shopName":"rotatingmoment.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy2-m1f4btl4bwoud3.webp"}
+{"shopid":477440621,"shopName":"Docooler Store","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdy3-m1f49c37c7b9d5.webp"}
+{"shopid":327824446,"shopName":"sunshineage1.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwb-m1f4avwbmowlad.webp"}
+{"shopid":418622129,"shopName":"livedesign.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdwq-m1f4a3t8qaadd0.webp"}
+{"shopid":477440621,"shopName":"Docooler Store","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdyf-m1f49ogj74058a.webp"}
+{"shopid":1268143508,"shopName":"noelpater.sg","shopLocation":"Mainland China","status":"active","image":"https://down-ws-vn.img.susercontent.com/sg-11134258-7rdvd-m1f4cf88nrdp7b.webp"}

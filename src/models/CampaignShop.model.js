@@ -1,4 +1,5 @@
-const {DataTypes, Model} = require("@sequelize/core")
+
+const {DataTypes, Model} = require('sequelize')
 class CampaignShop extends Model{}
 const initializeCampaignShop = async(sequelize)=>{
     CampaignShop.init({
@@ -10,14 +11,6 @@ const initializeCampaignShop = async(sequelize)=>{
             type:DataTypes.INTEGER,
             allowNull:false,
         },
-        start_time:{
-            type:DataTypes.DATE,
-            allowNull:true
-        },
-        end_time:{
-            type:DataTypes.DATE,
-            allowNull:true
-        }
     },{
         sequelize,
         tableName:"CampaignShops",

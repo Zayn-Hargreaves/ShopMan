@@ -1,4 +1,5 @@
-const {DataTypes, Model} = require("@sequelize/core")
+
+const {DataTypes, Model} = require('sequelize')
 class Banner extends Model{}
 const initializeBanner = async(sequelize)=>{
     Banner.init({
@@ -15,7 +16,7 @@ const initializeBanner = async(sequelize)=>{
             type:DataTypes.STRING,
             allowNull:false
         },
-        image:{
+        thumb:{
             type:DataTypes.STRING,
             allowNull:false
         },
@@ -53,7 +54,6 @@ const initializeBanner = async(sequelize)=>{
         },
         ShopId:{
             type:DataTypes.INTEGER,
-            allowNull:false
         },
         PartnerId:{
             type:DataTypes.INTEGER,

@@ -1,24 +1,46 @@
 const { NotFoundError } = require("../cores/error.response.js");
-const CampaignRepo = require("../models/repositories/campaign.repo.js");
-const productRepo = require("../models/repositories/product.repo.js");
 const { getInfoData } = require("../utils/index.js");
+const RepositoryFactory = require("../models/repositories/repositoryFactory.js");
+const RedisService = require("./Redis.Service.js");
 class CampaignService {
     static async getCampainDetails(slug){
-        const campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
+        await RepositoryFactory.initialize()
+        const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
+        const cacheKey = `campaign:slug:${slug}`
+        let campaign = {}
+        campaign = await RedisService.getCachedData(cacheKey)
         if(!campaign){
-            throw new NotFoundError("Campaign is not found or ended")
+            campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
+            if(!campaign){
+                await RedisService.cacheData(cacheKey,{},300)
+                console.log(await RedisService.getCachedData(cacheKey))
+                throw new NotFoundError("Campaign is not found or ended")
+            }
+            await RedisService.cacheData(cacheKey,campaign,3600)
         }
         return {
             campaign:getInfoData({
                 fields:['id', 'title', 'slug', 'description','start_time','end_time'],
                 object:campaign
             }),
-            discount:campaign.Discounts,
+            discount:campaign.discount,
         }
     } 
-    static async getProductsByCampaignSlug(slug, page = 1, limit = 20){
-        const {products, pagination} = await CampaignRepo.findProductsByCampaignSlug(slug, page, limit)
-        return {products, pagination}
+    static async getProductsByCampaignSlug(slug, page = 1, limit = 10){
+        await RepositoryFactory.initialize()
+        const cacheKey = `campaign:slug:${slug}:product:page:${page}:limit:${limit}`
+        const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
+        let result = await RedisService.getCachedData(cacheKey)
+        if(!result){
+            result = await CampaignRepo.findProductsByCampaignSlug(slug, page, limit)
+            if(!result){
+                await RedisService.cacheData(cacheKey, {}, 600)
+                throw new NotFoundError("Campaign not found or ended");
+            }
+            await RedisService.cacheData(cacheKey, result, 3600)
+        }
+
+        return result
     }
 
 }

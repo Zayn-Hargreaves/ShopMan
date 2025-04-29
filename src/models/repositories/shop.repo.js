@@ -1,7 +1,8 @@
+
 const { NotFoundError } = require("../../cores/error.response");
 const initializeModels = require("../../db/dbs/associations");
 const { getSelectData } = require("../../utils");
-const {Op} = require("@sequelize/core")
+const {Op} = require('sequelize')
 class ShopRepository{
     constructor(models){
         this.Shop = models.Shop

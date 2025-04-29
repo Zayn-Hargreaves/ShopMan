@@ -1,0 +1,1292 @@
+{
+    "Products": [
+        {
+            "id": 26820485146,
+            "name": "ZGO Men's Watch Multi-Function Sports Military Watch",
+            "desc": "Multi-function sports military watch with dual display, shock resistance, and 50m waterproof, perfect for outdoor activities.",
+            "desc_plain": "Men's sports watch, dual display, 50m waterproof",
+            "price": 2412000,
+            "discount_percentage": 51,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7ras8-m3op4tuxh5rs78@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone, Stainless Steel",
+                "features": [
+                    "Shock Resistance",
+                    "Waterproof",
+                    "Dual Display"
+                ],
+                "style": "Sports"
+            },
+            "status": "active",
+            "slug": "zgo-mens-sports-military-watch",
+            "CategoryId": 100534,
+            "ShopId": 1207629635,
+            "rating": 4.2,
+            "sale_count": 0,
+            "has_variations": false
+        },
+        {
+            "id": 29579262077,
+            "name": "Solvil et Titus Fair Lady Women's Watch",
+            "desc": "Elegant stainless steel women's watch with 3 hands and date display, ideal for formal occasions.",
+            "desc_plain": "Women's watch, stainless steel, date display",
+            "price": 22500000,
+            "discount_percentage": 25,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rd4p-m78ssbqq0g6nc8@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Date Display",
+                    "Waterproof"
+                ],
+                "style": "Fashion"
+            },
+            "status": "active",
+            "slug": "solvil-et-titus-fair-lady-watch",
+            "CategoryId": 100534,
+            "ShopId": 1229648191,
+            "rating": 4.5,
+            "sale_count": 2,
+            "has_variations": false
+        },
+        {
+            "id": 2255348323,
+            "name": "Fossil Grant Automatic Watch ME3099",
+            "desc": "Luxury automatic watch with stainless steel case, ideal for business and casual settings.",
+            "desc_plain": "Automatic watch, stainless steel, luxury",
+            "price": 31120000,
+            "discount_percentage": 20,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rdvc-lzqnsqmamgyia4@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel, Leather",
+                "features": [
+                    "Automatic",
+                    "Waterproof"
+                ],
+                "style": "Luxury"
+            },
+            "status": "active",
+            "slug": "fossil-grant-automatic-watch",
+            "CategoryId": 100534,
+            "ShopId": 139568237,
+            "rating": 4.7,
+            "sale_count": 3,
+            "has_variations": false
+        },
+        {
+            "id": 21981647997,
+            "name": "FOXBOX Men's LED Sports Watch",
+            "desc": "Waterproof LED sports watch with silicone strap, featuring date and alarm functions, perfect for active lifestyles.",
+            "desc_plain": "Men's sports watch, LED, waterproof",
+            "price": 1842000,
+            "discount_percentage": 72,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7r98o-lxmetnufq891ac@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone",
+                "features": [
+                    "Waterproof",
+                    "LED Display",
+                    "Alarm"
+                ],
+                "style": "Sports"
+            },
+            "status": "active",
+            "slug": "foxbox-mens-led-sports-watch",
+            "CategoryId": 100534,
+            "ShopId": 272085890,
+            "rating": 4.8,
+            "sale_count": 68,
+            "has_variations": false
+        },
+        {
+            "id": 25870364822,
+            "name": "POEDAGAR Men's Stainless Steel Watch",
+            "desc": "Waterproof stainless steel watch with luminous hands and fashion design, suitable for business and casual wear.",
+            "desc_plain": "Men's watch, stainless steel, luminous",
+            "price": 2126000,
+            "discount_percentage": 61,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7r98o-lt671br99zvh5f@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Calendar"
+                ],
+                "style": "Fashion"
+            },
+            "status": "active",
+            "slug": "poedagar-mens-stainless-steel-watch",
+            "CategoryId": 100534,
+            "ShopId": 1021330702,
+            "rating": 4.6,
+            "sale_count": 18,
+            "has_variations": false
+        },
+        {
+            "id": 23629136922,
+            "name": "Y68 Smart Bracelet D20S",
+            "desc": "Smart bracelet with Bluetooth, color touch screen, and sports tracking, compatible with Android and iOS.",
+            "desc_plain": "Smart bracelet, Bluetooth, touch screen",
+            "price": 1000,
+            "discount_percentage": 99,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-23030-163o8l2ul8nv4d@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone",
+                "features": [
+                    "Bluetooth",
+                    "Touch Screen",
+                    "Sports Tracking"
+                ],
+                "style": "Smart"
+            },
+            "status": "active",
+            "slug": "y68-smart-bracelet",
+            "CategoryId": 100013,
+            "ShopId": 957822656,
+            "rating": 4.7,
+            "sale_count": 85,
+            "has_variations": true
+        },
+        {
+            "id": 19495041351,
+            "name": "Lovito Women's Quartz Watch L69AD053",
+            "desc": "Casual quartz watch for women with PU leather strap, available in white and black, perfect for daily wear.",
+            "desc_plain": "Women's quartz watch, PU leather, casual",
+            "price": 281000,
+            "discount_percentage": 53,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rbls-lnqlb9zj4o8859@resize_w450_nl.webp",
+            "attrs": {
+                "material": "PU Leather",
+                "features": [
+                    "Quartz",
+                    "Waterproof"
+                ],
+                "style": "Casual"
+            },
+            "status": "active",
+            "slug": "lovito-womens-quartz-watch",
+            "CategoryId": 100534,
+            "ShopId": 445275287,
+            "rating": 4.6,
+            "sale_count": 44,
+            "has_variations": true
+        },
+        {
+            "id": 29683412437,
+            "name": "Opk Couple Watch 8103",
+            "desc": "Waterproof stainless steel couple watch with luminous hands and calendar, ideal for matching outfits.",
+            "desc_plain": "Couple watch, stainless steel, luminous",
+            "price": 929000,
+            "discount_percentage": 30,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7ras8-m8d2l4o9hklufe@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Calendar"
+                ],
+                "style": "Fashion"
+            },
+            "status": "active",
+            "slug": "opk-couple-watch",
+            "CategoryId": 100534,
+            "ShopId": 1519989464,
+            "rating": 4.3,
+            "sale_count": 0,
+            "has_variations": true
+        },
+        {
+            "id": 23690192326,
+            "name": "Korean Fashion Men's Watch",
+            "desc": "Casual men's watch with calendar and date display, featuring a Korean fashion design with leather strap.",
+            "desc_plain": "Men's watch, leather, Korean fashion",
+            "price": 382000,
+            "discount_percentage": 65,
+            "thumb": "https://down-sg.img.susercontent.com/file/04ac45fae04ea219526f43bf742fb399@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Leather",
+                "features": [
+                    "Calendar",
+                    "Waterproof"
+                ],
+                "style": "Fashion"
+            },
+            "status": "active",
+            "slug": "korean-fashion-mens-watch",
+            "CategoryId": 100534,
+            "ShopId": 266063564,
+            "rating": 4.5,
+            "sale_count": 48,
+            "has_variations": false
+        },
+        {
+            "id": 29275820289,
+            "name": "Women's PU Leather Quartz Watch",
+            "desc": "High-end quartz watch for women with PU leather strap, simple and casual design, perfect for everyday use.",
+            "desc_plain": "Women's quartz watch, PU leather, casual",
+            "price": 316000,
+            "discount_percentage": 72,
+            "thumb": "https://down-sg.img.susercontent.com/file/my-11134207-7rasg-m63njca3pmc3a3@resize_w450_nl.webp",
+            "attrs": {
+                "material": "PU Leather",
+                "features": [
+                    "Quartz",
+                    "Waterproof",
+                    "Luminous"
+                ],
+                "style": "Casual"
+            },
+            "status": "active",
+            "slug": "womens-pu-leather-quartz-watch",
+            "CategoryId": 100534,
+            "ShopId": 1146818087,
+            "rating": 4.4,
+            "sale_count": 18,
+            "has_variations": true
+        },
+        {
+            "id": 1702729724,
+            "name": "CASIO MQ Series Analog Watches",
+            "desc": "Authentic CASIO MQ series analog watches with minimalist design, suitable for both men and women.",
+            "desc_plain": "Analog watches, CASIO MQ series, minimalist",
+            "price": 1690000,
+            "discount_percentage": 0,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134207-7rd3z-lxajbzr4y2j062@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Waterproof",
+                    "Minimalist"
+                ],
+                "style": "Casual"
+            },
+            "status": "active",
+            "slug": "casio-mq-series-watches",
+            "CategoryId": 100534,
+            "ShopId": 91681600,
+            "rating": 4.8,
+            "sale_count": 15,
+            "has_variations": true
+        },
+        {
+            "id": 25134843393,
+            "name": "LIGE Men's Sports Chronograph Watch",
+            "desc": "Waterproof sports watch with luminous hands, silicone strap, and chronograph, perfect for active men.",
+            "desc_plain": "Men's sports watch, chronograph, waterproof",
+            "price": 2290000,
+            "discount_percentage": 72,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7ras8-m7j2sjr0vn4yd6@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Chronograph"
+                ],
+                "style": "Sports"
+            },
+            "status": "active",
+            "slug": "lige-mens-sports-chronograph-watch",
+            "CategoryId": 100534,
+            "ShopId": 131618467,
+            "rating": 4.7,
+            "sale_count": 39,
+            "has_variations": true
+        },
+        {
+            "id": 19116560754,
+            "name": "PAGANI DESIGN GMT-Pepsi Men's Watch",
+            "desc": "Luxury automatic mechanical watch with ceramic bezel, Japan NH34 movement, and 3-year warranty.",
+            "desc_plain": "Men's automatic watch, GMT, luxury",
+            "price": 12164000,
+            "discount_percentage": 45,
+            "thumb": "https://down-sg.img.susercontent.com/file/ae3df9ac3e324eab54bc20034750013c@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel, Ceramic",
+                "features": [
+                    "Automatic",
+                    "Waterproof",
+                    "Luminous"
+                ],
+                "style": "Luxury"
+            },
+            "status": "active",
+            "slug": "pagani-design-gmt-pepsi-watch",
+            "CategoryId": 100534,
+            "ShopId": 804795167,
+            "rating": 4.6,
+            "sale_count": 6,
+            "has_variations": true
+        },
+        {
+            "id": 24926033742,
+            "name": "POSHI Bluetooth Smart Watch",
+            "desc": "Waterproof smart watch with color touch screen and Bluetooth, compatible with Android and iOS, ideal for sports.",
+            "desc_plain": "Smart watch, Bluetooth, waterproof",
+            "price": 594000,
+            "discount_percentage": 82,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rbk5-lmeg0os57mlf39@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone",
+                "features": [
+                    "Bluetooth",
+                    "Touch Screen",
+                    "Waterproof"
+                ],
+                "style": "Smart"
+            },
+            "status": "active",
+            "slug": "poshi-bluetooth-smart-watch",
+            "CategoryId": 100013,
+            "ShopId": 1006220784,
+            "rating": 4.9,
+            "sale_count": 291,
+            "has_variations": false
+        },
+        {
+            "id": 18880411481,
+            "name": "POSHI Men's Quartz Leather Watch",
+            "desc": "Waterproof quartz watch with leather strap, featuring calendar and luminous hands, suitable for casual wear.",
+            "desc_plain": "Men's quartz watch, leather, luminous",
+            "price": 970000,
+            "discount_percentage": 31,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-22110-49ks5mp19dkvf8@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Leather",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Calendar"
+                ],
+                "style": "Casual"
+            },
+            "status": "active",
+            "slug": "poshi-mens-quartz-leather-watch",
+            "CategoryId": 100534,
+            "ShopId": 994784602,
+            "rating": 4.5,
+            "sale_count": 43,
+            "has_variations": false
+        },
+        {
+            "id": 29153386063,
+            "name": "Men's Luxury Quartz Leather Watch",
+            "desc": "Luxury quartz watch with leather strap, waterproof and glow-in-the-dark, perfect for business and sports.",
+            "desc_plain": "Men's quartz watch, leather, luxury",
+            "price": 316000,
+            "discount_percentage": 61,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rd5n-lws2ti8skxmg48@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Leather",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Quartz"
+                ],
+                "style": "Luxury"
+            },
+            "status": "active",
+            "slug": "mens-luxury-quartz-leather-watch",
+            "CategoryId": 100534,
+            "ShopId": 266063564,
+            "rating": 4.5,
+            "sale_count": 52,
+            "has_variations": false
+        },
+        {
+            "id": 25917666577,
+            "name": "POSHI Men's Stainless Steel Quartz Watch",
+            "desc": "Multifunction stainless steel watch with calendar and luminous hands, ideal for business and casual settings.",
+            "desc_plain": "Men's quartz watch, stainless steel, multifunction",
+            "price": 1254000,
+            "discount_percentage": 30,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rcck-lsh94c1mw00ida@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Calendar"
+                ],
+                "style": "Business"
+            },
+            "status": "active",
+            "slug": "poshi-mens-stainless-steel-quartz-watch",
+            "CategoryId": 100534,
+            "ShopId": 994784602,
+            "rating": 4.7,
+            "sale_count": 101,
+            "has_variations": false
+        },
+        {
+            "id": 5647435017,
+            "name": "LIGE Men's Luxury Sports Watch",
+            "desc": "Luxury sports watch with silicone strap, luminous hands, and chronograph, waterproof and stylish.",
+            "desc_plain": "Men's sports watch, luxury, chronograph",
+            "price": 2590000,
+            "discount_percentage": 84,
+            "thumb": "https://down-sg.img.susercontent.com/file/cn-11134207-7ras8-m8lgfkyoxwj654@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Silicone",
+                "features": [
+                    "Waterproof",
+                    "Luminous",
+                    "Chronograph"
+                ],
+                "style": "Sports"
+            },
+            "status": "active",
+            "slug": "lige-mens-luxury-sports-watch",
+            "CategoryId": 100534,
+            "ShopId": 131618467,
+            "rating": 4.8,
+            "sale_count": 9,
+            "has_variations": false
+        },
+        {
+            "id": 21141014323,
+            "name": "Men's Large Dial Leather Watch",
+            "desc": "Simple fashion watch with large dial and leather strap, perfect for casual and business wear.",
+            "desc_plain": "Men's watch, leather, large dial",
+            "price": 382000,
+            "discount_percentage": 59,
+            "thumb": "https://down-sg.img.susercontent.com/file/2fd5ec06cab2c2b50b60009dcfb19f1a@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Leather",
+                "features": [
+                    "Waterproof",
+                    "Quartz"
+                ],
+                "style": "Fashion"
+            },
+            "status": "active",
+            "slug": "mens-large-dial-leather-watch",
+            "CategoryId": 100534,
+            "ShopId": 266063564,
+            "rating": 4.4,
+            "sale_count": 8,
+            "has_variations": false
+        },
+        {
+            "id": 29803773564,
+            "name": "R.X TopGMT Luxury Men's Watch",
+            "desc": "Luxury automatic mechanical watch with stainless steel case, waterproof, and GMT function.",
+            "desc_plain": "Men's automatic watch, GMT, luxury",
+            "price": 11756000,
+            "discount_percentage": 50,
+            "thumb": "https://down-sg.img.susercontent.com/file/sg-11134201-7rd73-lwiacz1fcabs75@resize_w450_nl.webp",
+            "attrs": {
+                "material": "Stainless Steel",
+                "features": [
+                    "Automatic",
+                    "Waterproof",
+                    "GMT"
+                ],
+                "style": "Luxury"
+            },
+            "status": "active",
+            "slug": "rx-topgmt-luxury-mens-watch",
+            "CategoryId": 100534,
+            "ShopId": 1063917703,
+            "rating": 4.5,
+            "sale_count": 2,
+            "has_variations": true
+        }
+    ],
+    "Skus": [
+        {
+            "id": 1,
+            "sku_no": "SKU-WATCH-26820485146",
+            "sku_name": "ZGO Sports Military Watch",
+            "sku_desc": "Multi-function sports military watch, dual display",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 2412000,
+            "ProductId": 26820485146,
+            "sku_attrs": {}
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-WATCH-29579262077",
+            "sku_name": "Solvil et Titus Fair Lady Watch",
+            "sku_desc": "Stainless steel women's watch with date display",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 22500000,
+            "ProductId": 29579262077,
+            "sku_attrs": {}
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-WATCH-2255348323",
+            "sku_name": "Fossil Grant Automatic Watch",
+            "sku_desc": "Luxury automatic watch with stainless steel case",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 60,
+            "sku_price": 31120000,
+            "ProductId": 2255348323,
+            "sku_attrs": {}
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-WATCH-21981647997",
+            "sku_name": "FOXBOX LED Sports Watch",
+            "sku_desc": "Waterproof LED sports watch with silicone strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 150,
+            "sku_price": 1842000,
+            "ProductId": 21981647997,
+            "sku_attrs": {}
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-WATCH-25870364822",
+            "sku_name": "POEDAGAR Stainless Steel Watch",
+            "sku_desc": "Waterproof stainless steel watch with luminous hands",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 2126000,
+            "ProductId": 25870364822,
+            "sku_attrs": {}
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-WATCH-23629136922-BLACK",
+            "sku_name": "Y68 Smart Bracelet Black",
+            "sku_desc": "Smart bracelet with Bluetooth, black color",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 1000,
+            "ProductId": 23629136922,
+            "sku_attrs": {
+                "color": "Black"
+            }
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-WATCH-23629136922-WHITE",
+            "sku_name": "Y68 Smart Bracelet White",
+            "sku_desc": "Smart bracelet with Bluetooth, white color",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 90,
+            "sku_price": 1000,
+            "ProductId": 23629136922,
+            "sku_attrs": {
+                "color": "White"
+            }
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-WATCH-19495041351-WHITE",
+            "sku_name": "Lovito Quartz Watch White",
+            "sku_desc": "Women's quartz watch with white PU leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 120,
+            "sku_price": 281000,
+            "ProductId": 19495041351,
+            "sku_attrs": {
+                "color": "White"
+            }
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-WATCH-19495041351-BLACK",
+            "sku_name": "Lovito Quartz Watch Black",
+            "sku_desc": "Women's quartz watch with black PU leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 110,
+            "sku_price": 281000,
+            "ProductId": 19495041351,
+            "sku_attrs": {
+                "color": "Black"
+            }
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-WATCH-29683412437-SILVER",
+            "sku_name": "Opk Couple Watch Silver",
+            "sku_desc": "Couple watch with silver stainless steel strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 70,
+            "sku_price": 929000,
+            "ProductId": 29683412437,
+            "sku_attrs": {
+                "color": "Silver"
+            }
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-WATCH-29683412437-GOLD",
+            "sku_name": "Opk Couple Watch Gold",
+            "sku_desc": "Couple watch with gold stainless steel strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 60,
+            "sku_price": 1106000,
+            "ProductId": 29683412437,
+            "sku_attrs": {
+                "color": "Gold"
+            }
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-WATCH-23690192326",
+            "sku_name": "Korean Fashion Men's Watch",
+            "sku_desc": "Casual men's watch with leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 382000,
+            "ProductId": 23690192326,
+            "sku_attrs": {}
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-WATCH-29275820289-BLACK",
+            "sku_name": "Women's Quartz Watch Black",
+            "sku_desc": "Women's quartz watch with black PU leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 316000,
+            "ProductId": 29275820289,
+            "sku_attrs": {
+                "color": "Black"
+            }
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-WATCH-29275820289-BROWN",
+            "sku_name": "Women's Quartz Watch Brown",
+            "sku_desc": "Women's quartz watch with brown PU leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 70,
+            "sku_price": 425000,
+            "ProductId": 29275820289,
+            "sku_attrs": {
+                "color": "Brown"
+            }
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-WATCH-1702729724-MQ24",
+            "sku_name": "CASIO MQ24 Watch",
+            "sku_desc": "CASIO MQ24 analog watch with minimalist design",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 90,
+            "sku_price": 1690000,
+            "ProductId": 1702729724,
+            "sku_attrs": {
+                "model": "MQ24"
+            }
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-WATCH-1702729724-MQ38",
+            "sku_name": "CASIO MQ38 Watch",
+            "sku_desc": "CASIO MQ38 analog watch with minimalist design",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 80,
+            "sku_price": 3850000,
+            "ProductId": 1702729724,
+            "sku_attrs": {
+                "model": "MQ38"
+            }
+        },
+        {
+            "id": 17,
+            "sku_no": "SKU-WATCH-25134843393-BLACK",
+            "sku_name": "LIGE Sports Watch Black",
+            "sku_desc": "Sports watch with black silicone strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 2290000,
+            "ProductId": 25134843393,
+            "sku_attrs": {
+                "color": "Black"
+            }
+        },
+        {
+            "id": 18,
+            "sku_no": "SKU-WATCH-25134843393-BLUE",
+            "sku_name": "LIGE Sports Watch Blue",
+            "sku_desc": "Sports watch with blue silicone strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 90,
+            "sku_price": 2496000,
+            "ProductId": 25134843393,
+            "sku_attrs": {
+                "color": "Blue"
+            }
+        },
+        {
+            "id": 19,
+            "sku_no": "SKU-WATCH-19116560754-PEPSI",
+            "sku_name": "PAGANI DESIGN GMT-Pepsi Watch",
+            "sku_desc": "Automatic watch with Pepsi bezel",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 12164000,
+            "ProductId": 19116560754,
+            "sku_attrs": {
+                "bezel": "Pepsi"
+            }
+        },
+        {
+            "id": 20,
+            "sku_no": "SKU-WATCH-19116560754-BLACK",
+            "sku_name": "PAGANI DESIGN GMT-Black Watch",
+            "sku_desc": "Automatic watch with black bezel",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 40,
+            "sku_price": 17233000,
+            "ProductId": 19116560754,
+            "sku_attrs": {
+                "bezel": "Black"
+            }
+        },
+        {
+            "id": 21,
+            "sku_no": "SKU-WATCH-24926033742",
+            "sku_name": "POSHI Bluetooth Smart Watch",
+            "sku_desc": "Waterproof smart watch with color touch screen",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 200,
+            "sku_price": 594000,
+            "ProductId": 24926033742,
+            "sku_attrs": {}
+        },
+        {
+            "id": 22,
+            "sku_no": "SKU-WATCH-18880411481",
+            "sku_name": "POSHI Quartz Leather Watch",
+            "sku_desc": "Waterproof quartz watch with leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 100,
+            "sku_price": 970000,
+            "ProductId": 18880411481,
+            "sku_attrs": {}
+        },
+        {
+            "id": 23,
+            "sku_no": "SKU-WATCH-29153386063",
+            "sku_name": "Luxury Quartz Leather Watch",
+            "sku_desc": "Luxury quartz watch with leather strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 120,
+            "sku_price": 316000,
+            "ProductId": 29153386063,
+            "sku_attrs": {}
+        },
+        {
+            "id": 24,
+            "sku_no": "SKU-WATCH-25917666577",
+            "sku_name": "POSHI Stainless Steel Quartz Watch",
+            "sku_desc": "Multifunction stainless steel watch",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 90,
+            "sku_price": 1254000,
+            "ProductId": 25917666577,
+            "sku_attrs": {}
+        },
+        {
+            "id": 25,
+            "sku_no": "SKU-WATCH-5647435017",
+            "sku_name": "LIGE Luxury Sports Watch",
+            "sku_desc": "Luxury sports watch with silicone strap",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 80,
+            "sku_price": 2590000,
+            "ProductId": 5647435017,
+            "sku_attrs": {}
+        },
+        {
+            "id": 26,
+            "sku_no": "SKU-WATCH-21141014323",
+            "sku_name": "Large Dial Leather Watch",
+            "sku_desc": "Simple fashion watch with large dial",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 70,
+            "sku_price": 382000,
+            "ProductId": 21141014323,
+            "sku_attrs": {}
+        },
+        {
+            "id": 27,
+            "sku_no": "SKU-WATCH-29803773564-SILVER",
+            "sku_name": "R.X TopGMT Watch Silver",
+            "sku_desc": "Luxury automatic watch with silver case",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 1,
+            "sku_stock": 50,
+            "sku_price": 11756000,
+            "ProductId": 29803773564,
+            "sku_attrs": {
+                "color": "Silver"
+            }
+        },
+        {
+            "id": 28,
+            "sku_no": "SKU-WATCH-29803773564-BLACK",
+            "sku_name": "R.X TopGMT Watch Black",
+            "sku_desc": "Luxury automatic watch with black case",
+            "sku_type": 1,
+            "status": "active",
+            "sort": 2,
+            "sku_stock": 40,
+            "sku_price": 13052000,
+            "ProductId": 29803773564,
+            "sku_attrs": {
+                "color": "Black"
+            }
+        }
+    ],
+    "SkuSpecs": [
+        {
+            "id": 1,
+            "sku_specs": {
+                "material": "Silicone, Stainless Steel",
+                "dial_size": "45mm",
+                "features": "Shock Resistance, Waterproof"
+            },
+            "SkuId": 1
+        },
+        {
+            "id": 2,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "32mm",
+                "features": "Date Display"
+            },
+            "SkuId": 2
+        },
+        {
+            "id": 3,
+            "sku_specs": {
+                "material": "Stainless Steel, Leather",
+                "dial_size": "42mm",
+                "features": "Automatic"
+            },
+            "SkuId": 3
+        },
+        {
+            "id": 4,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "40mm",
+                "features": "LED Display, Alarm"
+            },
+            "SkuId": 4
+        },
+        {
+            "id": 5,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "42mm",
+                "features": "Luminous, Calendar"
+            },
+            "SkuId": 5
+        },
+        {
+            "id": 6,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "38mm",
+                "features": "Bluetooth, Touch Screen"
+            },
+            "SkuId": 6
+        },
+        {
+            "id": 7,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "38mm",
+                "features": "Bluetooth, Touch Screen"
+            },
+            "SkuId": 7
+        },
+        {
+            "id": 8,
+            "sku_specs": {
+                "material": "PU Leather",
+                "dial_size": "34mm",
+                "features": "Quartz"
+            },
+            "SkuId": 8
+        },
+        {
+            "id": 9,
+            "sku_specs": {
+                "material": "PU Leather",
+                "dial_size": "34mm",
+                "features": "Quartz"
+            },
+            "SkuId": 9
+        },
+        {
+            "id": 10,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "40mm",
+                "features": "Luminous, Calendar"
+            },
+            "SkuId": 10
+        },
+        {
+            "id": 11,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "40mm",
+                "features": "Luminous, Calendar"
+            },
+            "SkuId": 11
+        },
+        {
+            "id": 12,
+            "sku_specs": {
+                "material": "Leather",
+                "dial_size": "38mm",
+                "features": "Calendar"
+            },
+            "SkuId": 12
+        },
+        {
+            "id": 13,
+            "sku_specs": {
+                "material": "PU Leather",
+                "dial_size": "34mm",
+                "features": "Luminous, Quartz"
+            },
+            "SkuId": 13
+        },
+        {
+            "id": 14,
+            "sku_specs": {
+                "material": "PU Leather",
+                "dial_size": "34mm",
+                "features": "Luminous, Quartz"
+            },
+            "SkuId": 14
+        },
+        {
+            "id": 15,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "36mm",
+                "features": "Minimalist"
+            },
+            "SkuId": 15
+        },
+        {
+            "id": 16,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "36mm",
+                "features": "Minimalist"
+            },
+            "SkuId": 16
+        },
+        {
+            "id": 17,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "42mm",
+                "features": "Chronograph, Luminous"
+            },
+            "SkuId": 17
+        },
+        {
+            "id": 18,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "42mm",
+                "features": "Chronograph, Luminous"
+            },
+            "SkuId": 18
+        },
+        {
+            "id": 19,
+            "sku_specs": {
+                "material": "Stainless Steel, Ceramic",
+                "dial_size": "44mm",
+                "features": "Automatic, GMT"
+            },
+            "SkuId": 19
+        },
+        {
+            "id": 20,
+            "sku_specs": {
+                "material": "Stainless Steel, Ceramic",
+                "dial_size": "44mm",
+                "features": "Automatic, GMT"
+            },
+            "SkuId": 20
+        },
+        {
+            "id": 21,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "40mm",
+                "features": "Bluetooth, Touch Screen"
+            },
+            "SkuId": 21
+        },
+        {
+            "id": 22,
+            "sku_specs": {
+                "material": "Leather",
+                "dial_size": "38mm",
+                "features": "Luminous, Calendar"
+            },
+            "SkuId": 22
+        },
+        {
+            "id": 23,
+            "sku_specs": {
+                "material": "Leather",
+                "dial_size": "40mm",
+                "features": "Luminous, Quartz"
+            },
+            "SkuId": 23
+        },
+        {
+            "id": 24,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "42mm",
+                "features": "Luminous, Calendar"
+            },
+            "SkuId": 24
+        },
+        {
+            "id": 25,
+            "sku_specs": {
+                "material": "Silicone",
+                "dial_size": "44mm",
+                "features": "Chronograph, Luminous"
+            },
+            "SkuId": 25
+        },
+        {
+            "id": 26,
+            "sku_specs": {
+                "material": "Leather",
+                "dial_size": "46mm",
+                "features": "Quartz"
+            },
+            "SkuId": 26
+        },
+        {
+            "id": 27,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "40mm",
+                "features": "Automatic, GMT"
+            },
+            "SkuId": 27
+        },
+        {
+            "id": 28,
+            "sku_specs": {
+                "material": "Stainless Steel",
+                "dial_size": "40mm",
+                "features": "Automatic, GMT"
+            },
+            "SkuId": 28
+        }
+    ],
+    "SpuToSku": [
+        {
+            "id": 1,
+            "sku_no": "SKU-WATCH-26820485146",
+            "spu_no": "SPU-WATCH-26820485146"
+        },
+        {
+            "id": 2,
+            "sku_no": "SKU-WATCH-29579262077",
+            "spu_no": "SPU-WATCH-29579262077"
+        },
+        {
+            "id": 3,
+            "sku_no": "SKU-WATCH-2255348323",
+            "spu_no": "SPU-WATCH-2255348323"
+        },
+        {
+            "id": 4,
+            "sku_no": "SKU-WATCH-21981647997",
+            "spu_no": "SPU-WATCH-21981647997"
+        },
+        {
+            "id": 5,
+            "sku_no": "SKU-WATCH-25870364822",
+            "spu_no": "SPU-WATCH-25870364822"
+        },
+        {
+            "id": 6,
+            "sku_no": "SKU-WATCH-23629136922-BLACK",
+            "spu_no": "SPU-WATCH-23629136922"
+        },
+        {
+            "id": 7,
+            "sku_no": "SKU-WATCH-23629136922-WHITE",
+            "spu_no": "SPU-WATCH-23629136922"
+        },
+        {
+            "id": 8,
+            "sku_no": "SKU-WATCH-19495041351-WHITE",
+            "spu_no": "SPU-WATCH-19495041351"
+        },
+        {
+            "id": 9,
+            "sku_no": "SKU-WATCH-19495041351-BLACK",
+            "spu_no": "SPU-WATCH-19495041351"
+        },
+        {
+            "id": 10,
+            "sku_no": "SKU-WATCH-29683412437-SILVER",
+            "spu_no": "SPU-WATCH-29683412437"
+        },
+        {
+            "id": 11,
+            "sku_no": "SKU-WATCH-29683412437-GOLD",
+            "spu_no": "SPU-WATCH-29683412437"
+        },
+        {
+            "id": 12,
+            "sku_no": "SKU-WATCH-23690192326",
+            "spu_no": "SPU-WATCH-23690192326"
+        },
+        {
+            "id": 13,
+            "sku_no": "SKU-WATCH-29275820289-BLACK",
+            "spu_no": "SPU-WATCH-29275820289"
+        },
+        {
+            "id": 14,
+            "sku_no": "SKU-WATCH-29275820289-BROWN",
+            "spu_no": "SPU-WATCH-29275820289"
+        },
+        {
+            "id": 15,
+            "sku_no": "SKU-WATCH-1702729724-MQ24",
+            "spu_no": "SPU-WATCH-1702729724"
+        },
+        {
+            "id": 16,
+            "sku_no": "SKU-WATCH-1702729724-MQ38",
+            "spu_no": "SPU-WATCH-1702729724"
+        },
+        {
+            "id": 17,
+            "sku_no": "SKU-WATCH-25134843393-BLACK",
+            "spu_no": "SPU-WATCH-25134843393"
+        },
+        {
+            "id": 18,
+            "sku_no": "SKU-WATCH-25134843393-BLUE",
+            "spu_no": "SPU-WATCH-25134843393"
+        },
+        {
+            "id": 19,
+            "sku_no": "SKU-WATCH-19116560754-PEPSI",
+            "spu_no": "SPU-WATCH-19116560754"
+        },
+        {
+            "id": 20,
+            "sku_no": "SKU-WATCH-19116560754-BLACK",
+            "spu_no": "SPU-WATCH-19116560754"
+        },
+        {
+            "id": 21,
+            "sku_no": "SKU-WATCH-24926033742",
+            "spu_no": "SPU-WATCH-24926033742"
+        },
+        {
+            "id": 22,
+            "sku_no": "SKU-WATCH-18880411481",
+            "spu_no": "SPU-WATCH-18880411481"
+        },
+        {
+            "id": 23,
+            "sku_no": "SKU-WATCH-29153386063",
+            "spu_no": "SPU-WATCH-29153386063"
+        },
+        {
+            "id": 24,
+            "sku_no": "SKU-WATCH-25917666577",
+            "spu_no": "SPU-WATCH-25917666577"
+        },
+        {
+            "id": 25,
+            "sku_no": "SKU-WATCH-5647435017",
+            "spu_no": "SPU-WATCH-5647435017"
+        },
+        {
+            "id": 26,
+            "sku_no": "SKU-WATCH-21141014323",
+            "spu_no": "SPU-WATCH-21141014323"
+        },
+        {
+            "id": 27,
+            "sku_no": "SKU-WATCH-29803773564-SILVER",
+            "spu_no": "SPU-WATCH-29803773564"
+        },
+        {
+            "id": 28,
+            "sku_no": "SKU-WATCH-29803773564-BLACK",
+            "spu_no": "SPU-WATCH-29803773564"
+        }
+    ]
+}

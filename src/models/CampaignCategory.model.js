@@ -1,4 +1,5 @@
-const {DataTypes, Model} = require("@sequelize/core")
+
+const {DataTypes, Model} = require('sequelize')
 class CampaignCategory extends Model{}
 const initializeCampaignCategory = async(sequelize)=>{
     CampaignCategory.init({

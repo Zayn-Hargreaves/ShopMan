@@ -1,48 +1,52 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const { DataTypes, Model } = require('sequelize');
+const slugify = require('slugify');
 
-class Category extends Model {}
-const initializeCategory = async(sequelize)=>{
+class Category extends Model { }
+const initializeCategory = async (sequelize) => {
     Category.init({
-        id:{
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        name:{
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        desc:{
-            type: DataTypes.STRING,
+        desc: {
+            type: DataTypes.STRING
         },
-        status:{
+        status: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        thumb:{
-            type:DataTypes.STRING
+        thumb: {
+            type: DataTypes.STRING
         },
-        slug:{
+        slug: {
             type: DataTypes.STRING,
             unique: true
-        },
+        }
     }, {
         sequelize,
-        modelName: "Categories",
-        tableName:"Categories",
+        modelName: 'Categories',
+        tableName: 'Categories',
         freezeTableName: true,
         paranoid: true,
         timestamps: true
-    })
-    Category.addHook("beforeSave", (category) => {
-        if(category.title){
-            category.slug = slugify(category.title, {
+    });
+
+    Category.addHook('beforeSave', (category) => {
+        if (category.name) {
+            category.slug = slugify(category.name, {
                 lower: true,
                 strict: true,
-                replacement: "-"
+                replacement: '-'
             });
         }
     });
-    return Category
-}
+
+    return Category;
+};
+
 module.exports = initializeCategory;

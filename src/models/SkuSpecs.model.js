@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require("@sequelize/core");
+const {DataTypes, Model} = require('sequelize');
 class SkuSpecs extends Model{}
 const initializeSkuSpecs = async(sequelize)=>{
     SkuSpecs.init({
@@ -8,16 +8,19 @@ const initializeSkuSpecs = async(sequelize)=>{
             autoIncrement:true
         },
         sku_specs:{
-            type:DataTypes.JSON,
+            type:DataTypes.JSONB,
             allowNull:true,
+        },
+        SkuId:{
+            type:DataTypes.INTEGER,
+            allowNull:false
         }
     },{
         sequelize,
         modelName:"SkuSpecs",
         tableName:"SkuSpecs",
         freezeTableName:true,
-        timestamps:true,
-        underscored:true,
+        timestamps:false,
     })
     return SkuSpecs
 }

@@ -1,15 +1,17 @@
-const { Op, where } = require("@sequelize/core")
-const initializeModels = require("../../db/dbs/associations");
-const {getSelectData } = require("../../utils");
+
+const { Op, where } = require('sequelize')
+const { getSelectData } = require("../../utils");
+const { NotFoundError } = require('../../cores/error.response');
 class CampaignRepository {
     constructor(models) {
         this.Campaign = models.Campaign;
         this.Products = models.Products;
-        this.Discounts = models.Products;
+        this.Discounts = models.Discounts;
+        this.DiscountsProducts = models.DiscountsProducts
     }
 
     async findCampaignAndDiscountBySlug(slug) {
-        if(!slug) {
+        if (!slug) {
             throw new Error("Slug is required");
         }
         const campaign = await this.Campaign.findOne({
@@ -23,11 +25,12 @@ class CampaignRepository {
                     [Op.gte]: new Date()
                 }
             },
-            include:[
+            include: [
                 {
                     model: this.Discounts,
-                    attributes: getSelectData(['id', 'name','code', 'value','type', 'StartDate','EndDate','MinValueOrders']),
-                    where:{
+                    as: 'discount',
+                    attributes: getSelectData(['id', 'name', 'code', 'value', 'type', 'StartDate', 'EndDate', 'MinValueOrders']),
+                    where: {
                         status: "active",
                         EndDate: {
                             [Op.gte]: new Date()
@@ -38,42 +41,75 @@ class CampaignRepository {
         });
         return campaign;
     }
-    async findProductsByCampaignSlug(slug, page = 1, limit = 20){
-        const campaign = await this.Campaign.findOne({where:{slug}})
-        if(!campaign){
-            throw new NotFoundError("Campaign not found or ended")
+    async findProductsByCampaignSlug(slug, page = 1, limit = 20) {
+        const campaign = await this.Campaign.findOne({
+            where: {
+                slug,
+                status: 'active',
+                start_time: { [Op.lte]: new Date() },
+                end_time: { [Op.gte]: new Date() }
+            }
+        });
+
+        if (!campaign) {
+            return campaign
         }
-        const offset = (page -1 ) * limit
+
         const discounts = await this.Discounts.findAll({
-            where:{CampaignId:campaign.id},
-            attributes:getSelectData(['id'])
-        })
-        const DiscountIds = discounts.map(d=>d.id)
-        const {count, rows} = await this.Products.findAndCountAll({
-            include:[
-                {
-                    model:this.Discounts,
-                    through:{model:this.DiscountsProducts},
-                    where:{id:{[Op.in]:DiscountIds}},
-                    require:true,
-                    attributes:getSelectData('id', 'name','code','value')
-                }
-            ],
-            where:{status:'active'},
+            where: { CampaignId: campaign.id },
+            attributes: ['id']
+        });
+
+        const DiscountIds = discounts.map(d => d.id);
+
+        if (DiscountIds.length === 0) {
+            return {
+                products: [],
+                limit,
+                total: 0,
+                totalPages: 0
+            };
+        }
+
+        // 🧠 Tìm productId trong DiscountsProducts
+        const discountsProducts = await this.DiscountsProducts.findAll({
+            where: { DiscountId: { [Op.in]: DiscountIds } },
+            attributes: ['ProductId']
+        });
+
+        const productIds = discountsProducts.map(dp => dp.ProductId);
+
+        if (productIds.length === 0) {
+            return {
+                products: [],
+                limit,
+                total: 0,
+                totalPages: 0
+            };
+        }
+
+        const offset = (page - 1) * limit;
+
+        const { count, rows } = await this.Products.findAndCountAll({
+            where: {
+                id: { [Op.in]: productIds },
+                status: 'active'
+            },
+            attributes: getSelectData(['id', 'slug', 'name', 'sale_count', 'price', 'discount_percentage', 'thumb', 'rating']),
             limit,
             offset,
-            order:[['sort','ASC']]
-        })
-        return{
-            products:rows,
-            pagination:{
-                page,
-                limit,
-                total:count,
-                totalPages:Math.ceil(count/limit)
-            }
-        }
+            order: [['sort', 'ASC']],
+        });
+
+        return {
+            products: rows,
+            limit,
+            total: count,
+            totalPages: Math.ceil(count / limit)
+        };
     }
+
+
 }
 
 module.exports = CampaignRepository

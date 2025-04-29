@@ -1,4 +1,4 @@
-const {DataTypes, Model} = require('@sequelize/core');
+const {DataTypes, Model} = require('sequelize');
 
 class PaymentMethod extends Model {}
 const initializePaymentMethod = async(sequelize)=>{
