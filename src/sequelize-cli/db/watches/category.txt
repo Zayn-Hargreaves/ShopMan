@@ -1,2 +1,0 @@
-{"catid":100534,"name":"Watches manufactured in Switzerland","status":"active"}
-{"catid":100013,"name":"Watches produced in China","status":"active"}

@@ -1,2 +1,0 @@
-{"catid":100634,"name":"Video Games by PlayStation","status":"active"}
-{"catid":102752,"name":"Video Games by Xbox","status":"active"}

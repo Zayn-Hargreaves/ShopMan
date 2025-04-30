@@ -1,3 +1,0 @@
-{"catid":100017,"name":"Clothing Men","status":"active"}
-{"catid":100011,"name":"Clothing in Summer","status":"active"}
-
