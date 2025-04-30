@@ -7,7 +7,7 @@ class wishlistController {
         const { page, limit } = req.query
         new OkResponse({
             message: "get wishlist success",
-            metadata: await WishlistService.getWishlist(userId, page, limit)
+            metadata: await WishlistService.getWishlist(userId, parseInt(page), parseInt(limit))
         }).send(res)
     }
     addProductToWishlist = async (req, res, next) => {

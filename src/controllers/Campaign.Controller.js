@@ -15,7 +15,7 @@ class CampaignController {
         const {page,limit} = req.query
         new OkResponse({
             message:'get product campaign success',
-            metadata: await CampaignService.getProductsByCampaignSlug(slug,page,limit)
+            metadata: await CampaignService.getProductsByCampaignSlug(slug,parseInt(page),parseInt(limit))
         }).send(res)
     }
 }

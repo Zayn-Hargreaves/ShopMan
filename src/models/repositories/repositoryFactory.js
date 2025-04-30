@@ -9,7 +9,12 @@ const ProductRepository = require("./product.repo")
 const ShopRepository = require("./shop.repo")
 const UserRepository = require("./user.repo")
 const WishListRepository = require("./wishlist.repo")
+const OrderRepository = require("./order.repo")
+const InventoryRepository = require("./inventory.repo")
+const PaymentRepository = require("./payment.repo")
+const NotificationRepository = require("./notification.repo")
 const initializeModels = require("../../db/dbs/associations")
+
 class RepositoryFactory {
     constructor() {
         this.models = null;
@@ -31,6 +36,10 @@ class RepositoryFactory {
                 WishListRepository:new WishListRepository(this.models),
                 UserRepository: new UserRepository(this.models),
                 CartRepository: new CartRepository(this.models),
+                OrderRepository:new OrderRepository(this.models),
+                InventoryRepository:new InventoryRepository(this.models),
+                PaymentRepository:new PaymentRepository(this.models),
+                NotificationRepository:new PaymentRepository(this.models)
             };
         }
     }

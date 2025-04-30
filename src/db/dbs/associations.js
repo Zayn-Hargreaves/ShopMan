@@ -236,6 +236,23 @@ const initializeModels = async () => {
         Category.hasMany(CampaignCategory, { foreignKey: { name: 'CategoryId' }, as: 'category' })
         CampaignCategory.belongsTo(Category, { foreignKey: { name: 'CategoryId' }, as: 'category' })
 
+        CartDetails.belongsTo(Sku, {
+            foreignKey: 'sku_no',
+            targetKey: 'sku_no',
+            as: 'Sku',
+            constraints: false,             
+            foreignKeyConstraints: false    
+          });
+          
+          Sku.hasMany(CartDetails, {
+            foreignKey: 'sku_no',
+            sourceKey: 'sku_no',
+            as: 'CartItems',
+            constraints: false,
+            foreignKeyConstraints: false
+          });
+          
+
         await sequelize.sync();
 
         return {

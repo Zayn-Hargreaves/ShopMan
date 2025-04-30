@@ -22,20 +22,12 @@ const initializePayment = async(sequelize)=>{
             allowNull:false
         },
         OrderId:{
-            type:DataTypes.INTEGER,
-            // references:{
-            //     model:"Orders",
-            //     key:"id"
-            // },
-            allowNull:false
+            type:DataTypes.INTEGER,      
+            // allowNull:false
         },
         PaymentMethodId:{
             type:DataTypes.INTEGER,
-            // references:{
-            //     model:"PaymentMethods",
-            //     key:"id"
-            // },
-            allowNull:false
+            // allowNull:false
         },
     },{
         sequelize,

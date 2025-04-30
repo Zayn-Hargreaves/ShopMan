@@ -144,6 +144,21 @@ class ProductRepository {
             products: rows
         }
     }
+    async getProductWithSku(productId, skuNo) {
+        return await this.Sku.findOne({
+            where: { ProductId: productId, sku_no: skuNo },
+            include: [
+                { model: this.SkuAttr, as: 'SkuAttr' },
+                { model: this.SkuSpecs, as: 'SkuSpecs' },
+            ]
+        });
+    }
+    async increaseSaleCount(productId, quantity) {
+        return await this.Products.increment(
+            { sale_count: quantity },
+            { where: { id: productId } }
+        );
+    }
 }
 
 

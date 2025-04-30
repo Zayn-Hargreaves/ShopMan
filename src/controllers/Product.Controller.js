@@ -13,14 +13,14 @@ class ProductController{
         const {page,limit} = req.query
         new OkResponse({
             message:"get deal of the day success",
-            metadata: await ProductService.getDealOfTheDayProducts(page,limit)
+            metadata: await ProductService.getDealOfTheDayProducts(parseInt(page),parseInt(limit))
         }).send(res)
     }
     getAllDealProduct = async(req,res, next)=>{
         const {page, limit} = req.query
         new OkResponse({
             message:'get all deal product success',
-            metadata:await ProductService.getAllDealProducts(page, limit)
+            metadata:await ProductService.getAllDealProducts(parseInt(page), parseInt(limit))
         }).send(res)
     }
     getTrendingProducts = async(req,res, next)=>{
@@ -33,7 +33,7 @@ class ProductController{
         const {page, limit} = req.body
         new OkResponse({
             message:"get all trending product sucess",
-            metadata : await ProductService.getAllTrendingProducts(page,limit)
+            metadata : await ProductService.getAllTrendingProducts(parseInt(page),parseInt(limit))
         }).send(res)
     }
 
@@ -41,7 +41,7 @@ class ProductController{
         const {page,limit} = req.query
         new OkResponse({
             message:"get new arrivals success",
-            metadata: await ProductService.getNewArrivals(page,limit)
+            metadata: await ProductService.getNewArrivals(parseInt(page),parseInt(limit))
         }).send(res)
     }
 }

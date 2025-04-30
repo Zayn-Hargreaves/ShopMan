@@ -1,4 +1,5 @@
 
+const { date } = require("joi");
 const { BadGatewayError } = require("../cores/error.response");
 const { getRedis } = require("../db/rdb");
 
@@ -47,7 +48,7 @@ class RedisService {
       }
       return true
     } catch (error) {
-      throw new BadGatewayError(`Error upserting item into ZSET ${key}:`,error)
+      throw new BadGatewayError(`Error upserting item into ZSET ${key}:`, error)
     }
   }
   static async getZsetRange(key, start, end = -1, withScores = true) {
@@ -55,7 +56,7 @@ class RedisService {
     try {
       return await redis.zrevrange(key, start, end, withScores ? "WITHSCORES" : '"')
     } catch (error) {
-      throw new BadGatewayError(`Error getting ZSET range ${key}:`,error)
+      throw new BadGatewayError(`Error getting ZSET range ${key}:`, error)
     }
   }
   static async getZsetScore(key, member) {
@@ -112,6 +113,30 @@ class RedisService {
       throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:`, error)
     }
   }
+  static async cacheHashField(hashKey, field, value, ttl = 3600) {
+    const redis = await getRedis()
+    await redis.hset(hashKey, field, JSON.stringify(value))
+    await redis.expire(hashKey, ttl)
+  }
+  static async getAllHashField(hashKey) {
+    const redis = await getRedis()
+    const rawData = await redis.hgetall(hashKey)
+    const dataParsed = Object.entries(rawData).map(([field, val]) => ({
+      field,
+      ...JSON.parse(val)
+    }))
+    return dataParsed
+  }
+  static async getHashField(hashKey, field) {
+    const redis = await getRedis();
+    const val = await redis.hget(hashKey, field);
+    return val ? JSON.parse(val) : null;
+  }
+  static async removeHashField(hashKey, field) {
+    const redis = await getRedis();
+    return await redis.hdel(hashKey, field);
+  }
+
   static async acquireLock({ productID, cartID, quantity, timeout = 10 }) {
     const redis = await getRedis();
     const lockKey = `lock:product:${productID}:cart:${cartID}`;
