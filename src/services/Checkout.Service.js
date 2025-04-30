@@ -4,7 +4,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const { Op } = require("sequelize");
 const RedisService = require("./Redis.Service");
 const { v4: uuidv4 } = require("uuid");
-
+const EmailService = require("./Email.service")
+const {retry} = require("../helpers/retryFuntion")
 class CheckoutService {
     static async fromCart({ userId, selectedItems = [], shopDiscountIds = [] }) {
         await RepositoryFactory.initialize();
@@ -132,6 +133,106 @@ class CheckoutService {
         }
     }
 
+    // static async confirmPayment({ userId, paymentIntentId }) {
+    //     await RepositoryFactory.initialize();
+    //     const OrderRepo = RepositoryFactory.getRepository("OrderRepository");
+    //     const CartRepo = RepositoryFactory.getRepository("CartRepository");
+    //     const InventoryRepo = RepositoryFactory.getRepository("InventoryRepository");
+    //     const NotificationRepo = RepositoryFactory.getRepository("NotificationRepository");
+    //     const DiscountRepo = RepositoryFactory.getRepository("DiscountRepository");
+    //     const PaymentRepo = RepositoryFactory.getRepository("PaymentRepository");
+    //     const ProductRepo = RepositoryFactory.getRepository("ProductRepository")
+    //     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    //     if (!paymentIntent || paymentIntent.status !== "succeeded") {
+    //         throw new Error("Payment not completed or invalid");
+    //     }
+
+    //     const cartItems = await CartRepo.findAllProductInCart(userId);
+    //     if (!cartItems.length) throw new Error("No items in cart");
+
+    //     let orderTotal = 0;
+    //     const orderDetailsData = [];
+
+    //     for (const item of cartItems) {
+    //         const unitPrice = item.SkuAttr?.sku_price || item.Sku?.sku_price || item.Product?.price || 0;
+    //         const itemTotal = parseFloat(unitPrice) * item.quantity;
+    //         orderTotal += itemTotal;
+
+    //         // Giảm tồn kho
+    //         await InventoryRepo.decrementStock({
+    //             ProductId: item.ProductId,
+    //             ShopId: item.Product.ShopId,
+    //             quantity: item.quantity
+    //         });
+
+    //         // Tăng sale count sản phẩm
+    //         await OrderRepo.increaseSaleCount(item.ProductId, item.quantity);
+
+    //         // Giảm UserCounts của discount (nếu có)
+    //         const discounts = await DiscountRepo.getAvailableDiscounts(item.ProductId);
+    //         for (const d of discounts) {
+    //             await DiscountRepo.incrementUserUsage(d.id);
+    //         }
+
+    //         // Thêm vào danh sách chi tiết đơn hàng
+    //         orderDetailsData.push({
+    //             ProductId: item.ProductId,
+    //             quantity: item.quantity,
+    //             price_at_time: unitPrice,
+    //         });
+
+    //         // Xoá item trong giỏ hàng
+    //         await CartRepo.removeItemFromCart(userId, item.ProductId, item.sku_no);
+    //         await ProductRepo.increaseSaleCount(item.productId, item.quantity);
+
+    //     }
+
+    //     // Tạo đơn hàng
+    //     const order = await OrderRepo.createOrder({
+    //         UserId: userId,
+    //         TotalPrice: orderTotal,
+    //         Status: "paid"
+    //     });
+
+    //     // Tạo chi tiết đơn hàng
+    //     await OrderRepo.bulkCreateOrderDetails(order.id, orderDetailsData);
+
+    //     // Tạo thông báo cho người dùng
+    //     await NotificationRepo.create({
+    //         type: "order",
+    //         option: "success",
+    //         content: `Đơn hàng ${order.id} của bạn đã được thanh toán thành công`,
+    //         UserId: userId
+    //     });
+
+    //     // Tạo bản ghi payment
+    //     await PaymentRepo.create({
+    //         UserId: userId,
+    //         OrderId: order.id,
+    //         TotalPrice: orderTotal,
+    //         Status: "succeeded",
+    //         PaymentMethodId: 1 // Stripe
+    //     });
+
+    //     // Gửi email
+    //     const userInfo = await OrderRepo.getUserInfo(userId);
+    //     const emailService = new EmailService(userInfo, null);
+    //     await emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
+    //         orderId: order.id,
+    //         orderDate: new Date().toLocaleDateString("vi-VN"),
+    //         paymentMethod: "Stripe",
+    //         orderItems: orderDetailsData,
+    //         orderTotal: orderTotal,
+    //     });
+
+    //     return {
+    //         orderCreated: true,
+    //         paymentIntentId,
+    //         orderId: order.id,
+    //         total: orderTotal,
+    //     };
+    // }
+
     static async confirmPayment({ userId, paymentIntentId }) {
         await RepositoryFactory.initialize();
         const OrderRepo = RepositoryFactory.getRepository("OrderRepository");
@@ -140,7 +241,8 @@ class CheckoutService {
         const NotificationRepo = RepositoryFactory.getRepository("NotificationRepository");
         const DiscountRepo = RepositoryFactory.getRepository("DiscountRepository");
         const PaymentRepo = RepositoryFactory.getRepository("PaymentRepository");
-        const ProductRepo = RepositoryFactory.getRepository("ProductRepository")
+        const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
+
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
         if (!paymentIntent || paymentIntent.status !== "succeeded") {
             throw new Error("Payment not completed or invalid");
@@ -157,72 +259,65 @@ class CheckoutService {
             const itemTotal = parseFloat(unitPrice) * item.quantity;
             orderTotal += itemTotal;
 
-            // Giảm tồn kho
             await InventoryRepo.decrementStock({
                 ProductId: item.ProductId,
                 ShopId: item.Product.ShopId,
-                quantity: item.quantity
+                quantity: item.quantity,
             });
 
-            // Tăng sale count sản phẩm
-            await OrderRepo.increaseSaleCount(item.ProductId, item.quantity);
-
-            // Giảm UserCounts của discount (nếu có)
+            await ProductRepo.increaseSaleCount(item.ProductId, item.quantity);
             const discounts = await DiscountRepo.getAvailableDiscounts(item.ProductId);
             for (const d of discounts) {
                 await DiscountRepo.incrementUserUsage(d.id);
             }
 
-            // Thêm vào danh sách chi tiết đơn hàng
             orderDetailsData.push({
                 ProductId: item.ProductId,
                 quantity: item.quantity,
                 price_at_time: unitPrice,
             });
 
-            // Xoá item trong giỏ hàng
             await CartRepo.removeItemFromCart(userId, item.ProductId, item.sku_no);
-            await ProductRepo.increaseSaleCount(item.productId, item.quantity);
-
         }
 
-        // Tạo đơn hàng
         const order = await OrderRepo.createOrder({
             UserId: userId,
             TotalPrice: orderTotal,
-            Status: "paid"
+            Status: "paid",
         });
 
-        // Tạo chi tiết đơn hàng
         await OrderRepo.bulkCreateOrderDetails(order.id, orderDetailsData);
 
-        // Tạo thông báo cho người dùng
-        await NotificationRepo.create({
-            type: "order",
-            option: "success",
-            content: `Đơn hàng ${order.id} của bạn đã được thanh toán thành công`,
-            UserId: userId
-        });
+        retry(() =>
+            NotificationRepo.create({
+                type: "order",
+                option: "success",
+                content: `Đơn hàng ${order.id} của bạn đã được thanh toán thành công`,
+                UserId: userId,
+            })
+        ).catch(console.error);
 
-        // Tạo bản ghi payment
-        await PaymentRepo.create({
-            UserId: userId,
-            OrderId: order.id,
-            TotalPrice: orderTotal,
-            Status: "succeeded",
-            PaymentMethodId: 1 // Stripe
-        });
+        retry(() =>
+            PaymentRepo.create({
+                UserId: userId,
+                OrderId: order.id,
+                TotalPrice: orderTotal,
+                Status: "succeeded",
+                PaymentMethodId: 1,
+            })
+        ).catch(console.error);
 
-        // Gửi email
         const userInfo = await OrderRepo.getUserInfo(userId);
         const emailService = new EmailService(userInfo, null);
-        await emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
-            orderId: order.id,
-            orderDate: new Date().toLocaleDateString("vi-VN"),
-            paymentMethod: "Stripe",
-            orderItems: orderDetailsData,
-            orderTotal: orderTotal,
-        });
+        retry(() =>
+            emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
+                orderId: order.id,
+                orderDate: new Date().toLocaleDateString("vi-VN"),
+                paymentMethod: "Stripe",
+                orderItems: orderDetailsData,
+                orderTotal: orderTotal,
+            })
+        ).catch(console.error);
 
         return {
             orderCreated: true,
@@ -231,6 +326,7 @@ class CheckoutService {
             total: orderTotal,
         };
     }
+
 }
 
 module.exports = CheckoutService;
