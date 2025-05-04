@@ -33,12 +33,6 @@ class AuthController{
             metadata: await AuthService.signUp(req.body)
         }).send(res)
     }
-    signUpWithGoogle = async(req, res,next)=>{
-        new OkResponse({
-            message:'signUp with Google successfully',
-            metadata: await AuthService.signUpWithGoogle(req.body)
-        }).send(res)
-    }
     forgotPassword = async(req,res, next)=>{
         const email= req.body.email
         new OkResponse({

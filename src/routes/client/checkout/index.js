@@ -31,7 +31,7 @@ const checkOutController = require('../../../controllers/Checkout.Controller');
  *       200:
  *         description: Kết quả tạo paymentIntent thành công
  */
-router.post("/buynow", asyncHandler(checkOutController));
+router.post("/buynow", asyncHandler(checkOutController.buyNow));
 
 /**
  * @swagger
@@ -71,7 +71,7 @@ router.post("/buynow", asyncHandler(checkOutController));
  *       200:
  *         description: Tạo paymentIntent từ giỏ hàng thành công
  */
-router.post("/from-cart", asyncHandler(checkOutController));
+router.post("/from-cart", asyncHandler(checkOutController.fromCart));
 
 /**
  * @swagger
@@ -94,6 +94,6 @@ router.post("/from-cart", asyncHandler(checkOutController));
  *       200:
  *         description: Đơn hàng đã được tạo, tồn kho đã cập nhật
  */
-router.post("/confirm", asyncHandler(checkOutController));
+router.post("/confirm", asyncHandler(checkOutController.confirmPayment));
 
 module.exports = router;

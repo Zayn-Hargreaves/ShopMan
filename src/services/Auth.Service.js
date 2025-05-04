@@ -50,7 +50,6 @@ class AuthService {
             throw new UnauthorizedError('Email or password is required');
         }
         const user = await UserRepository.findByEmail(email);
-        console.log(user)
         if (!user) {
             throw new NotFoundError("Account not found");
         }

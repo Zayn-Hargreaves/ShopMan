@@ -3,7 +3,6 @@ const app = express()
 const cors = require("cors")
 const helmet = require("helmet")
 const compression = require("compression")
-const inittializeModel = require("./db/dbs/associations")
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 require("dotenv").config()

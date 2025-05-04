@@ -39,7 +39,7 @@ class RepositoryFactory {
                 OrderRepository:new OrderRepository(this.models),
                 InventoryRepository:new InventoryRepository(this.models),
                 PaymentRepository:new PaymentRepository(this.models),
-                NotificationRepository:new PaymentRepository(this.models)
+                NotificationRepository:new NotificationRepository(this.models)
             };
         }
     }
