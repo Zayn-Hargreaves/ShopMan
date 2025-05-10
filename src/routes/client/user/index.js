@@ -38,7 +38,7 @@ const userController = require("../../../controllers/User.Controller");
  * @swagger
  * /api/v1/user/profile:
  *   get:
- *     summary: Get user profile with main address
+ *     summary: Lấy thông tin hồ sơ người dùng (kèm địa chỉ chính)
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
@@ -46,7 +46,7 @@ const userController = require("../../../controllers/User.Controller");
  *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     responses:
  *       200:
- *         description: Profile retrieved successfully
+ *         description: Hồ sơ người dùng được lấy thành công
  *         content:
  *           application/json:
  *             schema:
@@ -54,11 +54,17 @@ const userController = require("../../../controllers/User.Controller");
  *               properties:
  *                 message:
  *                   type: string
- *                   example: get user profile successfully
+ *                   example: OK
+ *                 status:
+ *                   type: integer
+ *                   example: 200
  *                 metadata:
  *                   type: object
  *                   properties:
- *                     user:
+ *                     message:
+ *                       type: string
+ *                       example: get user profile successfully
+ *                     metadata:
  *                       type: object
  *                       properties:
  *                         id:
@@ -66,42 +72,69 @@ const userController = require("../../../controllers/User.Controller");
  *                           example: 1
  *                         name:
  *                           type: string
- *                           example: John Doe
+ *                           example: Nguyễn Văn A
  *                         email:
  *                           type: string
- *                           example: john@example.com
+ *                           example: quanva.b21cn618@stu.ptit.edu.vn
+ *                         google_id:
+ *                           type: string
+ *                           nullable: true
  *                         phone:
  *                           type: string
- *                           example: +123456789
+ *                           example: 0987654321
  *                         avatar:
  *                           type: string
  *                           example: https://example.com/avatar.jpg
- *                     addressMain:
- *                       type: object
- *                       nullable: true
- *                       properties:
- *                         id:
- *                           type: integer
- *                           example: 1
+ *                         balance:
+ *                           type: string
+ *                           example: "0.00"
+ *                         status:
+ *                           type: string
+ *                           example: active
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                         deletedAt:
+ *                           type: string
+ *                           format: date-time
+ *                           nullable: true
  *                         address:
- *                           type: string
- *                           example: 123 Main St
- *                         city:
- *                           type: string
- *                           example: New York
- *                         country:
- *                           type: string
- *                           example: USA
- *                         pincode:
- *                           type: string
- *                           example: 10001
- *                         address_type:
- *                           type: string
- *                           example: main
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: integer
+ *                               UserId:
+ *                                 type: integer
+ *                               address_type:
+ *                                 type: string
+ *                                 example: main
+ *                               pincode:
+ *                                 type: integer
+ *                                 example: 700000
+ *                               address:
+ *                                 type: string
+ *                                 example: 123 Nguyễn Trãi
+ *                               city:
+ *                                 type: string
+ *                                 example: Hồ Chí Minh
+ *                               country:
+ *                                 type: string
+ *                                 example: Việt Nam
+ *                               createdAt:
+ *                                 type: string
+ *                                 format: date-time
+ *                               updatedAt:
+ *                                 type: string
+ *                                 format: date-time
  *       401:
- *         description: Unauthorized - Invalid or missing token
+ *         description: Không có quyền truy cập - thiếu hoặc sai token
  *       404:
- *         description: User not found
+ *         description: Không tìm thấy người dùng
  */
 
 
