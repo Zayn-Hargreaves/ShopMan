@@ -10,17 +10,17 @@ class UserRepository {
     async findByEmail(email) {
         return await this.User.findOne({
             where: { email },
-            raw:true
+            raw: true
         });
     }
 
     async findById(id) {
         return await this.User.findByPk(id, {
             attributes: getUnselectData(['password']),
-            raw:true
+            raw: true
         });
     }
-    
+
     async findByIdWithCart(id) {
         return await this.User.findByPk(id, {
             include: {
@@ -28,52 +28,50 @@ class UserRepository {
                 as: 'cart'
             },
             attributes: getUnselectData(['password']),
-            raw:true
+            raw: true
         });
     }
-    async getUserProfile(id){
+    async getUserProfile(id) {
         return await this.User.findOne({
             where: { id },
             attributes: getUnselectData(['password']),
-            include: {
+            include: [{
                 model: this.Address,
                 as: 'address',
-                where:{
-                    address_type:'main',
-                },
-                required: false,
-                raw:true
-            }
-        })
+                where: { address_type: 'main' },
+                required: false
+            }]
+        });
     }
+
     async findByGoogleId(googleId) {
         return await this.User.findOne({
             where: { googleId },
             attributes: getUnselectData(['password']),
-            raw:true
+            raw: true
         });
     }
 
-    async updatePassword(id, password ) {
+    async updatePassword(id, password) {
         console.log(id)
         console.log(password)
         return await this.User.update({ password: password }, { where: { id } });
     }
 
-    async createUser({name, email, password = null, googleId= null , status = 'active' }) {
-        return await this.User.create({ name, email, password, status,googleId });
+    async createUser({ name, email, password = null, googleId = null, status = 'active' }) {
+        return await this.User.create({ name, email, password, status, googleId });
     }
-    async updateUserProfile(UserId,{name,phone, avatar}){
+    async updateUserProfile(UserId, { name, phone, avatar }) {
         return await this.User.update({
             name,
             phone,
             avatar,
-        },{
-            where:{
-                id:UserId
+        }, {
+            where: {
+                id: UserId
             }
         })
     }
 }
 
-module.exports =UserRepository
+module.exports = UserRepository

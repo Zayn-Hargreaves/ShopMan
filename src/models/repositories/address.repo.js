@@ -30,16 +30,16 @@ class AddressRepository {
             country
         })
     }
-    async updateUserAddress(UserId,{address_type = 'Main', pincode, address, city, country }) {
+    async updateUserAddress(UserId,{pincode, address, city, country }) {
         return await this.Address.update({
-            address_type,
             pincode,
             address,
             city,
             country,
         }, {
             where: {
-                UserId: UserId
+                UserId: UserId,
+                address_type :'main'
             }
         })
     }

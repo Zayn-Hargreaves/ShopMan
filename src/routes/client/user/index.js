@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
 const userController = require("../../../controllers/User.Controller");
 
-
 /**
  * @swagger
  * components:
@@ -30,10 +29,9 @@ const userController = require("../../../controllers/User.Controller");
  *       Các API trong nhóm này yêu cầu người dùng gửi access token để xác thực.
  *       
  *       👉 Cách gửi access token:
- *       - Trên Swagger UI, nhấn nút "Authorize" góc trên phải.
- *       - Trên app Android hoặc khi gửi request:
- *         - req.headers['authorization'] = 'Bearer ' + accessToken
- *       - Trên Postman: Header → authorization: Bearer <access_token>
+ *       - Swagger UI: nhấn "Authorize" ở góc phải trên.
+ *       - Android app hoặc JS: `req.headers['authorization'] = 'Bearer ' + accessToken`
+ *       - Postman: tab Header → Key: `authorization`, Value: `Bearer <access_token>`
  */
 
 /**
@@ -49,11 +47,63 @@ const userController = require("../../../controllers/User.Controller");
  *     responses:
  *       200:
  *         description: Profile retrieved successfully
- *       404:
- *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: get user profile successfully
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: integer
+ *                           example: 1
+ *                         name:
+ *                           type: string
+ *                           example: John Doe
+ *                         email:
+ *                           type: string
+ *                           example: john@example.com
+ *                         phone:
+ *                           type: string
+ *                           example: +123456789
+ *                         avatar:
+ *                           type: string
+ *                           example: https://example.com/avatar.jpg
+ *                     addressMain:
+ *                       type: object
+ *                       nullable: true
+ *                       properties:
+ *                         id:
+ *                           type: integer
+ *                           example: 1
+ *                         address:
+ *                           type: string
+ *                           example: 123 Main St
+ *                         city:
+ *                           type: string
+ *                           example: New York
+ *                         country:
+ *                           type: string
+ *                           example: USA
+ *                         pincode:
+ *                           type: string
+ *                           example: 10001
+ *                         address_type:
+ *                           type: string
+ *                           example: main
  *       401:
  *         description: Unauthorized - Invalid or missing token
+ *       404:
+ *         description: User not found
  */
+
 
 /**
  * @swagger
@@ -80,12 +130,7 @@ const userController = require("../../../controllers/User.Controller");
  *                     example: John Doe
  *                   phone:
  *                     type: string
- *                     nullable: true
- *                     example: +1234567890
- *                   avatar:
- *                     type: string
- *                     nullable: true
- *                     example: https://example.com/avatar.jpg
+ *                     example: "+123456789"
  *               Address:
  *                 type: object
  *                 nullable: true
@@ -93,35 +138,38 @@ const userController = require("../../../controllers/User.Controller");
  *                   address:
  *                     type: string
  *                     example: 123 Main St
- *                   city:
- *                     type: string
- *                     example: New York
- *                   country:
- *                     type: string
- *                     example: USA
- *                   pincode:
- *                     type: string
- *                     example: 10001
- *                   address_type:
- *                     type: string
- *                     example: Main
  *     responses:
  *       200:
  *         description: Profile updated successfully
- *       404:
- *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "update user profile successfully"
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: integer
+ *                           example: 1
+ *                         name:
+ *                           type: string
+ *                           example: John Doe
  *       400:
  *         description: Invalid input
+ *       404:
+ *         description: User not found
  *       401:
  *         description: Unauthorized - Invalid or missing token
  */
 
-
-
-
-
 router.get("/profile", asyncHandler(userController.getUserProfile));
-
 router.put("/profile/update", asyncHandler(userController.updateUserProfile));
 
 module.exports = router;
