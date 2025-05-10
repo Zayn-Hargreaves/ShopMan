@@ -110,7 +110,7 @@ class CartRepository {
         });
     }
 
-    async removeProductFromCart({ UserId, ProductId, sku_no }) {
+    async removeProductFromCart( UserId, ProductId, sku_no ) {
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new Error("Cart not found");
 

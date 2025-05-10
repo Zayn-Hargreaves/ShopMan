@@ -535,23 +535,36 @@ router.use(authentication);
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   parameters:
+ *     RefreshTokenHeader:
+ *       in: header
+ *       name: x-rtoken-id
+ *       required: true
+ *       schema:
+ *         type: string
+ *       description: Refresh token gửi qua header để xử lý logout hoặc refresh accessToken
+ */
+
+/**
+ * @swagger
  * /api/v1/auth/logout:
  *   post:
  *     summary: User logout
- *     description: Logout a user by blacklisting the refresh token.
+ *     description: Logout người dùng bằng cách blacklist refresh token.
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: header
- *         name: x-rtoken-id
- *         schema:
- *           type: string
- *         required: true
- *         description: Refresh token to blacklist
+ *       - $ref: '#/components/parameters/RefreshTokenHeader'
  *     responses:
  *       200:
- *         description: Logout successful
+ *         description: Logout thành công
  *         content:
  *           application/json:
  *             schema:
@@ -562,7 +575,7 @@ router.use(authentication);
  *                 metadata:
  *                   type: boolean
  *             example:
- *               message: "logout sucsess"
+ *               message: "logout success"
  *               metadata: true
  *       500:
  *         description: Internal Server Error - Logout failed
@@ -573,17 +586,18 @@ router.use(authentication);
  *             example:
  *               message: "Logout failed"
  */
-router.post("/logout", asyncHandler(authController.logout));
 
 /**
  * @swagger
  * /api/v1/auth/handle-refreshtoken:
  *   post:
  *     summary: Refresh token
- *     description: Refresh access token using refresh token.
+ *     description: Cấp lại access token mới khi refresh token còn hạn.
  *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/RefreshTokenHeader'
  *     responses:
  *       200:
  *         description: Token refreshed successfully
@@ -597,12 +611,12 @@ router.post("/logout", asyncHandler(authController.logout));
  *                 metadata:
  *                   $ref: '#/components/schemas/Tokens'
  *             example:
- *               message: "refresh token sucess"
+ *               message: "refresh token success"
  *               metadata:
  *                 accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *                 refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
- *         description: Unauthorized - Invalid or blacklisted refresh token
+ *         description: Unauthorized - Invalid or expired refresh token
  *         content:
  *           application/json:
  *             schema:
@@ -610,6 +624,10 @@ router.post("/logout", asyncHandler(authController.logout));
  *             example:
  *               message: "Something went wrong, please relogin"
  */
+
+router.post("/logout", asyncHandler(authController.logout));
+
+
 router.post("/handle-refreshtoken", asyncHandler(authController.handleRefreshToken));
 
 module.exports = router;

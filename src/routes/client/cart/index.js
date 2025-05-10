@@ -1,9 +1,24 @@
 const router = require("express").Router()
-const {asyncHandler} = require("../../../helpers/asyncHandler")
+const { asyncHandler } = require("../../../helpers/asyncHandler")
 const CartController = require("../../../controllers/Cart.Controller.js")
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   parameters:
+ *     AccessTokenHeader:
+ *       in: header
+ *       name: Authorization
+ *       required: true
+ *       schema:
+ *         type: string
+ *         example: "Bearer <access_token>"
+ *       description: "Access token để xác thực người dùng, định dạng: Bearer <access_token>"
+ *
  *   schemas:
  *     CartItem:
  *       type: object
@@ -45,10 +60,20 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *                 type: number
  *                 format: float
  *                 example: 10
+ */
 
+/**
+ * @swagger
  * tags:
  *   - name: Cart
- *     description: Cart management APIs
+ *     description: |
+ *       Các API trong nhóm này yêu cầu người dùng gửi access token để xác thực.
+ *       
+ *       👉 Cách gửi access token:
+ *       - Trên Swagger UI, nhấn nút "Authorize" góc trên phải.
+ *       - Trên app Android hoặc khi gửi request:
+ *         - req.headers['authorization'] = 'Bearer ' + accessToken
+ *       - Trên Postman: Header → Authorization: Bearer <access_token>
  */
 
 /**
@@ -57,6 +82,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   get:
  *     summary: Get all items in cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     responses:
  *       200:
  *         description: List of cart items
@@ -80,7 +109,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   post:
  *     summary: Add product to cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: query
  *         name: ProductId
  *         required: true
@@ -107,7 +139,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   put:
  *     summary: Update product quantity in cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: query
  *         name: ProductId
  *         required: true
@@ -134,7 +169,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   delete:
  *     summary: Remove a product from cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: path
  *         name: productId
  *         required: true
@@ -156,6 +194,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   delete:
  *     summary: Remove all products from cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     responses:
  *       200:
  *         description: All products removed from cart
@@ -167,6 +209,10 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *   get:
  *     summary: Get number of products in cart
  *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     responses:
  *       200:
  *         description: Number of products in cart

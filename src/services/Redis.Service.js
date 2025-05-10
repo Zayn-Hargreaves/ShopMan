@@ -136,45 +136,82 @@ class RedisService {
     const redis = await getRedis();
     return await redis.hdel(hashKey, field);
   }
-
-  static async acquireLock({ productID, cartID, quantity, timeout = 10 }) {
+  static async acquireLock({ productID, skuNo, cartID, quantity, timeout = 10 }) {
     const redis = await getRedis();
-    const lockKey = `lock:product:${productID}:cart:${cartID}`;
-    const token = uuidv4(); // Tạo token duy nhất cho khóa
+    const lockKey = `lock:product:${productID}:sku:${skuNo}:cart:${cartID}`;
+    const token = uuidv4();
 
     try {
-      // Thử tạo khóa với NX (chỉ tạo nếu chưa tồn tại) và EX (hết hạn sau timeout giây)
       const result = await redis.set(lockKey, token, "NX", "EX", timeout);
-
       if (result === "OK") {
-        // Khóa được tạo thành công, trả về token để sử dụng khi giải phóng
-        return { key: lockKey, token };
+        // ✅ Ghi nhận quantity đang giữ chỗ vào HASH để dễ thống kê
+        const hashKey = `reserved:product:${productID}:sku:${skuNo}`;
+        await redis.hincrby(hashKey, cartID, quantity);
+        await redis.expire(hashKey, timeout); // đảm bảo TTL
+
+        return { key: lockKey, token, productID, skuNo, cartID };
       } else {
-        // Không tạo được khóa (đã có client khác giữ khóa)
         return null;
       }
-    } catch (error) {
-      throw new BadGatewayError(`Error acquiring lock for product ${productID}: ${error.message}`);
+    } catch (err) {
+      throw new BadGatewayError(`Error acquiring lock for product ${productID}: ${err.message}`);
     }
   }
 
-  static async releaseLock({ key, token }) {
+
+  static async releaseLock({ key, token, productID, skuNo, cartID }) {
     const redis = await getRedis();
 
     try {
-      // Kiểm tra token trước khi xóa khóa (đảm bảo chỉ xóa khóa của client đã tạo)
       const currentToken = await redis.get(key);
-      if (currentToken !== token) {
-        return false; // Không phải khóa của client này, không xóa
-      }
+      if (currentToken !== token) return false;
 
-      // Xóa khóa
-      const result = await redis.del(key);
-      return result === 1; // Trả về true nếu xóa thành công
+      // ✅ Xoá lock
+      await redis.del(key);
+
+      // ✅ Xoá lượng reserved từ HASH
+      const hashKey = `reserved:product:${productID}:sku:${skuNo}`;
+      await redis.hdel(hashKey, cartID);
+
+      return true;
     } catch (error) {
       throw new BadGatewayError(`Error releasing lock for key ${key}: ${error.message}`);
     }
   }
+  static async getReservedQuantity(productID, skuNo) {
+    const redis = await getRedis();
+    try {
+      const hashKey = `reserved:product:${productID}:sku:${skuNo}`;
+      const values = await redis.hvals(hashKey);
+      return values.reduce((sum, val) => sum + parseInt(val, 10), 0);
+    } catch (err) {
+      throw new BadGatewayError(`Error reading reserved quantity for product ${productID} | ${skuNo}: ${err.message}`);
+    }
+  }
+  static async set(key, value, ttl = 3600) {
+    const redis = await getRedis();
+    try {
+      const serializedValue = JSON.stringify(value);
+      await redis.set(key, serializedValue, "EX", ttl);
+    } catch (error) {
+      throw new BadGatewayError(`Error setting key ${key} in Redis: ${error.message}`);
+    }
+  }
+  static async get(key) {
+    const redis = await getRedis();
+    const value = await redis.get(key);
+    return value ? JSON.parse(value) : null;
+  }
+  static async remove(key) {
+    const redis = await getRedis();
+    try {
+      return await redis.del(key);
+    } catch (err) {
+      throw new BadGatewayError(`Error deleting Redis key ${key}: ${err.message}`);
+    }
+  }
+
+
 }
 
 module.exports = RedisService;
