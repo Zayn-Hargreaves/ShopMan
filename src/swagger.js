@@ -35,6 +35,8 @@ const options = {
     "./src/routes/client/cart/index.js",
     "./src/routes/client/checkout/index.js",
     "./src/routes/client/wishlist/index.js",
+    "./src/routes/client/shop/index.js",
+
   ]
 };
 

@@ -2,6 +2,34 @@ const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
 const CampaignController = require("../../../controllers/Campaign.Controller.js");
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Campaign:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         title:
+ *           type: string
+ *           example: "Giảm Giá Tháng 5"
+ *         slug:
+ *           type: string
+ *           example: "giam-gia-thang-5"
+ *         description:
+ *           type: string
+ *           example: "Ưu đãi khủng cho tháng 5"
+ *         start_time:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-05-01T00:00:00.000Z"
+ *         end_time:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-05-31T23:59:59.000Z"
+ */
 
 /**
  * @swagger
@@ -33,28 +61,7 @@ const CampaignController = require("../../../controllers/Campaign.Controller.js"
  *                   type: object
  *                   properties:
  *                     campaign:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: integer
- *                           example: 1
- *                         title:
- *                           type: string
- *                           example: "Giảm Giá Tháng 5"
- *                         slug:
- *                           type: string
- *                           example: "giam-gia-thang-5"
- *                         description:
- *                           type: string
- *                           example: "Ưu đãi khủng cho tháng 5"
- *                         start_time:
- *                           type: string
- *                           format: date-time
- *                           example: "2025-05-01T00:00:00.000Z"
- *                         end_time:
- *                           type: string
- *                           format: date-time
- *                           example: "2025-05-31T23:59:59.000Z"
+ *                       $ref: '#/components/schemas/Campaign'
  *                     discount:
  *                       type: object
  *                       description: Thông tin discount đính kèm (nếu có)
@@ -65,8 +72,8 @@ const CampaignController = require("../../../controllers/Campaign.Controller.js"
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
 router.get("/:slug", asyncHandler(CampaignController.getCampaignDetails));
+
 /**
  * @swagger
  * /api/v1/campaign/{slug}/product:
@@ -150,7 +157,6 @@ router.get("/:slug", asyncHandler(CampaignController.getCampaignDetails));
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-
-router.get("/:slug/product", asyncHandler(CampaignController.getCampaignProduct))
+router.get("/:slug/product", asyncHandler(CampaignController.getCampaignProduct));
 
 module.exports = router;

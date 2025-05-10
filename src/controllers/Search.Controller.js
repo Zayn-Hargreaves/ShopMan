@@ -14,7 +14,6 @@ class SearchController {
             pageSize,
             isAndroid
         } = req.query;
-
         new OkResponse({
             message: "Search products successfully",
             metadata: await ElasticSearchService.searchProducts({
@@ -53,13 +52,15 @@ class SearchController {
         new OkResponse({
             message: "Get products by shop successfully",
             metadata: await ElasticSearchService.searchProducts({
-                minPrice: minPrice ? Number(minPrice) : undefined,
-                maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                shopSlug: slug,
-                sortBy: sortBy ? JSON.parse(sortBy) : undefined,
-                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
-                pageSize: pageSize ? Number(pageSize) : undefined,
-                isAndroid: isAndroid === 'true'
+                query:undefined,
+                minPrice:minPrice ? Number(minPrice) : undefined,
+                maxPrice:maxPrice ? Number(maxPrice) : undefined,
+                CategorySlug:undefined,
+                ShopSlug:slug,
+                sortBy : sortBy ? JSON.parse(sortBy) : undefined,
+                lastSortValues : lastSortValues ? JSON.parse(lastSortValues) : undefined,
+                pageSize : pageSize ? Number(pageSize) : undefined,
+                isAndroid : isAndroid === 'true'
             })
         }).send(res);
     }

@@ -4,6 +4,7 @@ const ShopService = require("../services/Shop.Service")
 class ShopController {
     getShopDetails = async (req, res, next) => {
         const slug = req.params.slug
+        console.log(slug)
         new OkResponse({
             message: "get shop details sucess",
             metadata: await ShopService.getShopDetails(slug)
@@ -11,6 +12,7 @@ class ShopController {
     }
     getProductShop = async (req, res, next) => {
         const { slug } = req.params;
+        console.log(slug)
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by shop successfully",

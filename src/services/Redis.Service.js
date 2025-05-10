@@ -2,7 +2,7 @@
 const { date } = require("joi");
 const { BadGatewayError } = require("../cores/error.response");
 const { getRedis } = require("../db/rdb");
-
+const {v4:uuidv4} = require("uuid")
 class RedisService {
   static async createRedisBloomFilter(filterName, falsePositiveRate, capacity) {
     const redis = await getRedis();

@@ -1,7 +1,15 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
 const categoryController = require("../../../controllers/Category.Controller");
-const SearchController = require("../../../controllers/Search.Controller")
+const SearchController = require("../../../controllers/Search.Controller");
+
+/**
+ * @swagger
+ * tags:
+ *   name: Category
+ *   description: Danh mục sản phẩm
+ */
+
 /**
  * @swagger
  * /api/v1/category:
@@ -38,8 +46,8 @@ const SearchController = require("../../../controllers/Search.Controller")
  *                         type: string
  *                         example: "active"
  */
-
 router.get("/", asyncHandler(categoryController.getAllCategoriesNoParent));
+
 /**
  * @swagger
  * /api/v1/category/{slug}/product:
@@ -131,8 +139,6 @@ router.get("/", asyncHandler(categoryController.getAllCategoriesNoParent));
  *       404:
  *         description: Không tìm thấy category
  */
-
 router.get('/:slug/product', asyncHandler(SearchController.getProductByCategory));
-
 
 module.exports = router;

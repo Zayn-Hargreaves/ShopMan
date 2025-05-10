@@ -10,7 +10,7 @@ class CartController {
     }
 
     addProductToCart = async (req, res, next) => {
-        const { ProductId, skuNo, quantity } = req.query
+        const { ProductId, skuNo, quantity } = req.body
         const userId = req.userId
         new OkResponse({
             message: "add product to cart success",
@@ -19,7 +19,9 @@ class CartController {
     }
 
     updateProductToCart = async (req, res, next) => {
-        const { ProductId, skuNo, quantity } = req.query
+        const { ProductId, skuNo, quantity } = req.body
+        console.log(req.body)
+        console.log(ProductId, skuNo, quantity)
         const userId = req.userId
         new OkResponse({
             message: 'update product to cart success',
@@ -29,10 +31,12 @@ class CartController {
 
     removeProductFromCart = async (req, res, next) => {
         const userId = req.userId
-        const { ProductId, skuNo } = req.query
+        const { productId} = req.params
+        const {skuNo} = req.query
+        console.log(productId, skuNo)
         new OkResponse({
             message: "remove product from cart success",
-            metadata: await CartService.removeProductFromCart(userId, ProductId, skuNo)
+            metadata: await CartService.removeProductFromCart(userId, productId, skuNo)
         }).send(res)
     }
 

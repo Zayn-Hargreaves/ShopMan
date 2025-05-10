@@ -20,7 +20,7 @@ class ElasticSearchService {
         const CategoryRepo = RepositoryFactory.getRepository("CategoryRepository")
         let shop
         if (ShopSlug) {
-            shop = await ShopRepo.findShopBySlug(CategorySlug)
+            shop = await ShopRepo.findShopBySlug(ShopSlug)
         }
         if (minPrice !== undefined && (isNaN(minPrice) || minPrice < 0)) {
             throw new Error("minPrice must be a non-negative number");
@@ -51,7 +51,7 @@ class ElasticSearchService {
             minPrice: minPrice !== undefined ? Number(minPrice) : undefined,
             maxPrice: maxPrice !== undefined ? Number(maxPrice) : undefined,
             category: category !== undefined ? Number(category.id) : undefined,
-            shop: shop !== undefined ? Number(category.id) : undefined,
+            shop: shop !== undefined ? Number(shop.id) : undefined,
             categoryPath: categoryIds.length > 0 ? categoryIds : undefined
         };
         const result = await ProductRepositoryEdb.searchProducts({

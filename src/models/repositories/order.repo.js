@@ -27,12 +27,28 @@ class OrderRepository {
         return await this.OrderDetails.bulkCreate(details, options);
     }
     async getUserInfo(userId) {
-        return await this.Order.findOne({
+        const order = await this.Order.findOne({
             where: { UserId: userId },
-            include: [{ model: this.User, as: "user" }],
+            include: [
+                {
+                    model: this.User,
+                    as: "user",
+                    attributes: ["email", "name"]
+                }
+            ],
             order: [["createdAt", "DESC"]],
         });
+
+        if (!order || !order.user) {
+            throw new Error("Không tìm thấy thông tin user để gửi mail.");
+        }
+
+        return {
+            email: order.user.email,
+            name: order.user.name,
+        };
     }
+
 
 }
 

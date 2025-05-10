@@ -11,6 +11,7 @@ class CartRepository {
         this.SkuSpecs = models.SkuSpecs
         this.Shop = models.Shop
         this.CartDetails = models.CartDetails
+        this.Discounts = models.Discounts
     }
 
     async getOrCreateCart(UserId) {
@@ -21,14 +22,22 @@ class CartRepository {
         return cart;
     }
     async findProductInCart(userId, productId, skuNo) {
-        return await this.CartDetails.findOne({
-            where: { CartId: userId, ProductId: productId, sku_no: skuNo },
+        return await this.CartDetails.findAll({
+            where: { CartId: userId },
             include: [
-                { model: this.Products, as: 'product' },
-                { model: this.Sku, as: 'Sku' },
-                { model: this.SkuAttr, as: 'SkuAttr' },
-                { model: this.SkuSpecs, as: 'SkuSpecs' },
-            ],
+                {
+                    model: this.Products,
+                    as: 'product'
+                },
+                {
+                    model: this.Sku,
+                    as: 'Sku',
+                    include: [
+                        { model: this.SkuAttr, as: 'SkuAttr' },
+                        { model: this.SkuSpecs, as: 'SkuSpecs' }
+                    ]
+                }
+            ]
         });
     }
 
@@ -56,18 +65,21 @@ class CartRepository {
     async addProductToCart({ UserId, ProductId, sku_no, quantity }) {
         const cart = await this.getOrCreateCart(UserId);
         let item = await this.CartDetails.findOne({ where: { CartId: cart.id, ProductId, sku_no } });
-
+        console.log("🔍 Found item:", item)
         if (item) {
             item.quantity += quantity;
             await item.save();
+            console.log("🔍 Save item:", item)
         } else {
             item = await this.CartDetails.create({ CartId: cart.id, ProductId, sku_no, quantity });
-        }
+            console.log("🔍 Create item:", item)
 
-        return await this.CartDetails.findOne({
+        }
+        console.log(item)
+        const test = await this.CartDetails.findOne({
             where: { id: item.id },
             include: [
-                { model: this.Products, as: "Product" },
+                { model: this.Products, as: "product" },
                 {
                     model: this.Sku,
                     as: "Sku",
@@ -78,9 +90,12 @@ class CartRepository {
                 }
             ]
         });
+        console.log(test)
+        return test
     }
 
     async updateProductToCart({ UserId, ProductId, sku_no, quantity }) {
+        console.log(UserId, ProductId, sku_no, quantity)
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new Error("Cart not found");
 
@@ -97,7 +112,7 @@ class CartRepository {
         return await this.CartDetails.findOne({
             where: { id: item.id },
             include: [
-                { model: this.Products, as: "Product" },
+                { model: this.Products, as: "product" },
                 {
                     model: this.Sku,
                     as: "Sku",
@@ -110,7 +125,8 @@ class CartRepository {
         });
     }
 
-    async removeProductFromCart( UserId, ProductId, sku_no ) {
+    async removeProductFromCart(UserId, ProductId, sku_no) {
+        console.log(UserId, ProductId, sku_no)
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new Error("Cart not found");
 
@@ -128,10 +144,13 @@ class CartRepository {
         const discounts = await this.Discounts.findAll({
             include: [
                 {
-                    model: this.DiscountsProducts,
-                    as: "DiscountsProducts",
-                    where: { ProductId: productId },
-                    attributes: [],
+                    model: this.Products,
+                    as: "products", // đúng alias
+                    through: {
+                        attributes: [],
+                        where: { ProductId: productId }
+                    },
+                    attributes: []
                 },
             ],
             where: {

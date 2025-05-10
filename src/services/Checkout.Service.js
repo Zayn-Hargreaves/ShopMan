@@ -76,7 +76,7 @@ class CheckoutService {
             totalAmount -= shopDiscountTotal;
 
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: Math.round(totalAmount * 100),
+                amount: Math.round(totalAmount),
                 currency: "sgd",
                 metadata: { userId: String(userId), type: "cart" },
             });
@@ -141,7 +141,7 @@ class CheckoutService {
             itemTotal -= discountAmount;
 
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: Math.round(itemTotal * 100),
+                amount: Math.round(itemTotal),
                 currency: "sgd",
                 metadata: { userId: String(userId), productId, skuNo, type: "buynow" },
             });
@@ -228,7 +228,12 @@ class CheckoutService {
                         price_at_time: unitPrice,
                     });
 
-                    await CartRepo.removeProductFromCart(userId, productId, skuNo);
+                    const cart = await CartRepo.getOrCreateCart(userId);
+                    await CartRepo.removeItemsFromCart(cart.id, checkoutData.items.map(item => ({
+                        productId: item.productId,
+                        skuNo: item.skuNo
+                    })));
+
 
                     lockReleaseQueue.push({
                         key: `lock:product:${productId}:cart:${userId}`,
@@ -299,14 +304,20 @@ class CheckoutService {
 
             const userInfo = await OrderRepo.getUserInfo(userId);
             const emailService = new EmailService(userInfo, null);
-            retry(() =>
-                emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
+            retry(async () =>
+                await emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
                     orderId: order.id,
                     orderDate: new Date().toLocaleDateString("vi-VN"),
                     paymentMethod: "Stripe",
-                    orderItems: orderDetailsData,
+                    orderItems: checkoutData.items.map(item => ({
+                        productName: item.productName || item.skuNo,
+                        quantity: item.quantity,
+                        unitPrice: item.unitPrice,
+                        itemTotal: item.itemTotal,
+                    })),
                     orderTotal,
                 })
+
             ).catch(console.error);
 
             await RedisService.remove(`checkout:${userId}:${paymentIntentId}`);

@@ -256,6 +256,7 @@ const initializeModels = async () => {
         await sequelize.sync();
 
         return {
+            sequelize,
             Cart, CartDetails, Category, Comment, Discounts, DiscountsProducts,
             Follows, Inventories, Notifications, Order, OrderDetails,
             Otp, Payment, PaymentMethod, Products, Resource, RoleGrants,

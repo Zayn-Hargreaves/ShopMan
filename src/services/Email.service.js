@@ -80,7 +80,7 @@ class EmailService {
         await transport.sendMail(mailOptions);
     }
     async sendInvoice(template, subject, data) {
-        const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
+        const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
             firstName: this.firstName,
             orderId: data.orderId,
             orderDate: data.orderDate,
@@ -94,7 +94,7 @@ class EmailService {
             from: this.from,
             to: this.to,
             subject: subject,
-            text: htmlToText.fromString(html),
+            text: htmlToText.convert(html),
             html: html,
             attachments: [
                 {

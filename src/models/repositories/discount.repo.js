@@ -1,9 +1,11 @@
 const initializeModels = require("../../db/dbs/associations")
-const {Op} = require("sequelize")
+const { Op } = require("sequelize")
+const { getSelectData } = require("../../utils/index")
 class DiscountRepository {
   constructor(models) {
     this.Discounts = models.Discounts
     this.DiscountsProducts = models.DiscountsProducts
+    this.Products = models.Products
   }
   static async incrementUserCounts(discountId) {
     await DiscountRepository.increment("UserCounts", {
@@ -11,23 +13,35 @@ class DiscountRepository {
     });
   }
   async getAvailableDiscounts(productId) {
-    return await this.Discounts.findAll({
+    const now = new Date();
+
+    const discounts = await this.Discounts.findAll({
       where: {
         status: "active",
-        StartDate: { [Op.lte]: new Date() },
-        EndDate: { [Op.gte]: new Date() },
+        StartDate: { [Op.lte]: now },
+        EndDate: { [Op.gte]: now },
+        UserCounts: { [Op.lt]: this.Discounts.sequelize.col("MaxUses") }
       },
       include: [
         {
-          model: this.DiscountProduct,
-          as: "DiscountsProducts",
-          where: { ProductId: productId },
-          required: true,
-        },
+          model: this.Products,
+          as: "products",
+          through: {
+            attributes: [],
+            where: { ProductId: productId }  // lọc qua bảng trung gian
+          },
+          attributes: [],  // không cần trả thông tin Product
+          required: true
+        }
       ],
+      attributes: getSelectData([
+        "id", "name", "desc", "value", "type",
+        "code", "StartDate", "EndDate", "MinValueOrders"
+      ])
     });
+
+    return discounts;
   }
-  
   async validateDiscountsForProduct(productId, discountIds, itemTotal) {
     if (!discountIds.length) return [];
 
@@ -41,15 +55,21 @@ class DiscountRepository {
       },
       include: [
         {
-          model: this.DiscountProduct,
-          as: 'DiscountsProducts',
-          where: { ProductId: productId },
-        },
+          model: this.Products,
+          as: 'products',
+          through: {
+            attributes: [],
+            where: { ProductId: productId }
+          },
+          attributes: [],
+          required: true
+        }
       ]
     });
 
     return discounts;
   }
+
 
   async validateShopDiscounts(shopDiscountIds, cartTotal) {
     if (!shopDiscountIds.length) return [];

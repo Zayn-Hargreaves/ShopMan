@@ -65,6 +65,7 @@ class CartService {
     }
 
     static async addProductToCart(UserId, productId, skuNo, quantity) {
+        console.log(productId,skuNo,quantity)
         if (!UserId || !productId || !skuNo || !quantity || quantity <= 0) {
             throw new Error("Invalid input for adding product to cart");
         }
@@ -93,6 +94,7 @@ class CartService {
     }
 
     static async updateProductToCart(UserId, productId, skuNo, quantity) {
+        
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
 
@@ -123,7 +125,7 @@ class CartService {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
 
-        await CartRepo.removeProductFromCart({ UserId, ProductId: productId, sku_no: skuNo });
+        await CartRepo.removeProductFromCart( UserId, productId, skuNo);
 
         const hashKey = `cart:user:${UserId}`;
         const fieldKey = `${productId}|${skuNo}`;

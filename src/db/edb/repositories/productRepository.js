@@ -32,7 +32,7 @@ class ProductRepositoryEdb {
       _source: isAndroid
         ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath',]
         : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath'],
-      suggest: query ? buildAutoCompleteQuery(query) : undefined
+      suggest: undefined
     };
 
     // Thêm search_after nếu có

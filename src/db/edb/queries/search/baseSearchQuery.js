@@ -1,54 +1,48 @@
-const buildBaseSearchQuery = ({ query, filters = {} }) => {
-    const boolQuery = {
-        bool: {
-            must: query
-                ? {
-                    multi_match: {
-                        query,
-                        fields: ['name^3', 'desc_plain'],
-                        fuzziness: 'AUTO',
-                        analyzer: 'search_analyzer'
-                    }
+const buildBaseSearchQuery = ({ query, filters }) => {
+    const must = [];
+    const filter = [];
+
+    if (query) {
+        must.push({
+            multi_match: {
+                query,
+                type: "bool_prefix",
+                fields: [
+                    "name.suggest",
+                    "name.suggest._2gram",
+                    "name.suggest._3gram"
+                ]
+            }
+        });
+    }
+
+    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+        filter.push({
+            range: {
+                price: {
+                    gte: filters.minPrice ?? 0,
+                    lte: filters.maxPrice ?? Number.MAX_SAFE_INTEGER
                 }
-                : { match_all: {} },
-            filter: [
-                { term: { status: 'active' } },
-                filters.minPrice || filters.maxPrice
-                    ? {
-                        range: {
-                            price: {
-                                ...(filters.minPrice !== undefined && { gte: filters.minPrice }),
-                                ...(filters.maxPrice !== undefined && { lte: filters.maxPrice })
-                            }
-                        }
-                    }
-                    : {},
-                filters.categoryPath && Array.isArray(filters.categoryPath)
-                    ? {
-                        terms: {
-                            CategoryPath: filters.categoryPath
-                        }
-                    }
-                    : {},
-                filters.CategoryId
-                    ? {
-                        term: {
-                            CategoryId: filters.CategoryId
-                        }
-                    }
-                    : {},
-                filters.ShopId
-                    ? {
-                        term: {
-                            ShopId: filters.ShopId
-                        }
-                    }
-                    : {}
-            ].filter(f => Object.keys(f).length > 0)
+            }
+        });
+    }
+
+    if (filters.categoryPath && Array.isArray(filters.categoryPath)) {
+        filter.push({ terms: { CategoryPath: filters.categoryPath } });
+    } else if (filters.category !== undefined) {
+        filter.push({ term: { CategoryId: filters.category } });
+    }
+
+    if (filters.shop !== undefined) {
+        filter.push({ term: { ShopId: filters.shop } });
+    }
+
+    return {
+        bool: {
+            must,
+            filter
         }
     };
-
-    return boolQuery;
 };
 
 module.exports = { buildBaseSearchQuery };

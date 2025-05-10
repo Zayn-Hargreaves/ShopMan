@@ -1,6 +1,13 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
-const bannerController = require("../../../controllers/Banner.Controller.js");
+const bannerController = require("../../../controllers/Banner.Controller");
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Banner
+ *     description: APIs for retrieving banners
+ */
 
 /**
  * @swagger
@@ -70,11 +77,11 @@ const bannerController = require("../../../controllers/Banner.Controller.js");
  * /api/v1/banner:
  *   get:
  *     summary: Get all active banners
- *     description: Retrieve a list of all banners that are active within the current date range.
  *     tags: [Banner]
+ *     description: Get all banners with status "active" and current date between start_time and end_time.
  *     responses:
  *       200:
- *         description: List of banners retrieved successfully
+ *         description: List of active banners
  *         content:
  *           application/json:
  *             schema:
@@ -88,17 +95,16 @@ const bannerController = require("../../../controllers/Banner.Controller.js");
  *                   items:
  *                     $ref: '#/components/schemas/Banner'
  *       500:
- *         description: Internal server error
+ *         description: Internal Server Error
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               message: "Internal server error"
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
  */
-
-
 router.get("/", asyncHandler(bannerController.getAllBanner));
-
 
 module.exports = router;

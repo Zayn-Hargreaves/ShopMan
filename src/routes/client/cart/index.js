@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const { asyncHandler } = require("../../../helpers/asyncHandler")
 const CartController = require("../../../controllers/Cart.Controller.js")
+
 /**
  * @swagger
  * components:
@@ -18,12 +19,11 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *         type: string
  *         example: "Bearer <access_token>"
  *       description: "Access token để xác thực người dùng, định dạng: Bearer <access_token>"
- *
  *   schemas:
  *     CartItem:
  *       type: object
  *       properties:
- *         productId:
+ *         ProductId:
  *           type: integer
  *           example: 101
  *         productName:
@@ -66,14 +66,7 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  * @swagger
  * tags:
  *   - name: Cart
- *     description: |
- *       Các API trong nhóm này yêu cầu người dùng gửi access token để xác thực.
- *       
- *       👉 Cách gửi access token:
- *       - Trên Swagger UI, nhấn nút "Authorize" góc trên phải.
- *       - Trên app Android hoặc khi gửi request:
- *         - req.headers['authorization'] = 'Bearer ' + accessToken
- *       - Trên Postman: Header → Authorization: Bearer <access_token>
+ *     description: "Các API cần access token (Authorization: Bearer <access_token>)"
  */
 
 /**
@@ -113,21 +106,23 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: '#/components/parameters/AccessTokenHeader'
- *       - in: query
- *         name: ProductId
- *         required: true
- *         schema:
- *           type: integer
- *       - in: query
- *         name: skuNo
- *         required: true
- *         schema:
- *           type: string
- *       - in: query
- *         name: quantity
- *         required: true
- *         schema:
- *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [ProductId, skuNo, quantity]
+ *             properties:
+ *               ProductId:
+ *                 type: integer
+ *                 example: 101
+ *               skuNo:
+ *                 type: string
+ *                 example: "SRM-001"
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       200:
  *         description: Product added to cart successfully
@@ -143,21 +138,23 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *       - bearerAuth: []
  *     parameters:
  *       - $ref: '#/components/parameters/AccessTokenHeader'
- *       - in: query
- *         name: ProductId
- *         required: true
- *         schema:
- *           type: integer
- *       - in: query
- *         name: skuNo
- *         required: true
- *         schema:
- *           type: string
- *       - in: query
- *         name: quantity
- *         required: true
- *         schema:
- *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [ProductId, skuNo, quantity]
+ *             properties:
+ *               ProductId:
+ *                 type: integer
+ *                 example: 101
+ *               skuNo:
+ *                 type: string
+ *                 example: "SRM-001"
+ *               quantity:
+ *                 type: integer
+ *                 example: 3
  *     responses:
  *       200:
  *         description: Product quantity updated
@@ -165,7 +162,7 @@ const CartController = require("../../../controllers/Cart.Controller.js")
 
 /**
  * @swagger
- * /api/v1/cart/remove/{productId}:
+ * /api/v1/cart/remove/{ProductId}:
  *   delete:
  *     summary: Remove a product from cart
  *     tags: [Cart]
@@ -174,7 +171,7 @@ const CartController = require("../../../controllers/Cart.Controller.js")
  *     parameters:
  *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: path
- *         name: productId
+ *         name: ProductId
  *         required: true
  *         schema:
  *           type: integer

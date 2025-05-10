@@ -7,6 +7,16 @@ const authSchemas = require("../../../middlewares/schemas/auth.schema");
 
 /**
  * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: >
+ *       Các API xác thực người dùng (login, signup, quên mật khẩu, liên kết Google, v.v).  
+ *       👉 Xem chi tiết tại [Postman Link](https://student-9406.postman.co/workspace/My-Workspace~6a105610-8181-4265-8532-64c17bced017/collection/33038829-164994ee-81be-42a2-a632-a7b81c4516c1?action=share&creator=33038829&active-environment=33038829-33728f14-2c11-4530-bfe3-0159f640f9b5)
+ */
+
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     User:
