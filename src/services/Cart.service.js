@@ -65,7 +65,6 @@ class CartService {
     }
 
     static async addProductToCart(UserId, productId, skuNo, quantity) {
-        console.log(productId,skuNo,quantity)
         if (!UserId || !productId || !skuNo || !quantity || quantity <= 0) {
             throw new Error("Invalid input for adding product to cart");
         }
@@ -77,16 +76,16 @@ class CartService {
 
         const hashKey = `cart:user:${UserId}`;
         const fieldKey = `${productId}|${skuNo}`;
-
         const simplified = {
             productId: item.ProductId,
-            productName: item.Product?.name || "",
+            productName: item.product?.name || "",
             skuNo: item.sku_no,
             quantity: item.quantity,
-            price: item.SkuAttr?.sku_price || item.Sku?.sku_price || 0,
-            image: item.Product?.thumb || "",
-            variant: item.SkuAttr?.sku_attrs || item.SkuSpecs?.sku_specs || {},
+            price: item.Sku?.SkuAttr?.sku_price || item.Sku?.sku_price || 0,
+            image: item.product?.thumb || "",
+            variant: item.Sku?.SkuAttr?.sku_attrs || item.Sku?.SkuSpecs?.sku_specs || {},
         };
+        
 
         await RedisService.cacheHashField(hashKey, fieldKey, simplified, 3600);
 

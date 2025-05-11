@@ -65,17 +65,13 @@ class CartRepository {
     async addProductToCart({ UserId, ProductId, sku_no, quantity }) {
         const cart = await this.getOrCreateCart(UserId);
         let item = await this.CartDetails.findOne({ where: { CartId: cart.id, ProductId, sku_no } });
-        console.log("🔍 Found item:", item)
         if (item) {
             item.quantity += quantity;
             await item.save();
-            console.log("🔍 Save item:", item)
         } else {
             item = await this.CartDetails.create({ CartId: cart.id, ProductId, sku_no, quantity });
-            console.log("🔍 Create item:", item)
 
         }
-        console.log(item)
         const test = await this.CartDetails.findOne({
             where: { id: item.id },
             include: [
@@ -90,7 +86,6 @@ class CartRepository {
                 }
             ]
         });
-        console.log(test)
         return test
     }
 
