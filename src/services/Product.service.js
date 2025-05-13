@@ -85,9 +85,10 @@ class ProductService {
         let trendingProduct = await RedisService.getCachedData(cacheKey)
         if (!trendingProduct) {
             const topTrending = await RedisService.getZsetRange(trendingZsetkey, 0, limit)
-            console.log("topTrending::",topTrending)
-            const productIds = topTrending
-                .map((id) => id.replace('product:', ""))
+            const productIds = []
+            for (let i = 0; i < topTrending.length; i += 2) {
+                productIds.push(topTrending[i].replace("product:", ""))
+            }
             trendingProduct = await ProductRepo.findProductByIds(productIds)
 
             await RedisService.cacheData(cacheKey, trendingProduct, 3600)
@@ -127,13 +128,13 @@ class ProductService {
         const totalPages = Math.ceil(totalItems / limit);
 
         result = {
-            totalItems:totalItems + 1,
-            totalPages:totalPages,
+            totalItems: totalItems + 1,
+            totalPages: totalPages,
             currentPage: page,
-            products:products,
+            products: products,
         };
 
-        await RedisService.cacheData(cacheKey, result, 3600); 
+        await RedisService.cacheData(cacheKey, result, 3600);
         return result;
     }
 
@@ -143,11 +144,11 @@ class ProductService {
         const ProductRepo = await RepositoryFactory.getRepository("ProductRepository")
         const cacheKey = `product:newArrivals:page:${page}:limit:${limit}`
         let result = await RedisService.getCachedData(cacheKey)
-        if(result){
+        if (result) {
             return result
         }
-        result =  await ProductRepo.findNewArrivalsProduct(page, limit)
-        await RedisService.cacheData(cacheKey,result, 3600)
+        result = await ProductRepo.findNewArrivalsProduct(page, limit)
+        await RedisService.cacheData(cacheKey, result, 3600)
         return result
     }
 }
