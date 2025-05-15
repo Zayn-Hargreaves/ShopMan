@@ -639,5 +639,6 @@ router.post("/logout", asyncHandler(authController.logout));
 
 
 router.post("/handle-refreshtoken", asyncHandler(authController.handleRefreshToken));
+router.post("/update-fcm-token", asyncHandler(authController.updateFcmToken))
 
 module.exports = router;

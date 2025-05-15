@@ -59,6 +59,14 @@ class AuthController{
             message:"Change Password successfull",
             metadata:await AuthService.changePassword({resetToken,newPassword, confirmedPassword})
         }).send(res)
+    }
+    updateFcmToken = async(req, res, next)=>{
+        const userId = req.userId
+        const fcmToken = req.body.fcmToken
+        new OkResponse({
+            message:"Fcm token updated",
+            metadata:await AuthService.updateFcmToken({userId,fcmToken})
+        }).send(res)
     }  
 }
 

@@ -6,6 +6,7 @@ const compression = require("compression")
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 require("dotenv").config()
+const admin = require("./config/firebase")
 
 if (process.env.mode === 'development') {
     app.use(cors())
@@ -14,6 +15,7 @@ if (process.env.mode === 'development') {
         origin: ["http://localhost:5173", "http://localhost:3000"]
     }))
 }
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));

@@ -37,6 +37,10 @@ const initializeUser = async(sequelize)=>{
             allowNull: false,
             defaultValue:"active"
         },
+        fcmToken:{
+            type:DataTypes.STRING,
+            allowNull:true
+        }
     }, {
         sequelize,
         modelName: "Users",

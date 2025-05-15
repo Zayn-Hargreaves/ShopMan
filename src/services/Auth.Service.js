@@ -129,7 +129,7 @@ class AuthService {
         };
     }
 
-    static async linkGoogle(idToken ) {
+    static async linkGoogle(idToken) {
         await RepositoryFactory.initialize()
         const UserRepository = RepositoryFactory.getRepository("UserRepository")
         const { userId } = verifyJWT(idToken, accessSecretKey);
@@ -159,7 +159,7 @@ class AuthService {
         return await user.save();
     }
 
-    static async logout( refreshToken ) {
+    static async logout(refreshToken) {
         const decode = verifyJWT(refreshToken, refreshSecretKey);
         const { jti } = decode;
         const state = await RedisService.addElementToRedisBloomFilter("blacklist_token", jti);
@@ -169,7 +169,7 @@ class AuthService {
         return state;
     }
 
-    static async handleRefreshToken(refreshToken ) {
+    static async handleRefreshToken(refreshToken) {
         await RepositoryFactory.initialize()
         const UserRepository = RepositoryFactory.getRepository("UserRepository")
         const decode = verifyJWT(refreshToken, refreshSecretKey);
@@ -207,11 +207,11 @@ class AuthService {
             UserId: holderUser.id,
             expire: expireTime
         });
-        const emailService = new EmailService(holderUser,'http')
+        const emailService = new EmailService(holderUser, 'http')
         await emailService.sendOtpCode({
             template: "reset-password",
             subject: "OTP for reset password",
-            otp:newOtpValue
+            otp: newOtpValue
         });
         return { otp: newOtpValue };
     }
@@ -219,7 +219,7 @@ class AuthService {
     static async checkOtp(otp) {
         await RepositoryFactory.initialize()
         const OtpRepository = RepositoryFactory.getRepository("OtpRepository")
-        
+
         if (!otp) {
             throw new BadRequestError("OTP is required");
         }
@@ -238,7 +238,7 @@ class AuthService {
     }
 
     static async changePassword({ resetToken, newPassword, confirmedPassword }) {
-        console.log(resetToken,newPassword, confirmedPassword)
+        console.log(resetToken, newPassword, confirmedPassword)
         await RepositoryFactory.initialize()
         const UserRepository = RepositoryFactory.getRepository("UserRepository")
         if (!resetToken || !newPassword || !confirmedPassword) {
@@ -268,6 +268,16 @@ class AuthService {
             }),
             tokens
         };
+    }
+    static async updateFcmToken({ userId, fcmToken }) {
+        await RepositoryFactory.initialize()
+        const UserRepository = await RepositoryFactory.getRepository("UserRepository")
+        const user = await UserRepository.findById(userId)
+        if(!user){
+            throw NotFoundError("User not found")
+        }
+        user.fcmToken = fcmToken
+        await user.save()
     }
 }
 
