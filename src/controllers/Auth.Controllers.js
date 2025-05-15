@@ -8,6 +8,7 @@ class AuthController{
         }).send(res)
     }
     loginWithGoogle = async(req, res, next)=>{
+        console.log("login with google")
         new OkResponse({
             message:'login with Google success',
             metadata: await AuthService.loginWithGoogle(req.body)

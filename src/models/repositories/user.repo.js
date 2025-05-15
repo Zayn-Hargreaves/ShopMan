@@ -13,7 +13,9 @@ class UserRepository {
             raw: true
         });
     }
-
+    async findByGoogleIdOrEmail(googleId,email){
+        return this.User.findOne({ $or: [{ googleId }, { email }] })
+    }
     async findById(id) {
         return await this.User.findByPk(id, {
             attributes: getUnselectData(['password']),

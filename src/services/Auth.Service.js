@@ -96,7 +96,7 @@ class AuthService {
         const name = payload['name'];
         let cart
         // Tìm người dùng bằng googleId hoặc email
-        let user = await UserRepository.findOne({ $or: [{ googleId }, { email }] });
+        let user = await UserRepository.findByGoogleIdOrEmail(googleId,email);
 
         if (!user) {
             // Tạo tài khoản mới nếu không tìm thấy
@@ -108,7 +108,7 @@ class AuthService {
             });
             cart = await CartRepository.getOrCreateCart(user.id);
         } else if (!user.googleId) {
-            cart = await CartRepository.getCartByUserId({ UserId: user.id });
+            cart = await CartRepository.getOrCreateCart(user.id );
             user.googleId = googleId;
             await user.save();
         }
