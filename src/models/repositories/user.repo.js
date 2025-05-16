@@ -13,7 +13,7 @@ class UserRepository {
             raw: true
         });
     }
-    async findByGoogleIdOrEmail(googleId,email){
+    async findByGoogleIdOrEmail(googleId, email) {
         return this.User.findOne({ $or: [{ googleId }, { email }] })
     }
     async findById(id) {
@@ -73,6 +73,12 @@ class UserRepository {
                 id: UserId
             }
         })
+    }
+    async updateFcmToken(id, fcmToken) {
+        return await this.User.update(
+            { fcmToken },
+            { where: { id } }
+        );
     }
 }
 
