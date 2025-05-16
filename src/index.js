@@ -5,6 +5,7 @@ const helmet = require("helmet")
 const compression = require("compression")
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
+const {ErrorResponse}  = require('./cores/error.response');
 require("dotenv").config()
 const admin = require("./config/firebase")
 
@@ -35,13 +36,17 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    console.error('ERROR:', err);
-
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
-        success: false,
-        message: err.message || 'Internal Server Error',
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    console.log(err);
+    if (err instanceof ErrorResponse) {
+        return res.status(err.status).json({
+            message: err.message,
+            status: err.status
+        });
+    }
+    console.error('Unexpected error:', err);
+    res.status(500).json({
+        message: 'Internal Server Error',
+        status: 500
     });
 });
 module.exports = app

@@ -105,4 +105,5 @@ module.exports = {
     NotImplementedError,
     BadGatewayError,
     ServiceUnavailableError,
+    ErrorResponse
 };

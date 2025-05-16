@@ -77,7 +77,7 @@ const authentication = asyncHandler(async(req, res, next) => {
             return next();
         } catch (error) {
             console.log(error)
-            throw new UnauthorizedError('invalid request::',error);
+            throw new UnauthorizedError('invalid request::');
         }
     }
     if(accessToken){
@@ -90,7 +90,7 @@ const authentication = asyncHandler(async(req, res, next) => {
             }
             return next();
         } catch (error) {
-            throw new UnauthorizedError('invalid request::',error);
+            throw new UnauthorizedError('invalid request::');
         }
     }
 })

@@ -15,7 +15,7 @@ class ShopRepository {
         try {
             decodedSlug = decodeURIComponent(slug);
         } catch (err) {
-            throw new NotFoundError("Invalid shop slug::",err);
+            throw new NotFoundError(`Invalid shop slug::${err}`);
         }
 
         const shop = await this.Shop.findOne({

@@ -56,7 +56,7 @@ class RedisService {
     try {
       return await redis.zrevrange(key, start, end, withScores ? "WITHSCORES" : '"')
     } catch (error) {
-      throw new BadGatewayError(`Error getting ZSET range ${key}:`, error)
+      throw new BadGatewayError(`Error getting ZSET range ${key}:${error}`)
     }
   }
   static async getZsetScore(key, member) {
@@ -64,7 +64,7 @@ class RedisService {
     try {
       return await redis.zscore(key, member)
     } catch (error) {
-      throw new BadGatewayError(`Error getting score for ${member} in ZSET ${key}:`, error)
+      throw new BadGatewayError(`Error getting score for ${member} in ZSET ${key}:${error}`)
     }
   }
   static async removeZsetItem(key, member) {
@@ -72,7 +72,7 @@ class RedisService {
     try {
       return await redis.zrem(key, member)
     } catch (error) {
-      throw new BadGatewayError(`Error removing ${member} from ZSET ${key}:`, error)
+      throw new BadGatewayError(`Error removing ${member} from ZSET ${key}:${error}`,)
     }
   }
   static async getZsetCount(zsetkey) {
@@ -80,7 +80,7 @@ class RedisService {
     try {
       return await redis.zcard(zsetkey)
     } catch (error) {
-      throw new BadGatewayError(`Error counting elements in ZSET ${zsetkey}:`, error)
+      throw new BadGatewayError(`Error counting elements in ZSET ${zsetkey}:${error}`)
     }
   }
   static async cacheData(key, value, ttl = 3600) {
@@ -89,7 +89,7 @@ class RedisService {
       const serializedValue = JSON.stringify(value)
       return await redis.set(key, serializedValue, "EX", ttl)
     } catch (error) {
-      throw new BadGatewayError(`Error caching data for key ${key}:`, error)
+      throw new BadGatewayError(`Error caching data for key ${key}:${error}`)
     }
   }
   static async getCachedData(key) {
@@ -110,7 +110,7 @@ class RedisService {
       return true
     } catch (error) {
       console.log(error)
-      throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:`, error)
+      throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:${error}` )
     }
   }
   static async cacheHashField(hashKey, field, value, ttl = 3600) {
