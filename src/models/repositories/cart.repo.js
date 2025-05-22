@@ -42,6 +42,7 @@ class CartRepository {
     }
 
     async findAllProductInCart(UserId) {
+        console.log(UserId)
         return await this.CartDetails.findAll({
             where: { CartId: UserId },
             include: [
@@ -129,6 +130,7 @@ class CartRepository {
     }
 
     async deleteAllProductFromCart(UserId) {
+        console.log(UserId)
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) return 0;
         return await this.CartDetails.destroy({ where: { CartId: cart.id } });

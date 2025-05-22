@@ -118,15 +118,6 @@ class RedisService {
     await redis.hset(hashKey, field, JSON.stringify(value))
     await redis.expire(hashKey, ttl)
   }
-  static async getAllHashField(hashKey) {
-    const redis = await getRedis()
-    const rawData = await redis.hgetall(hashKey)
-    const dataParsed = Object.entries(rawData).map(([field, val]) => ({
-      field,
-      ...JSON.parse(val)
-    }))
-    return dataParsed
-  }
   static async getHashField(hashKey, field) {
     const redis = await getRedis();
     const val = await redis.hget(hashKey, field);
@@ -210,6 +201,40 @@ class RedisService {
       throw new BadGatewayError(`Error deleting Redis key ${key}: ${err.message}`);
     }
   }
+  static async getAllHashField(hashKey) {
+  const redis = await getRedis();
+  const rawData = await redis.hgetall(hashKey);
+
+  if (!rawData || Object.keys(rawData).length === 0) {
+    console.log(`[Redis] MISS for key ${hashKey}`);
+    return [];
+  }
+
+  console.log(`[Redis] HIT for key ${hashKey}: ${Object.keys(rawData).length} items`);
+  return Object.entries(rawData).map(([field, val]) => ({
+    field,
+    ...JSON.parse(val)
+  }));
+}
+
+static async deleteHashKey(hashKey) {
+  const redis = await getRedis();
+  return await redis.del(hashKey);
+}
+
+static async updateHashField(hashKey, fieldKey, updaterFn, ttl = 3600) {
+  const redis = await getRedis();
+  const currentValue = await redis.hget(hashKey, fieldKey);
+  let value = currentValue ? JSON.parse(currentValue) : null;
+
+  const updatedValue = updaterFn(value);
+  if (updatedValue === null) {
+    await redis.hdel(hashKey, fieldKey);
+  } else {
+    await redis.hset(hashKey, fieldKey, JSON.stringify(updatedValue));
+    await redis.expire(hashKey, ttl);
+  }
+}
 
 
 }

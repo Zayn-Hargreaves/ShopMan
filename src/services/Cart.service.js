@@ -16,7 +16,6 @@ class CartService {
 
             for (const item of dbCartItems) {
                 const fieldKey = `${item.ProductId}|${item.sku_no}`;
-
                 const simplified = {
                     productId: item.ProductId,
                     productName: item.Product?.name || "",
@@ -25,9 +24,8 @@ class CartService {
                     price: item.SkuAttr?.sku_price || item.Sku?.sku_price || 0,
                     image: item.Product?.thumb || "",
                     variant: item.SkuAttr?.sku_attrs || item.SkuSpecs?.sku_specs || {},
-                    discounts: [] 
+                    discounts: []
                 };
-
                 await RedisService.cacheHashField(hashKey, fieldKey, simplified, 3600);
             }
 
@@ -73,9 +71,9 @@ class CartService {
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
 
         const item = await CartRepo.addProductToCart({ UserId, ProductId: productId, sku_no: skuNo, quantity });
-
         const hashKey = `cart:user:${UserId}`;
         const fieldKey = `${productId}|${skuNo}`;
+
         const simplified = {
             productId: item.ProductId,
             productName: item.product?.name || "",
@@ -85,37 +83,40 @@ class CartService {
             image: item.product?.thumb || "",
             variant: item.Sku?.SkuAttr?.sku_attrs || item.Sku?.SkuSpecs?.sku_specs || {},
         };
-        
 
-        await RedisService.cacheHashField(hashKey, fieldKey, simplified, 3600);
+        const existing = await RedisService.getHashField(hashKey, fieldKey);
+        const updated = existing
+            ? { ...existing, quantity: existing.quantity + quantity }
+            : simplified;
 
-        return simplified;
+        await RedisService.cacheHashField(hashKey, fieldKey, updated, 3600);
+        return updated;
     }
 
     static async updateProductToCart(UserId, productId, skuNo, quantity) {
-        
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
-
         const result = await CartRepo.updateProductToCart({ UserId, ProductId: productId, sku_no: skuNo, quantity });
 
         const hashKey = `cart:user:${UserId}`;
         const fieldKey = `${productId}|${skuNo}`;
 
-        if (quantity === 0) {
-            await RedisService.removeHashField(hashKey, fieldKey);
-        } else {
-            const simplified = {
-                productId: result.ProductId,
-                productName: result.Product?.name || "",
-                skuNo: result.sku_no,
-                quantity: result.quantity,
-                price: result.SkuAttr?.sku_price || result.Sku?.sku_price || 0,
-                image: result.Product?.thumb || "",
-                variant: result.SkuAttr?.sku_attrs || result.SkuSpecs?.sku_specs || {},
-            };
-            await RedisService.cacheHashField(hashKey, fieldKey, simplified, 3600);
-        }
+        await RedisService.updateHashField(
+            hashKey,
+            fieldKey,
+            (old) => {
+                if (quantity === 0) return null;
+                return {
+                    ...old,
+                    quantity,
+                    price: result.SkuAttr?.sku_price || result.Sku?.sku_price || 0,
+                    variant: result.SkuAttr?.sku_attrs || result.SkuSpecs?.sku_specs || {},
+                    image: result.Product?.thumb || "",
+                    productName: result.Product?.name || ""
+                };
+            },
+            3600
+        );
 
         return { message: "Updated successfully" };
     }
@@ -123,12 +124,11 @@ class CartService {
     static async removeProductFromCart(UserId, productId, skuNo) {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
-
-        await CartRepo.removeProductFromCart( UserId, productId, skuNo);
+        await CartRepo.removeProductFromCart(UserId, productId, skuNo);
 
         const hashKey = `cart:user:${UserId}`;
         const fieldKey = `${productId}|${skuNo}`;
-        await RedisService.removeHashField(hashKey, fieldKey)
+        await RedisService.removeHashField(hashKey, fieldKey);
 
         return { message: "Removed from cart" };
     }
@@ -139,7 +139,7 @@ class CartService {
         await CartRepo.deleteAllProductFromCart(UserId);
 
         const hashKey = `cart:user:${UserId}`;
-        await RedisService.removeHashField(hashKey);
+        await RedisService.deleteHashKey(hashKey);
         return { message: "Cart cleared" };
     }
 
