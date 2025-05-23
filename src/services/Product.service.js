@@ -45,7 +45,7 @@ class ProductService {
         const trendingZsetKey = "product:trending:daily";
 
         // Lấy từ ZSET: các phần tử có score < cursorScore, giảm dần
-        const rawEntries = await RedisService.getZsetRangeByScore(
+        const rawEntries = await RedisService.getZsetByScoreDescWithLimit(
             trendingZsetKey,
             cursorScore,
             limit
