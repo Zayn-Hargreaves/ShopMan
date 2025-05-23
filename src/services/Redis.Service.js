@@ -2,7 +2,7 @@
 const { date } = require("joi");
 const { BadGatewayError } = require("../cores/error.response");
 const { getRedis } = require("../db/rdb");
-const {v4:uuidv4} = require("uuid")
+const { v4: uuidv4 } = require("uuid")
 class RedisService {
   static async createRedisBloomFilter(filterName, falsePositiveRate, capacity) {
     const redis = await getRedis();
@@ -51,6 +51,23 @@ class RedisService {
       throw new BadGatewayError(`Error upserting item into ZSET ${key}:`, error)
     }
   }
+  static async getZsetByScoreDescWithLimit(key, cursorScore = "+inf", limit = 10) {
+    const redis = await getRedis();
+    try {
+      return await redis.zrevrangebyscore(
+        key,
+        `(${cursorScore}`,
+        "-inf",
+        "WITHSCORES",
+        "LIMIT",
+        0,
+        limit
+      );
+    } catch (error) {
+      throw new BadGatewayError(`Error getting ZSET by score (desc) from ${key}: ${error.message}`);
+    }
+  }
+
   static async getZsetRange(key, start, end = -1, withScores = true) {
     const redis = await getRedis()
     try {
@@ -110,7 +127,7 @@ class RedisService {
       return true
     } catch (error) {
       console.log(error)
-      throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:${error}` )
+      throw new BadGatewayError(`Error setting trending score for ${productId} in ZSET ${zsetkey}:${error}`)
     }
   }
   static async cacheHashField(hashKey, field, value, ttl = 3600) {
@@ -202,39 +219,39 @@ class RedisService {
     }
   }
   static async getAllHashField(hashKey) {
-  const redis = await getRedis();
-  const rawData = await redis.hgetall(hashKey);
+    const redis = await getRedis();
+    const rawData = await redis.hgetall(hashKey);
 
-  if (!rawData || Object.keys(rawData).length === 0) {
-    console.log(`[Redis] MISS for key ${hashKey}`);
-    return [];
+    if (!rawData || Object.keys(rawData).length === 0) {
+      console.log(`[Redis] MISS for key ${hashKey}`);
+      return [];
+    }
+
+    console.log(`[Redis] HIT for key ${hashKey}: ${Object.keys(rawData).length} items`);
+    return Object.entries(rawData).map(([field, val]) => ({
+      field,
+      ...JSON.parse(val)
+    }));
   }
 
-  console.log(`[Redis] HIT for key ${hashKey}: ${Object.keys(rawData).length} items`);
-  return Object.entries(rawData).map(([field, val]) => ({
-    field,
-    ...JSON.parse(val)
-  }));
-}
-
-static async deleteHashKey(hashKey) {
-  const redis = await getRedis();
-  return await redis.del(hashKey);
-}
-
-static async updateHashField(hashKey, fieldKey, updaterFn, ttl = 3600) {
-  const redis = await getRedis();
-  const currentValue = await redis.hget(hashKey, fieldKey);
-  let value = currentValue ? JSON.parse(currentValue) : null;
-
-  const updatedValue = updaterFn(value);
-  if (updatedValue === null) {
-    await redis.hdel(hashKey, fieldKey);
-  } else {
-    await redis.hset(hashKey, fieldKey, JSON.stringify(updatedValue));
-    await redis.expire(hashKey, ttl);
+  static async deleteHashKey(hashKey) {
+    const redis = await getRedis();
+    return await redis.del(hashKey);
   }
-}
+
+  static async updateHashField(hashKey, fieldKey, updaterFn, ttl = 3600) {
+    const redis = await getRedis();
+    const currentValue = await redis.hget(hashKey, fieldKey);
+    let value = currentValue ? JSON.parse(currentValue) : null;
+
+    const updatedValue = updaterFn(value);
+    if (updatedValue === null) {
+      await redis.hdel(hashKey, fieldKey);
+    } else {
+      await redis.hset(hashKey, fieldKey, JSON.stringify(updatedValue));
+      await redis.expire(hashKey, ttl);
+    }
+  }
 
 
 }

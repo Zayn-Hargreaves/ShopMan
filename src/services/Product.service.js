@@ -39,6 +39,43 @@ class ProductService {
         }
         return productDetail
     }
+    static async getTrendingProductsByCursor(cursorScore = "+inf", limit = 10) {
+        await RepositoryFactory.initialize();
+        const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
+        const trendingZsetKey = "product:trending:daily";
+
+        // Lấy từ ZSET: các phần tử có score < cursorScore, giảm dần
+        const rawEntries = await RedisService.getZsetRangeByScore(
+            trendingZsetKey,
+            cursorScore,
+            limit
+        ); // Phải viết thêm hàm này trong RedisService
+
+        if (!rawEntries || rawEntries.length === 0) {
+            return {
+                products: [],
+                nextCursor: null
+            };
+        }
+
+        const productIds = [];
+        const scores = [];
+
+        for (let i = 0; i < rawEntries.length; i += 2) {
+            const id = rawEntries[i].replace("product:", "");
+            const score = parseFloat(rawEntries[i + 1]);
+            productIds.push(id);
+            scores.push(score);
+        }
+
+        const products = await ProductRepo.findProductByIds(productIds);
+
+        return {
+            products,
+            nextCursor: scores.length > 0 ? scores[scores.length - 1] : null
+        };
+    }
+
     static async getDealOfTheDayProducts(page, limit) {
         const cacheKey = `deal:day:page:${page}:limit:${limit}`
         await RepositoryFactory.initialize()
