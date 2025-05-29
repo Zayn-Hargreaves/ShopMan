@@ -90,13 +90,28 @@ const authentication = asyncHandler(async(req, res, next) => {
             }
             return next();
         } catch (error) {
-            throw new UnauthorizedError('invalid request::');
+            throw new UnauthorizedError(`invalid request::${error}`);
         }
     }
+})
+
+const optionalAuthentication = asyncHandler (async(req, res, next)=>{
+    const authorization = req.headers[HEADER.AUTHORIZATION]
+    let accessToken
+    if(authorization) accessToken = authorization.split(' ')[1];
+    
+    if(accessToken) {
+        const {userId, jti} = verifyJWT(accessToken,accessSecretKey)
+        if(!userId){
+            throw new UnauthorizedError("invalid request")
+        }
+        req.userId = userId
+    }
+    next()
 })
 
 
 
 
 
-module.exports = { createTokenPair, authentication, verifyJWT,createAccessToken,createRefreshToken, createResetToken }
+module.exports = { createTokenPair, authentication, verifyJWT,createAccessToken,createRefreshToken, createResetToken, optionalAuthentication }

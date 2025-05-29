@@ -128,8 +128,8 @@ const initializeModels = async () => {
         Follows.belongsTo(Shop, { foreignKey: { name: "ShopId" }, as: "shop" });
 
         // Quan hệ Products - Inventories (1-n)
-        Products.hasMany(Inventories, { foreignKey: { name: "ProductId" }, as: "inventories" });
-        Inventories.belongsTo(Products, { foreignKey: { name: "ProductId" }, as: "product" });
+        Sku.hasMany(Inventories, { foreignKey: { name: "SkuId" }, as: "inventories" });
+        Inventories.belongsTo(Sku, { foreignKey: { name: "SkuId" }, as: "product" });
 
         // Quan hệ Shop - Inventories (1-n)
         Shop.hasMany(Inventories, { foreignKey: { name: "ShopId" }, as: "inventories" });

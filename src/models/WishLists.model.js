@@ -1,28 +1,34 @@
-const {DataTypes, Model} = require('sequelize');
-class Wishlists extends Model {}
-const initializeWishLists = async(sequelize)=>{
+const { DataTypes, Model } = require('sequelize');
 
+class Wishlists extends Model {}
+const initializeWishLists = async (sequelize) => {
     Wishlists.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        UserId:{
+        UserId: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        ProductId:{
+        ProductId: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-    },{
+        }
+    }, {
         sequelize,
-        tableName:"WishLists",
-        modelName:"WishLists",
-        freezeTableName:true,
-        timestamps:true
-    })
-    return Wishlists
-}
+        tableName: 'WishLists',
+        modelName: 'WishLists',
+        freezeTableName: true,
+        timestamps: true,
+        indexes: [
+            { fields: ['UserId'] },
+            { fields: ['ProductId'] },
+            { fields: ['UserId', 'ProductId'], unique: true }
+        ]
+    });
+    return Wishlists;
+};
+
 module.exports = initializeWishLists;

@@ -1,10 +1,7 @@
-
 const { DataTypes, Model } = require('sequelize');
 
-
-class OrderDetails extends Model { }
+class OrderDetails extends Model {}
 const initializeOrderDetails = async (sequelize) => {
-
     OrderDetails.init({
         id: {
             type: DataTypes.INTEGER,
@@ -12,10 +9,10 @@ const initializeOrderDetails = async (sequelize) => {
             autoIncrement: true
         },
         OrderId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER
         },
         ProductId: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER
         },
         quantity: {
             type: DataTypes.INTEGER,
@@ -27,12 +24,17 @@ const initializeOrderDetails = async (sequelize) => {
         }
     }, {
         sequelize,
-        tableName: "OrdersDetails",
-        modelName: "OrdersDetails",
+        tableName: 'OrdersDetails',
+        modelName: 'OrdersDetails',
         freezeTableName: true,
-        timestamps: true
-    })
-    return OrderDetails
-}
+        timestamps: true,
+        indexes: [
+            { fields: ['OrderId'] },
+            { fields: ['ProductId'] },
+            { fields: ['OrderId', 'ProductId'], unique: true }
+        ]
+    });
+    return OrderDetails;
+};
 
 module.exports = initializeOrderDetails;

@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const slugify = require('slugify');
 
-class Category extends Model { }
+class Category extends Model {}
 const initializeCategory = async (sequelize) => {
     Category.init({
         id: {
@@ -33,7 +33,11 @@ const initializeCategory = async (sequelize) => {
         tableName: 'Categories',
         freezeTableName: true,
         paranoid: true,
-        timestamps: true
+        timestamps: true,
+        indexes: [
+            { fields: ['status'] },
+            { fields: ['status', 'name'] } // Index composite
+        ]
     });
 
     Category.addHook('beforeSave', (category) => {

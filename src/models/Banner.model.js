@@ -1,80 +1,92 @@
+const { DataTypes, Model } = require('sequelize');
 
-const {DataTypes, Model} = require('sequelize')
-class Banner extends Model{}
-const initializeBanner = async(sequelize)=>{
+class Banner extends Model {}
+const initializeBanner = async (sequelize) => {
     Banner.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        banner_type:{
-            type:DataTypes.STRING,
-            allowNull:false
+        banner_type: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        title:{
-            type:DataTypes.STRING,
-            allowNull:false
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        thumb:{
-            type:DataTypes.STRING,
-            allowNull:false
+        thumb: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        link_type:{
-            type:DataTypes.STRING,
-            allowNull:false
+        link_type: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        link_target:{
-            type:DataTypes.STRING,
-            allowNull:false
+        link_target: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        position:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
+        action: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        start_time:{
-            type:DataTypes.DATE,
-            allowNull:false
+        position: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        end_time:{
-            type:DataTypes.DATE,
-            allowNull:false
+        start_time: {
+            type: DataTypes.DATE,
+            allowNull: false
         },
-        priority:{
-            type:DataTypes.INTEGER,
-            allowNull:false
+        end_time: {
+            type: DataTypes.DATE,
+            allowNull: false
         },
-        status:{
-            type:DataTypes.STRING,
-            allowNull:false
+        priority: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
-        fee:{
-            type:DataTypes.DECIMAL,
-            allowNull:false
+        status: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        ShopId:{
-            type:DataTypes.INTEGER,
+        fee: {
+            type: DataTypes.DECIMAL,
+            allowNull: false
         },
-        PartnerId:{
-            type:DataTypes.INTEGER,
+        ShopId: {
+            type: DataTypes.INTEGER
         },
-        CampaignId:{
-            type:DataTypes.INTEGER,
+        PartnerId: {
+            type: DataTypes.INTEGER
         },
-        slug:{
-            type:DataTypes.STRING,
-            unique:true
+        CampaignId: {
+            type: DataTypes.INTEGER
+        },
+        slug: {
+            type: DataTypes.STRING,
+            unique: true
         }
-    },{
+    }, {
         sequelize,
-        tableName:"Banners",
-        modelName:"Banners",
-        timestamps:true
-    })
-    Banner.addHook("beforeCreate", (banner) => {
-        banner.slug = banner.title.toLowerCase().replace(/ /g, "-");
-    })
-    return Banner
-}
+        tableName: 'Banners',
+        modelName: 'Banner',
+        timestamps: true,
+        indexes: [
+            { fields: ['status'] },
+            { fields: ['link_type'] },
+            { fields: ['CampaignId'] },
+            { fields: ['ShopId'] },
+            { fields: ['priority'] },
+            { fields: ['status', 'start_time', 'end_time', 'link_type'] } // Index composite
+        ]
+    });
+    Banner.addHook('beforeCreate', (banner) => {
+        banner.slug = banner.title.toLowerCase().replace(/ /g, '-');
+    });
+    return Banner;
+};
 
-module.exports = initializeBanner
+module.exports = initializeBanner;

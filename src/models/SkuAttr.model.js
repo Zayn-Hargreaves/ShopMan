@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-class SkuAttr extends Model { }
+class SkuAttr extends Model {}
 const initializeSkuAttr = async (sequelize) => {
     SkuAttr.init({
         id: {
@@ -12,7 +12,7 @@ const initializeSkuAttr = async (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-            default: ""
+            default: ''
         },
         sku_stock: {
             type: DataTypes.INTEGER,
@@ -26,18 +26,19 @@ const initializeSkuAttr = async (sequelize) => {
         },
         sku_attrs: {
             type: DataTypes.JSONB,
-            allowNull: true,
+            allowNull: true
         }
     }, {
         sequelize,
-        modelName: "SkuAttr",
-        tableName: "SkuAttr",
+        modelName: 'SkuAttr',
+        tableName: 'SkuAttr',
         freezeTableName: true,
+        timestamps: false,
+        indexes: [
+            { fields: ['sku_no'] }
+        ]
+    });
+    return SkuAttr;
+};
 
-        timestamps:false,
-        indexes: []
-    })
-    return SkuAttr
-}
-
-module.exports = initializeSkuAttr
+module.exports = initializeSkuAttr;

@@ -7,9 +7,7 @@ class CampaignService {
         await RepositoryFactory.initialize()
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         const cacheKey = `campaign:slug:${slug}`
-        let campaign = {}
-        campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
-        console.log(campaign)
+        let campaign
         campaign = await RedisService.getCachedData(cacheKey)
         if(!campaign){
             campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
@@ -32,7 +30,8 @@ class CampaignService {
         await RepositoryFactory.initialize()
         const cacheKey = `campaign:slug:${slug}:product:page:${page}:limit:${limit}`
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
-        let result = await RedisService.getCachedData(cacheKey)
+        let result 
+        result = await RedisService.getCachedData(cacheKey)
         if(!result){
             result = await CampaignRepo.findProductsByCampaignSlug(slug, page, limit)
             if(!result){

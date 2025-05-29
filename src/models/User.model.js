@@ -1,55 +1,60 @@
-const {DataTypes, Model} = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 
 class User extends Model {}
-const initializeUser = async(sequelize)=>{
+const initializeUser = async (sequelize) => {
     User.init({
-        id:{
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        name:{
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        email:{
+        email: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        password:{
-            type: DataTypes.STRING,
+        password: {
+            type: DataTypes.STRING
         },
-        google_id:{
-            type: DataTypes.STRING,
+        google_id: {
+            type: DataTypes.STRING
         },
-        phone:{
-            type: DataTypes.STRING,
+        phone: {
+            type: DataTypes.STRING
         },
-        avatar:{
-            type: DataTypes.STRING,
+        avatar: {
+            type: DataTypes.STRING
         },
-        balance:{
-            type: DataTypes.DECIMAL(10,2),
+        balance: {
+            type: DataTypes.DECIMAL(10, 2),
             defaultValue: 0
         },
-        status:{
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue:"active"
+            defaultValue: 'active'
         },
-        fcmToken:{
-            type:DataTypes.STRING,
-            allowNull:true
+        fcmToken: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
     }, {
         sequelize,
-        modelName: "Users",
-        tableName: "Users",
+        modelName: 'Users',
+        tableName: 'Users',
         freezeTableName: true,
         paranoid: true,
         timestamps: true,
-    })
-    return User
-}
+        indexes: [
+            { fields: ['email'], unique: true },
+            { fields: ['status'] },
+            { fields: ['google_id'] }
+        ]
+    });
+    return User;
+};
 
 module.exports = initializeUser;

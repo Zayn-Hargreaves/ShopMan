@@ -2,6 +2,7 @@ const router = require('express').Router();
 const SearchController = require('../../../controllers/Search.Controller');
 const { asyncHandler } = require('../../../helpers/asyncHandler');
 const ProductController = require('../../../controllers/Product.Controller');
+const {optionalAuthentication} = require("../../../auth/authUtils")
 /**
  * @swagger
  * components:
@@ -264,7 +265,7 @@ router.get('/', asyncHandler(SearchController.getProductList));
  */
 
 
-router.get('/detail/:slug', asyncHandler(ProductController.getProductDetail));
+router.get('/detail/:slug', optionalAuthentication,asyncHandler(ProductController.getProductDetail));
 
 /**
  * @swagger

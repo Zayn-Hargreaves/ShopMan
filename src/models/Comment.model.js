@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
-class Comment extends Model { }
+
+class Comment extends Model {}
 const initializeComments = async (sequelize) => {
     Comment.init({
         id: {
@@ -8,15 +9,13 @@ const initializeComments = async (sequelize) => {
             autoIncrement: true
         },
         UserId: {
-            type: DataTypes.INTEGER,
-
+            type: DataTypes.INTEGER
         },
         ProductId: {
-            type: DataTypes.INTEGER,
-
+            type: DataTypes.INTEGER
         },
         rating: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER
         },
         content: {
             type: DataTypes.STRING,
@@ -29,15 +28,21 @@ const initializeComments = async (sequelize) => {
         right: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
+        }
     }, {
         sequelize,
-        modelName: "Comments",
-        tableName: "Comments",
+        modelName: 'Comments',
+        tableName: 'Comments',
         freezeTableName: true,
-        timestamps: true
-    })
-    return Comment
-}
+        timestamps: true,
+        indexes: [
+            { fields: ['UserId'] },
+            { fields: ['ProductId'] },
+            { fields: ['ProductId', 'rating'] },
+            { fields: ['left', 'right'] } // Index cho cây bình luận
+        ]
+    });
+    return Comment;
+};
 
 module.exports = initializeComments;

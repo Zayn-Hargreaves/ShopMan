@@ -1,75 +1,80 @@
-
-const {DataTypes, Model} = require('sequelize');
-const RedisService = require("../services/Redis.Service");
+const { DataTypes, Model } = require('sequelize');
 
 class Discounts extends Model {}
-const initializeDiscounts = async(sequelize)=>{
+const initializeDiscounts = async (sequelize) => {
     Discounts.init({
-        id:{
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        name:{
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        desc:{
-            type: DataTypes.STRING,
+        desc: {
+            type: DataTypes.STRING
         },
-        value:{
+        value: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        type:{
+        type: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        code:{
+        code: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        StartDate:{
+        StartDate: {
             type: DataTypes.DATE,
             allowNull: false
         },
-        EndDate:{
+        EndDate: {
             type: DataTypes.DATE,
             allowNull: false
         },
-        MaxUses:{
+        MaxUses: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        UserCounts:{
+        UserCounts: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        MinValueOrders:{
+        MinValueOrders: {
             type: DataTypes.DECIMAL,
             allowNull: false
         },
-        status:{
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue:"active"
+            defaultValue: 'active'
         },
-        ShopId:{
+        ShopId: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        CampaignId:{
+        CampaignId: {
             type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-    },{
+            allowNull: true
+        }
+    }, {
         sequelize,
-        modelName:"Discounts",
-        tableName:"Discounts",
-        freezeTableName:true,
-        timestamps:true,
-    })
-    return Discounts
-}
+        modelName: 'Discounts',
+        tableName: 'Discounts',
+        freezeTableName: true,
+        timestamps: true,
+        indexes: [
+            { fields: ['code'], unique: true },
+            { fields: ['status'] },
+            { fields: ['ShopId'] },
+            { fields: ['CampaignId'] },
+            { fields: ['status', 'StartDate', 'EndDate'] }
+        ]
+    });
+    return Discounts;
+};
 
 module.exports = initializeDiscounts;

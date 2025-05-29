@@ -1,7 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-class Product extends Model { }
-
+class Product extends Model {}
 const initializeProducts = async (sequelize) => {
     Product.init({
         id: {
@@ -14,10 +13,10 @@ const initializeProducts = async (sequelize) => {
             allowNull: false
         },
         desc: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         desc_plain: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         price: {
             type: DataTypes.DECIMAL,
@@ -28,15 +27,15 @@ const initializeProducts = async (sequelize) => {
             allowNull: false
         },
         thumb: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING
         },
         attrs: {
-            type: DataTypes.JSONB,
+            type: DataTypes.JSONB
         },
         status: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: "active"
+            defaultValue: 'active'
         },
         slug: {
             type: DataTypes.STRING,
@@ -44,7 +43,6 @@ const initializeProducts = async (sequelize) => {
         },
         CategoryId: {
             type: DataTypes.INTEGER,
-
             allowNull: false
         },
         CategoryPath: {
@@ -63,10 +61,7 @@ const initializeProducts = async (sequelize) => {
         rating: {
             type: DataTypes.FLOAT,
             defaultValue: 4.5,
-            validate: {
-                min: 1,
-                max: 5
-            }
+            validate: { min: 1, max: 5 }
         },
         sale_count: {
             type: DataTypes.INTEGER,
@@ -77,20 +72,27 @@ const initializeProducts = async (sequelize) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false
-        },
-
+        }
     }, {
         sequelize,
-        modelName: "Products",
-        tableName: "Products",
+        modelName: 'Products',
+        tableName: 'Products',
         freezeTableName: true,
         paranoid: true,
         timestamps: true,
-    })
-    Product.addHook("beforeCreate", (product) => {
-        product.slug = product.name.toLowerCase().replace(/ /g, "-");
-    })
-    return Product
-}
+        indexes: [
+            { fields: ['ShopId'] },
+            { fields: ['CategoryId'] },
+            { fields: ['status'] },
+            { fields: ['ShopId', 'status'] },
+            { fields: ['CategoryId', 'status'] },
+            { fields: ['sort'] }
+        ]
+    });
+    Product.addHook('beforeCreate', (product) => {
+        product.slug = product.name.toLowerCase().replace(/ /g, '-');
+    });
+    return Product;
+};
 
 module.exports = initializeProducts;

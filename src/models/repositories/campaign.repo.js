@@ -14,16 +14,17 @@ class CampaignRepository {
         if (!slug) {
             throw new Error("Slug is required");
         }
+        
         const campaign = await this.Campaign.findOne({
             where: {
                 slug: slug,
                 status: "active",
-                start_time: {
-                    [Op.lte]: new Date()
-                },
-                end_time: {
-                    [Op.gte]: new Date()
-                }
+                // start_time: {
+                //     [Op.lte]: new Date()
+                // },
+                // end_time: {
+                //     [Op.gte]: new Date()
+                // }
             },
             include: [
                 {
@@ -32,9 +33,9 @@ class CampaignRepository {
                     attributes: getSelectData(['id', 'name', 'code', 'value', 'type', 'StartDate', 'EndDate', 'MinValueOrders']),
                     where: {
                         status: "active",
-                        EndDate: {
-                            [Op.gte]: new Date()
-                        }
+                        // EndDate: {
+                        //     [Op.gte]: new Date()
+                        // }
                     }
                 }
             ]
@@ -42,12 +43,13 @@ class CampaignRepository {
         return campaign;
     }
     async findProductsByCampaignSlug(slug, page = 1, limit = 20) {
+        console.log(page, limit)
         const campaign = await this.Campaign.findOne({
             where: {
                 slug,
                 status: 'active',
-                start_time: { [Op.lte]: new Date() },
-                end_time: { [Op.gte]: new Date() }
+                // start_time: { [Op.lte]: new Date() },
+                // end_time: { [Op.gte]: new Date() }
             }
         });
 
@@ -61,7 +63,7 @@ class CampaignRepository {
         });
 
         const DiscountIds = discounts.map(d => d.id);
-
+        console.log(DiscountIds)
         if (DiscountIds.length === 0) {
             return {
                 products: [],
@@ -78,7 +80,6 @@ class CampaignRepository {
         });
 
         const productIds = discountsProducts.map(dp => dp.ProductId);
-
         if (productIds.length === 0) {
             return {
                 products: [],
@@ -87,9 +88,8 @@ class CampaignRepository {
                 totalPages: 0
             };
         }
-
+        
         const offset = (page - 1) * limit;
-
         const { count, rows } = await this.Products.findAndCountAll({
             where: {
                 id: { [Op.in]: productIds },

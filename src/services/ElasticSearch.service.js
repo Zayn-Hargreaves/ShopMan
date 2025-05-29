@@ -20,7 +20,7 @@ class ElasticSearchService {
         const CategoryRepo = RepositoryFactory.getRepository("CategoryRepository")
         let shop
         if (ShopSlug) {
-            shop = await ShopRepo.findShopBySlug(ShopSlug)
+            shop = await ShopRepo.findShopBySlug1(ShopSlug)
         }
         if (minPrice !== undefined && (isNaN(minPrice) || minPrice < 0)) {
             throw new Error("minPrice must be a non-negative number");
@@ -39,13 +39,11 @@ class ElasticSearchService {
         }
         let categoryIds = [];
         let category
-        console.log(CategorySlug)
         if (CategorySlug) {
             category = await CategoryRepo.findCategoryBySlug(CategorySlug);
             if (!category) throw new Error("Category not found");
 
             categoryIds = await CategoryRepo.getAllDescendantCategoryIds(category.id);
-            console.log("elastic:::::",categoryIds)
         }
         const filters = {
             minPrice: minPrice !== undefined ? Number(minPrice) : undefined,

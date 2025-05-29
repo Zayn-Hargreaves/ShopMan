@@ -1,23 +1,30 @@
+const { DataTypes, Model } = require('sequelize');
 
-const {DataTypes, Model} = require('sequelize')
-class CampaignShop extends Model{}
-const initializeCampaignShop = async(sequelize)=>{
+class CampaignShop extends Model {}
+const initializeCampaignShop = async (sequelize) => {
     CampaignShop.init({
-        CampaignId:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
+        CampaignId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            references: { model: 'Campaigns', key: 'id' }
         },
-        ShopId:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-        },
-    },{
+        ShopId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            references: { model: 'Shops', key: 'id' }
+        }
+    }, {
         sequelize,
-        tableName:"CampaignShops",
-        modelName:"CampaignShops",
-        timestamps:false
-    })
-    return CampaignShop
-}
+        tableName: 'CampaignShops',
+        modelName: 'CampaignShop',
+        timestamps: false,
+        indexes: [
+            { fields: ['ShopId'] }
+        ]
+    });
+    return CampaignShop;
+};
 
-module.exports = initializeCampaignShop
+module.exports = initializeCampaignShop;

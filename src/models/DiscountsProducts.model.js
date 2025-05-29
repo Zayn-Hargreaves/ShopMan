@@ -1,28 +1,32 @@
+const { DataTypes, Model } = require('sequelize');
 
-const {DataTypes, Model} = require('sequelize');
 class DiscountsProducts extends Model {}
-const initializeDiscountsProducts = async(sequelize)=>{
-
+const initializeDiscountsProducts = async (sequelize) => {
     DiscountsProducts.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        DiscountId:{
-            type:DataTypes.INTEGER,
+        DiscountId: {
+            type: DataTypes.INTEGER
         },
-        ProductId:{
-            type:DataTypes.INTEGER,
+        ProductId: {
+            type: DataTypes.INTEGER
         }
-    },{
+    }, {
         sequelize,
-        modelName:"DiscountsProducts",
-        tableName:"DiscountsProducts",
-        freezeTableName:true,
-        timestamps:true
-    })
-    return DiscountsProducts
-}
+        modelName: 'DiscountsProducts',
+        tableName: 'DiscountsProducts',
+        freezeTableName: true,
+        timestamps: true,
+        indexes: [
+            { fields: ['DiscountId'] },
+            { fields: ['ProductId'] },
+            { fields: ['DiscountId', 'ProductId'], unique: true }
+        ]
+    });
+    return DiscountsProducts;
+};
 
 module.exports = initializeDiscountsProducts;

@@ -1,32 +1,32 @@
-const {DataTypes, Model} = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 
 class Cart extends Model {}
-const initializeCart= async(sequelize)=>{
+const initializeCart = async (sequelize) => {
     Cart.init({
-        id:{
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        UserId:{
-            type:DataTypes.INTEGER,
+        UserId: {
+            type: DataTypes.INTEGER
         },
-        cart_total:{
-            type:DataTypes.DECIMAL,
-            allowNull:false
-        },
-        cart_status:{
-            type:DataTypes.STRING,
-            allowNull:false
+        cart_status: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
-    },{
+    }, {
         sequelize,
-        modelName:"Carts",
-        tableName:"Carts",
-        freezeTableName:true,
-        timestamps:true
-    })
-    return Cart
-}
+        modelName: 'Carts',
+        tableName: 'Carts',
+        freezeTableName: true,
+        timestamps: true,
+        indexes: [
+            { fields: ['UserId'] }, // Index đơn trường
+            { fields: ['UserId', 'cart_status'] } // Index composite
+        ]
+    });
+    return Cart;
+};
 
 module.exports = initializeCart;

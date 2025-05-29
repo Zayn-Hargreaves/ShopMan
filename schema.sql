@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.8
--- Dumped by pg_dump version 16.8 (Ubuntu 16.8-0ubuntu0.24.04.1)
+-- Dumped from database version 16.9
+-- Dumped by pg_dump version 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,6 +16,29 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: aiven_extras; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA aiven_extras;
+
+
+ALTER SCHEMA aiven_extras OWNER TO postgres;
+
+--
+-- Name: aiven_extras; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS aiven_extras WITH SCHEMA aiven_extras;
+
+
+--
+-- Name: EXTENSION aiven_extras; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION aiven_extras IS 'aiven_extras';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -27,9 +50,13 @@ SET default_table_access_method = heap;
 CREATE TABLE public."Address" (
     id integer NOT NULL,
     "UserId" integer NOT NULL,
-    value character varying(255) NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    address_type character varying(255) NOT NULL,
+    pincode integer NOT NULL,
+    address character varying(255) NOT NULL,
+    city character varying(255) NOT NULL,
+    country character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -65,7 +92,7 @@ CREATE TABLE public."Banners" (
     id integer NOT NULL,
     banner_type character varying(255) NOT NULL,
     title character varying(255) NOT NULL,
-    image character varying(255) NOT NULL,
+    thumb character varying(255) NOT NULL,
     link_type character varying(255) NOT NULL,
     link_target character varying(255) NOT NULL,
     "position" integer NOT NULL,
@@ -74,11 +101,13 @@ CREATE TABLE public."Banners" (
     priority integer NOT NULL,
     status character varying(255) NOT NULL,
     fee numeric NOT NULL,
-    "ShopId" integer NOT NULL,
+    "ShopId" integer,
     "PartnerId" integer,
-    "DiscountId" integer,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "CampaignId" integer,
+    slug character varying(255),
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "DiscountId" integer
 );
 
 
@@ -107,6 +136,118 @@ ALTER SEQUENCE public."Banners_id_seq" OWNED BY public."Banners".id;
 
 
 --
+-- Name: CampaignCategories; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."CampaignCategories" (
+    id integer NOT NULL,
+    "CampainId" integer NOT NULL,
+    "CategoryId" integer NOT NULL,
+    "CampaignId" integer
+);
+
+
+ALTER TABLE public."CampaignCategories" OWNER TO avnadmin;
+
+--
+-- Name: CampaignCategories_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."CampaignCategories_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."CampaignCategories_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: CampaignCategories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."CampaignCategories_id_seq" OWNED BY public."CampaignCategories".id;
+
+
+--
+-- Name: CampaignShops; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."CampaignShops" (
+    id integer NOT NULL,
+    "CampaignId" integer NOT NULL,
+    "ShopId" integer NOT NULL
+);
+
+
+ALTER TABLE public."CampaignShops" OWNER TO avnadmin;
+
+--
+-- Name: CampaignShops_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."CampaignShops_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."CampaignShops_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: CampaignShops_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."CampaignShops_id_seq" OWNED BY public."CampaignShops".id;
+
+
+--
+-- Name: Campaigns; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."Campaigns" (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    description text,
+    start_time timestamp with time zone NOT NULL,
+    end_time timestamp with time zone NOT NULL,
+    status character varying(255) NOT NULL,
+    slug character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public."Campaigns" OWNER TO avnadmin;
+
+--
+-- Name: Campaigns_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."Campaigns_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."Campaigns_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: Campaigns_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."Campaigns_id_seq" OWNED BY public."Campaigns".id;
+
+
+--
 -- Name: Carts; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
@@ -115,8 +256,8 @@ CREATE TABLE public."Carts" (
     "UserId" integer,
     cart_total numeric NOT NULL,
     cart_status character varying(255) NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -127,12 +268,13 @@ ALTER TABLE public."Carts" OWNER TO avnadmin;
 --
 
 CREATE TABLE public."CartsDetails" (
-    id integer NOT NULL,
     "CartId" integer NOT NULL,
     "ProductId" integer NOT NULL,
     quantity integer NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    sku_no character varying(255) NOT NULL,
+    id integer NOT NULL
 );
 
 
@@ -188,14 +330,14 @@ ALTER SEQUENCE public."Carts_id_seq" OWNED BY public."Carts".id;
 
 CREATE TABLE public."Categories" (
     id integer NOT NULL,
-    category_name character varying(255) NOT NULL,
-    category_desc character varying(255),
-    category_status character varying(255) NOT NULL,
-    category_thumb character varying(255),
-    category_slug character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone,
+    name character varying(255) NOT NULL,
+    "desc" character varying(255),
+    status character varying(255) NOT NULL,
+    thumb character varying(255),
+    slug character varying(255),
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone,
     "ParentId" integer
 );
 
@@ -225,45 +367,6 @@ ALTER SEQUENCE public."Categories_id_seq" OWNED BY public."Categories".id;
 
 
 --
--- Name: Clothing; Type: TABLE; Schema: public; Owner: avnadmin
---
-
-CREATE TABLE public."Clothing" (
-    id integer NOT NULL,
-    "ProductId" integer NOT NULL,
-    brand character varying(255) NOT NULL,
-    size character varying(255),
-    material character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
-);
-
-
-ALTER TABLE public."Clothing" OWNER TO avnadmin;
-
---
--- Name: Clothing_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
---
-
-CREATE SEQUENCE public."Clothing_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."Clothing_id_seq" OWNER TO avnadmin;
-
---
--- Name: Clothing_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
---
-
-ALTER SEQUENCE public."Clothing_id_seq" OWNED BY public."Clothing".id;
-
-
---
 -- Name: Comments; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
@@ -271,12 +374,12 @@ CREATE TABLE public."Comments" (
     id integer NOT NULL,
     "UserId" integer NOT NULL,
     "ProductId" integer NOT NULL,
-    comment_rating integer,
-    comment_content character varying(255) NOT NULL,
-    comment_left integer NOT NULL,
-    comment_right integer NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    rating integer,
+    content character varying(255) NOT NULL,
+    "left" integer NOT NULL,
+    "right" integer NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -310,20 +413,21 @@ ALTER SEQUENCE public."Comments_id_seq" OWNED BY public."Comments".id;
 
 CREATE TABLE public."Discounts" (
     id integer NOT NULL,
-    discount_name character varying(255) NOT NULL,
-    discount_desc character varying(255),
-    discount_value numeric NOT NULL,
-    discount_type character varying(255) NOT NULL,
-    discount_code character varying(255) NOT NULL,
-    "discount_StartDate" timestamp with time zone NOT NULL,
-    "discount_EndDate" timestamp with time zone NOT NULL,
-    "discount_MaxUses" integer NOT NULL,
-    "discount_UserCounts" integer NOT NULL,
-    "discount_MinValueOrders" numeric NOT NULL,
-    discount_status character varying(255) DEFAULT 'active'::character varying NOT NULL,
-    "ShopId" integer NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    name character varying(255) NOT NULL,
+    "desc" character varying(255),
+    value numeric NOT NULL,
+    type character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    "StartDate" timestamp with time zone NOT NULL,
+    "EndDate" timestamp with time zone NOT NULL,
+    "MaxUses" integer NOT NULL,
+    "UserCounts" integer NOT NULL,
+    "MinValueOrders" numeric NOT NULL,
+    status character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    "ShopId" integer,
+    "CampaignId" integer,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -337,8 +441,8 @@ CREATE TABLE public."DiscountsProducts" (
     id integer NOT NULL,
     "DiscountId" integer,
     "ProductId" integer,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -389,45 +493,6 @@ ALTER SEQUENCE public."Discounts_id_seq" OWNED BY public."Discounts".id;
 
 
 --
--- Name: Electronics; Type: TABLE; Schema: public; Owner: avnadmin
---
-
-CREATE TABLE public."Electronics" (
-    id integer NOT NULL,
-    "ProductId" integer NOT NULL,
-    manufacturer character varying(255) NOT NULL,
-    model character varying(255),
-    color character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
-);
-
-
-ALTER TABLE public."Electronics" OWNER TO avnadmin;
-
---
--- Name: Electronics_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
---
-
-CREATE SEQUENCE public."Electronics_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."Electronics_id_seq" OWNER TO avnadmin;
-
---
--- Name: Electronics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
---
-
-ALTER SEQUENCE public."Electronics_id_seq" OWNED BY public."Electronics".id;
-
-
---
 -- Name: Follows; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
@@ -435,8 +500,8 @@ CREATE TABLE public."Follows" (
     id integer NOT NULL,
     "UserId" integer,
     "ShopId" integer,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -465,45 +530,6 @@ ALTER SEQUENCE public."Follows_id_seq" OWNED BY public."Follows".id;
 
 
 --
--- Name: Furniture; Type: TABLE; Schema: public; Owner: avnadmin
---
-
-CREATE TABLE public."Furniture" (
-    id integer NOT NULL,
-    "ProductId" integer NOT NULL,
-    manufacturer character varying(255) NOT NULL,
-    model character varying(255),
-    color character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
-);
-
-
-ALTER TABLE public."Furniture" OWNER TO avnadmin;
-
---
--- Name: Furniture_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
---
-
-CREATE SEQUENCE public."Furniture_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."Furniture_id_seq" OWNER TO avnadmin;
-
---
--- Name: Furniture_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
---
-
-ALTER SEQUENCE public."Furniture_id_seq" OWNED BY public."Furniture".id;
-
-
---
 -- Name: Inventories; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
@@ -513,8 +539,8 @@ CREATE TABLE public."Inventories" (
     "ShopId" integer NOT NULL,
     inven_quantity integer NOT NULL,
     inven_location character varying(255) NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -548,13 +574,13 @@ ALTER SEQUENCE public."Inventories_id_seq" OWNED BY public."Inventories".id;
 
 CREATE TABLE public."Notifications" (
     id integer NOT NULL,
-    noti_type character varying(255) NOT NULL,
-    noti_option character varying(255) NOT NULL,
-    noti_content character varying(255) NOT NULL,
+    type character varying(255) NOT NULL,
+    option character varying(255) NOT NULL,
+    content character varying(255) NOT NULL,
     "ShopId" integer,
     "UserId" integer,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -589,10 +615,10 @@ ALTER SEQUENCE public."Notifications_id_seq" OWNED BY public."Notifications".id;
 CREATE TABLE public."Orders" (
     id integer NOT NULL,
     "UserId" integer,
-    "order_TotalPrice" numeric NOT NULL,
-    "order_Status" character varying(255) NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "TotalPrice" numeric NOT NULL,
+    "Status" character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -608,8 +634,8 @@ CREATE TABLE public."OrdersDetails" (
     "ProductId" integer,
     quantity integer NOT NULL,
     price_at_time numeric NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -668,9 +694,9 @@ CREATE TABLE public."Otps" (
     otp_value character varying(255) NOT NULL,
     "UserId" integer NOT NULL,
     expire timestamp with time zone NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -707,8 +733,8 @@ CREATE TABLE public."Partners" (
     name character varying(255) NOT NULL,
     contact_info character varying(255) NOT NULL,
     logo character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -742,11 +768,11 @@ ALTER SEQUENCE public."Partners_id_seq" OWNED BY public."Partners".id;
 
 CREATE TABLE public."PaymentMethods" (
     id integer NOT NULL,
-    "paymentMethod_name" character varying(255) NOT NULL,
-    "paymentMethod_desc" character varying(255),
-    "paymentMethod_status" character varying(255) DEFAULT 'active'::character varying NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    name character varying(255) NOT NULL,
+    "desc" character varying(255),
+    status character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -781,12 +807,12 @@ ALTER SEQUENCE public."PaymentMethods_id_seq" OWNED BY public."PaymentMethods".i
 CREATE TABLE public."Payments" (
     id integer NOT NULL,
     "UserId" integer,
-    "payment_TotalPrice" numeric NOT NULL,
-    "payment_Status" character varying(255) NOT NULL,
+    "TotalPrice" numeric NOT NULL,
+    "Status" character varying(255) NOT NULL,
     "OrderId" integer NOT NULL,
     "PaymentMethodId" integer NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -815,65 +841,30 @@ ALTER SEQUENCE public."Payments_id_seq" OWNED BY public."Payments".id;
 
 
 --
--- Name: ProductVariations; Type: TABLE; Schema: public; Owner: avnadmin
---
-
-CREATE TABLE public."ProductVariations" (
-    id integer NOT NULL,
-    "ProductId" integer NOT NULL,
-    sku character varying(255) NOT NULL,
-    price numeric NOT NULL,
-    quantity integer NOT NULL,
-    attributes json NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
-);
-
-
-ALTER TABLE public."ProductVariations" OWNER TO avnadmin;
-
---
--- Name: ProductVariations_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
---
-
-CREATE SEQUENCE public."ProductVariations_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."ProductVariations_id_seq" OWNER TO avnadmin;
-
---
--- Name: ProductVariations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
---
-
-ALTER SEQUENCE public."ProductVariations_id_seq" OWNED BY public."ProductVariations".id;
-
-
---
 -- Name: Products; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
 CREATE TABLE public."Products" (
     id integer NOT NULL,
-    product_name character varying(255) NOT NULL,
-    product_desc character varying(255),
-    product_price numeric NOT NULL,
-    product_quantity integer NOT NULL,
-    product_thumb character varying(255),
-    product_type character varying(255) NOT NULL,
-    product_status character varying(255) DEFAULT 'active'::character varying NOT NULL,
-    product_slug character varying(255),
+    name character varying(255) NOT NULL,
+    "desc" character varying(255),
+    desc_plain character varying(255),
+    price numeric NOT NULL,
+    discount_percentage integer NOT NULL,
+    thumb character varying(255),
+    attrs jsonb,
+    status character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    slug character varying(255),
     "CategoryId" integer NOT NULL,
+    "CategoryPath" integer[],
+    sort integer DEFAULT 10 NOT NULL,
     "ShopId" integer NOT NULL,
-    product_rating numeric(2,1) DEFAULT 4.5,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone
+    rating double precision DEFAULT '4.5'::double precision,
+    sale_count integer DEFAULT 0 NOT NULL,
+    has_variations boolean DEFAULT false NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -907,10 +898,10 @@ ALTER SEQUENCE public."Products_id_seq" OWNED BY public."Products".id;
 
 CREATE TABLE public."Resources" (
     id integer NOT NULL,
-    resrc_name character varying(255) NOT NULL,
-    resrc_slug character varying(255) DEFAULT ''::character varying,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    name character varying(255) NOT NULL,
+    slug character varying(255) DEFAULT ''::character varying,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -946,7 +937,7 @@ CREATE TABLE public."RoleGrants" (
     id integer NOT NULL,
     "RoleId" integer NOT NULL,
     "ResourceId" integer NOT NULL,
-    actions json NOT NULL,
+    actions jsonb NOT NULL,
     attributes character varying(255) DEFAULT ''::character varying
 );
 
@@ -1018,9 +1009,9 @@ CREATE TABLE public."Roles" (
     id integer NOT NULL,
     role_name character varying(255) NOT NULL,
     role_desc character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone
 );
 
 
@@ -1055,14 +1046,18 @@ ALTER SEQUENCE public."Roles_id_seq" OWNED BY public."Roles".id;
 CREATE TABLE public."Shops" (
     id integer NOT NULL,
     "UserId" integer NOT NULL,
-    shop_name character varying(255) NOT NULL,
-    shop_balance numeric DEFAULT 0 NOT NULL,
-    shop_status character varying(255) DEFAULT 'pending'::character varying NOT NULL,
+    name character varying(255) NOT NULL,
+    balance numeric DEFAULT 0 NOT NULL,
+    status character varying(255) DEFAULT 'pending'::character varying NOT NULL,
     "RolesId" integer,
-    shop_desc character varying(255),
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone,
+    "desc" character varying(255),
+    logo character varying(255),
+    "shopLocation" character varying(255),
+    rating numeric(2,1) DEFAULT 4.5,
+    slug character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone,
     "RoleId" integer
 );
 
@@ -1092,20 +1087,173 @@ ALTER SEQUENCE public."Shops_id_seq" OWNED BY public."Shops".id;
 
 
 --
+-- Name: Sku; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."Sku" (
+    id integer NOT NULL,
+    "ProductId" integer NOT NULL,
+    sku_no character varying(255) NOT NULL,
+    sku_name character varying(255),
+    sku_desc character varying(255),
+    sku_type integer,
+    status character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    sort integer DEFAULT 0 NOT NULL,
+    sku_stock integer DEFAULT 0 NOT NULL,
+    sku_price numeric DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public."Sku" OWNER TO avnadmin;
+
+--
+-- Name: SkuAttr; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."SkuAttr" (
+    id integer NOT NULL,
+    sku_no character varying(255) NOT NULL,
+    sku_stock integer DEFAULT 0 NOT NULL,
+    sku_price numeric DEFAULT 0 NOT NULL,
+    sku_attrs jsonb
+);
+
+
+ALTER TABLE public."SkuAttr" OWNER TO avnadmin;
+
+--
+-- Name: SkuAttr_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."SkuAttr_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."SkuAttr_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: SkuAttr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."SkuAttr_id_seq" OWNED BY public."SkuAttr".id;
+
+
+--
+-- Name: SkuSpecs; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."SkuSpecs" (
+    id integer NOT NULL,
+    sku_specs jsonb,
+    "SkuId" integer NOT NULL
+);
+
+
+ALTER TABLE public."SkuSpecs" OWNER TO avnadmin;
+
+--
+-- Name: SkuSpecs_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."SkuSpecs_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."SkuSpecs_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: SkuSpecs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."SkuSpecs_id_seq" OWNED BY public."SkuSpecs".id;
+
+
+--
+-- Name: Sku_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."Sku_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."Sku_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: Sku_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."Sku_id_seq" OWNED BY public."Sku".id;
+
+
+--
+-- Name: SpuToSku; Type: TABLE; Schema: public; Owner: avnadmin
+--
+
+CREATE TABLE public."SpuToSku" (
+    id integer NOT NULL,
+    sku_no character varying(255) NOT NULL,
+    spu_no character varying(255) NOT NULL,
+    "ProductId" integer NOT NULL
+);
+
+
+ALTER TABLE public."SpuToSku" OWNER TO avnadmin;
+
+--
+-- Name: SpuToSku_id_seq; Type: SEQUENCE; Schema: public; Owner: avnadmin
+--
+
+CREATE SEQUENCE public."SpuToSku_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."SpuToSku_id_seq" OWNER TO avnadmin;
+
+--
+-- Name: SpuToSku_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: avnadmin
+--
+
+ALTER SEQUENCE public."SpuToSku_id_seq" OWNED BY public."SpuToSku".id;
+
+
+--
 -- Name: Users; Type: TABLE; Schema: public; Owner: avnadmin
 --
 
 CREATE TABLE public."Users" (
     id integer NOT NULL,
-    user_name character varying(255) NOT NULL,
-    user_email character varying(255) NOT NULL,
-    user_password character varying(255),
-    user_phone character varying(255),
-    user_avatar character varying(255),
-    user_status character varying(255) DEFAULT 'active'::character varying NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL,
-    "deletedAt" timestamp(6) with time zone
+    name character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    password character varying(255),
+    google_id character varying(255),
+    phone character varying(255),
+    avatar character varying(255),
+    balance numeric(10,2) DEFAULT 0,
+    status character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL,
+    "deletedAt" timestamp with time zone,
+    "fcmToken" character varying(255)
 );
 
 
@@ -1141,8 +1289,8 @@ CREATE TABLE public."WishLists" (
     id integer NOT NULL,
     "UserId" integer NOT NULL,
     "ProductId" integer NOT NULL,
-    "createdAt" timestamp(6) with time zone NOT NULL,
-    "updatedAt" timestamp(6) with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
 );
 
 
@@ -1185,6 +1333,27 @@ ALTER TABLE ONLY public."Banners" ALTER COLUMN id SET DEFAULT nextval('public."B
 
 
 --
+-- Name: CampaignCategories id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignCategories" ALTER COLUMN id SET DEFAULT nextval('public."CampaignCategories_id_seq"'::regclass);
+
+
+--
+-- Name: CampaignShops id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignShops" ALTER COLUMN id SET DEFAULT nextval('public."CampaignShops_id_seq"'::regclass);
+
+
+--
+-- Name: Campaigns id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Campaigns" ALTER COLUMN id SET DEFAULT nextval('public."Campaigns_id_seq"'::regclass);
+
+
+--
 -- Name: Carts id; Type: DEFAULT; Schema: public; Owner: avnadmin
 --
 
@@ -1203,13 +1372,6 @@ ALTER TABLE ONLY public."CartsDetails" ALTER COLUMN id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public."Categories" ALTER COLUMN id SET DEFAULT nextval('public."Categories_id_seq"'::regclass);
-
-
---
--- Name: Clothing id; Type: DEFAULT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Clothing" ALTER COLUMN id SET DEFAULT nextval('public."Clothing_id_seq"'::regclass);
 
 
 --
@@ -1234,24 +1396,10 @@ ALTER TABLE ONLY public."DiscountsProducts" ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- Name: Electronics id; Type: DEFAULT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Electronics" ALTER COLUMN id SET DEFAULT nextval('public."Electronics_id_seq"'::regclass);
-
-
---
 -- Name: Follows id; Type: DEFAULT; Schema: public; Owner: avnadmin
 --
 
 ALTER TABLE ONLY public."Follows" ALTER COLUMN id SET DEFAULT nextval('public."Follows_id_seq"'::regclass);
-
-
---
--- Name: Furniture id; Type: DEFAULT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Furniture" ALTER COLUMN id SET DEFAULT nextval('public."Furniture_id_seq"'::regclass);
 
 
 --
@@ -1311,13 +1459,6 @@ ALTER TABLE ONLY public."Payments" ALTER COLUMN id SET DEFAULT nextval('public."
 
 
 --
--- Name: ProductVariations id; Type: DEFAULT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."ProductVariations" ALTER COLUMN id SET DEFAULT nextval('public."ProductVariations_id_seq"'::regclass);
-
-
---
 -- Name: Products id; Type: DEFAULT; Schema: public; Owner: avnadmin
 --
 
@@ -1353,6 +1494,34 @@ ALTER TABLE ONLY public."Shops" ALTER COLUMN id SET DEFAULT nextval('public."Sho
 
 
 --
+-- Name: Sku id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku" ALTER COLUMN id SET DEFAULT nextval('public."Sku_id_seq"'::regclass);
+
+
+--
+-- Name: SkuAttr id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuAttr" ALTER COLUMN id SET DEFAULT nextval('public."SkuAttr_id_seq"'::regclass);
+
+
+--
+-- Name: SkuSpecs id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuSpecs" ALTER COLUMN id SET DEFAULT nextval('public."SkuSpecs_id_seq"'::regclass);
+
+
+--
+-- Name: SpuToSku id; Type: DEFAULT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SpuToSku" ALTER COLUMN id SET DEFAULT nextval('public."SpuToSku_id_seq"'::regclass);
+
+
+--
 -- Name: Users id; Type: DEFAULT; Schema: public; Owner: avnadmin
 --
 
@@ -1383,11 +1552,75 @@ ALTER TABLE ONLY public."Banners"
 
 
 --
--- Name: CartsDetails CartsDetails_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+-- Name: Banners Banners_slug_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
 --
 
-ALTER TABLE ONLY public."CartsDetails"
-    ADD CONSTRAINT "CartsDetails_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key" UNIQUE (slug);
+
+
+--
+-- Name: Banners Banners_slug_key1; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key1" UNIQUE (slug);
+
+
+--
+-- Name: Banners Banners_slug_key2; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key2" UNIQUE (slug);
+
+
+--
+-- Name: Banners Banners_slug_key3; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key3" UNIQUE (slug);
+
+
+--
+-- Name: Banners Banners_slug_key4; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key4" UNIQUE (slug);
+
+
+--
+-- Name: Banners Banners_slug_key5; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Banners"
+    ADD CONSTRAINT "Banners_slug_key5" UNIQUE (slug);
+
+
+--
+-- Name: CampaignCategories CampaignCategories_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignCategories"
+    ADD CONSTRAINT "CampaignCategories_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: CampaignShops CampaignShops_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignShops"
+    ADD CONSTRAINT "CampaignShops_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Campaigns Campaigns_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Campaigns"
+    ADD CONSTRAINT "Campaigns_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1407,11 +1640,91 @@ ALTER TABLE ONLY public."Categories"
 
 
 --
--- Name: Clothing Clothing_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+-- Name: Categories Categories_slug_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
 --
 
-ALTER TABLE ONLY public."Clothing"
-    ADD CONSTRAINT "Clothing_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key1; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key1" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key10; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key10" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key2; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key2" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key3; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key3" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key4; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key4" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key5; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key5" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key6; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key6" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key7; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key7" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key8; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key8" UNIQUE (slug);
+
+
+--
+-- Name: Categories Categories_slug_key9; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Categories"
+    ADD CONSTRAINT "Categories_slug_key9" UNIQUE (slug);
 
 
 --
@@ -1420,6 +1733,14 @@ ALTER TABLE ONLY public."Clothing"
 
 ALTER TABLE ONLY public."Comments"
     ADD CONSTRAINT "Comments_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: DiscountsProducts DiscountsProducts_DiscountId_ProductId_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."DiscountsProducts"
+    ADD CONSTRAINT "DiscountsProducts_DiscountId_ProductId_key" UNIQUE ("DiscountId", "ProductId");
 
 
 --
@@ -1439,27 +1760,11 @@ ALTER TABLE ONLY public."Discounts"
 
 
 --
--- Name: Electronics Electronics_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Electronics"
-    ADD CONSTRAINT "Electronics_pkey" PRIMARY KEY (id);
-
-
---
 -- Name: Follows Follows_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
 --
 
 ALTER TABLE ONLY public."Follows"
     ADD CONSTRAINT "Follows_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Furniture Furniture_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Furniture"
-    ADD CONSTRAINT "Furniture_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1527,19 +1832,99 @@ ALTER TABLE ONLY public."Payments"
 
 
 --
--- Name: ProductVariations ProductVariations_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."ProductVariations"
-    ADD CONSTRAINT "ProductVariations_pkey" PRIMARY KEY (id);
-
-
---
 -- Name: Products Products_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
 --
 
 ALTER TABLE ONLY public."Products"
     ADD CONSTRAINT "Products_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Products Products_slug_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key1; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key1" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key10; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key10" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key2; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key2" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key3; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key3" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key4; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key4" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key5; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key5" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key6; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key6" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key7; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key7" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key8; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key8" UNIQUE (slug);
+
+
+--
+-- Name: Products Products_slug_key9; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Products"
+    ADD CONSTRAINT "Products_slug_key9" UNIQUE (slug);
 
 
 --
@@ -1575,6 +1960,142 @@ ALTER TABLE ONLY public."Shops"
 
 
 --
+-- Name: SkuAttr SkuAttr_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuAttr"
+    ADD CONSTRAINT "SkuAttr_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: SkuAttr SkuAttr_sku_no_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuAttr"
+    ADD CONSTRAINT "SkuAttr_sku_no_key" UNIQUE (sku_no);
+
+
+--
+-- Name: SkuSpecs SkuSpecs_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuSpecs"
+    ADD CONSTRAINT "SkuSpecs_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Sku Sku_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Sku Sku_sku_no_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key1; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key1" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key10; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key10" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key2; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key2" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key3; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key3" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key4; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key4" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key5; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key5" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key6; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key6" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key7; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key7" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key8; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key8" UNIQUE (sku_no);
+
+
+--
+-- Name: Sku Sku_sku_no_key9; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Sku"
+    ADD CONSTRAINT "Sku_sku_no_key9" UNIQUE (sku_no);
+
+
+--
+-- Name: SpuToSku SpuToSku_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SpuToSku"
+    ADD CONSTRAINT "SpuToSku_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: SpuToSku SpuToSku_sku_no_key; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SpuToSku"
+    ADD CONSTRAINT "SpuToSku_sku_no_key" UNIQUE (sku_no);
+
+
+--
 -- Name: Users Users_pkey; Type: CONSTRAINT; Schema: public; Owner: avnadmin
 --
 
@@ -1591,51 +2112,10 @@ ALTER TABLE ONLY public."WishLists"
 
 
 --
--- Name: Categories categories_category_slug_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
+-- Name: spu_to_sku_spu_no_sku_no; Type: INDEX; Schema: public; Owner: avnadmin
 --
 
-ALTER TABLE ONLY public."Categories"
-    ADD CONSTRAINT categories_category_slug_unique UNIQUE (category_slug);
-
-
---
--- Name: Clothing clothing__product_id_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Clothing"
-    ADD CONSTRAINT clothing__product_id_unique UNIQUE ("ProductId");
-
-
---
--- Name: Electronics electronics__product_id_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Electronics"
-    ADD CONSTRAINT electronics__product_id_unique UNIQUE ("ProductId");
-
-
---
--- Name: Furniture furniture__product_id_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Furniture"
-    ADD CONSTRAINT furniture__product_id_unique UNIQUE ("ProductId");
-
-
---
--- Name: ProductVariations product_variations_sku_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."ProductVariations"
-    ADD CONSTRAINT product_variations_sku_unique UNIQUE (sku);
-
-
---
--- Name: Products products_product_slug_unique; Type: CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Products"
-    ADD CONSTRAINT products_product_slug_unique UNIQUE (product_slug);
+CREATE INDEX spu_to_sku_spu_no_sku_no ON public."SpuToSku" USING btree (spu_no, sku_no);
 
 
 --
@@ -1659,7 +2139,7 @@ ALTER TABLE ONLY public."Banners"
 --
 
 ALTER TABLE ONLY public."Banners"
-    ADD CONSTRAINT "Banners_PartnerId_fkey" FOREIGN KEY ("PartnerId") REFERENCES public."Partners"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Banners_PartnerId_fkey" FOREIGN KEY ("PartnerId") REFERENCES public."Partners"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1668,6 +2148,22 @@ ALTER TABLE ONLY public."Banners"
 
 ALTER TABLE ONLY public."Banners"
     ADD CONSTRAINT "Banners_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: CampaignCategories CampaignCategories_CampaignId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignCategories"
+    ADD CONSTRAINT "CampaignCategories_CampaignId_fkey" FOREIGN KEY ("CampaignId") REFERENCES public."Campaigns"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+--
+-- Name: CampaignCategories CampaignCategories_CategoryId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."CampaignCategories"
+    ADD CONSTRAINT "CampaignCategories_CategoryId_fkey" FOREIGN KEY ("CategoryId") REFERENCES public."Categories"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1691,7 +2187,7 @@ ALTER TABLE ONLY public."CartsDetails"
 --
 
 ALTER TABLE ONLY public."Carts"
-    ADD CONSTRAINT "Carts_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Carts_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1699,15 +2195,7 @@ ALTER TABLE ONLY public."Carts"
 --
 
 ALTER TABLE ONLY public."Categories"
-    ADD CONSTRAINT "Categories_ParentId_fkey" FOREIGN KEY ("ParentId") REFERENCES public."Categories"(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: Clothing Clothing_ProductId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Clothing"
-    ADD CONSTRAINT "Clothing_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "Categories_ParentId_fkey" FOREIGN KEY ("ParentId") REFERENCES public."Categories"(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --
@@ -1731,7 +2219,7 @@ ALTER TABLE ONLY public."Comments"
 --
 
 ALTER TABLE ONLY public."DiscountsProducts"
-    ADD CONSTRAINT "DiscountsProducts_DiscountId_fkey" FOREIGN KEY ("DiscountId") REFERENCES public."Discounts"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "DiscountsProducts_DiscountId_fkey" FOREIGN KEY ("DiscountId") REFERENCES public."Discounts"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1739,7 +2227,15 @@ ALTER TABLE ONLY public."DiscountsProducts"
 --
 
 ALTER TABLE ONLY public."DiscountsProducts"
-    ADD CONSTRAINT "DiscountsProducts_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "DiscountsProducts_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: Discounts Discounts_CampaignId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."Discounts"
+    ADD CONSTRAINT "Discounts_CampaignId_fkey" FOREIGN KEY ("CampaignId") REFERENCES public."Campaigns"(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --
@@ -1747,15 +2243,7 @@ ALTER TABLE ONLY public."DiscountsProducts"
 --
 
 ALTER TABLE ONLY public."Discounts"
-    ADD CONSTRAINT "Discounts_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: Electronics Electronics_ProductId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Electronics"
-    ADD CONSTRAINT "Electronics_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "Discounts_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
 --
@@ -1763,7 +2251,7 @@ ALTER TABLE ONLY public."Electronics"
 --
 
 ALTER TABLE ONLY public."Follows"
-    ADD CONSTRAINT "Follows_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Follows_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1771,15 +2259,7 @@ ALTER TABLE ONLY public."Follows"
 --
 
 ALTER TABLE ONLY public."Follows"
-    ADD CONSTRAINT "Follows_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: Furniture Furniture_ProductId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."Furniture"
-    ADD CONSTRAINT "Furniture_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "Follows_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1803,7 +2283,7 @@ ALTER TABLE ONLY public."Inventories"
 --
 
 ALTER TABLE ONLY public."Notifications"
-    ADD CONSTRAINT "Notifications_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Notifications_ShopId_fkey" FOREIGN KEY ("ShopId") REFERENCES public."Shops"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1811,7 +2291,7 @@ ALTER TABLE ONLY public."Notifications"
 --
 
 ALTER TABLE ONLY public."Notifications"
-    ADD CONSTRAINT "Notifications_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Notifications_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1819,7 +2299,7 @@ ALTER TABLE ONLY public."Notifications"
 --
 
 ALTER TABLE ONLY public."OrdersDetails"
-    ADD CONSTRAINT "OrdersDetails_OrderId_fkey" FOREIGN KEY ("OrderId") REFERENCES public."Orders"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "OrdersDetails_OrderId_fkey" FOREIGN KEY ("OrderId") REFERENCES public."Orders"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1827,7 +2307,7 @@ ALTER TABLE ONLY public."OrdersDetails"
 --
 
 ALTER TABLE ONLY public."OrdersDetails"
-    ADD CONSTRAINT "OrdersDetails_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "OrdersDetails_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1835,7 +2315,7 @@ ALTER TABLE ONLY public."OrdersDetails"
 --
 
 ALTER TABLE ONLY public."Orders"
-    ADD CONSTRAINT "Orders_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE SET NULL;
+    ADD CONSTRAINT "Orders_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1867,15 +2347,7 @@ ALTER TABLE ONLY public."Payments"
 --
 
 ALTER TABLE ONLY public."Payments"
-    ADD CONSTRAINT "Payments_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-
---
--- Name: ProductVariations ProductVariations_ProductId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
---
-
-ALTER TABLE ONLY public."ProductVariations"
-    ADD CONSTRAINT "ProductVariations_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT "Payments_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1924,6 +2396,38 @@ ALTER TABLE ONLY public."Shops"
 
 ALTER TABLE ONLY public."Shops"
     ADD CONSTRAINT "Shops_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."Users"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: SkuAttr SkuAttr_sku_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuAttr"
+    ADD CONSTRAINT "SkuAttr_sku_no_fkey" FOREIGN KEY (sku_no) REFERENCES public."Sku"(sku_no) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: SkuSpecs SkuSpecs_SkuId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SkuSpecs"
+    ADD CONSTRAINT "SkuSpecs_SkuId_fkey" FOREIGN KEY ("SkuId") REFERENCES public."Sku"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: SpuToSku SpuToSku_ProductId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SpuToSku"
+    ADD CONSTRAINT "SpuToSku_ProductId_fkey" FOREIGN KEY ("ProductId") REFERENCES public."Products"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: SpuToSku SpuToSku_sku_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: avnadmin
+--
+
+ALTER TABLE ONLY public."SpuToSku"
+    ADD CONSTRAINT "SpuToSku_sku_no_fkey" FOREIGN KEY (sku_no) REFERENCES public."Sku"(sku_no) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

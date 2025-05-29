@@ -6,17 +6,17 @@ class ShopService{
     static async getShopDetails(slug){
         await repositoryFactory.initialize()
         const ShopRepo = repositoryFactory.getRepository("ShopRepository")
-        console.log(ShopRepo)
         const shop = await ShopRepo.findShopBySlug(slug)
         if(!shop){
             throw new NotFoundError("Shop is not found")
         }
+        console.log(shop.discounts)
         return {
             shop:getInfoData({
                 fields:['id','name','desc','slug','logo','shopLocation','rating','slug'],
                 object:shop
             }),
-            discount:shop.Discounts
+            discount:shop.discounts
         }
     }
 }
