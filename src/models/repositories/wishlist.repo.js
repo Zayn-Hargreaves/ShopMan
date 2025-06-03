@@ -25,6 +25,15 @@ class WishlistRepository {
         }
     }
     async addProductToWishlist(userId,productId){
+        let item = await this.Wishlists.findOne({
+            where:{
+                UserId:userId,
+                ProductId:productId
+            }
+        })
+        if(item){
+            return item
+        }
         return await this.Wishlists.create({
             UserId:userId,
             ProductId:productId

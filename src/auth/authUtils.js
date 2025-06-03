@@ -5,41 +5,41 @@ const { UnauthorizedError } = require('../cores/error.response');
 const RedisService = require("../services/Redis.Service")
 const HEADER = {
     CLIENT_ID: 'x-client-id',
-    AUTHORIZATION:'authorization',
+    AUTHORIZATION: 'authorization',
     REFRESHTOKEN: 'x-rtoken-id'
-}   
+}
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
 const accessSecretKey1 = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey1 = process.env.REFRESH_SECRET_KEY;
-let access 
-let refresh 
+let access
+let refresh
 const createAccessToken = (payload) => {
-    return jwt.sign(payload, Buffer.from(accessSecretKey,'utf-8'), {
+    return jwt.sign(payload, Buffer.from(accessSecretKey, 'utf-8'), {
         algorithm: 'HS256',
         expiresIn: '2h',
     });
 }
 const createRefreshToken = (payload) => {
-    return jwt.sign(payload, Buffer.from(refreshSecretKey,'utf-8'), {
+    return jwt.sign(payload, Buffer.from(refreshSecretKey, 'utf-8'), {
         algorithm: 'HS256',
         expiresIn: '7d',
     });
 }
-const createResetToken = (payload)=>{
-    return jwt.sign(payload, Buffer.from(accessSecretKey,'utf-8'), {
+const createResetToken = (payload) => {
+    return jwt.sign(payload, Buffer.from(accessSecretKey, 'utf-8'), {
         algorithm: 'HS256',
         expiresIn: '15m',
     });
 }
 const createTokenPair = async (payload) => {
     try {
-        
+
         const accessToken = createAccessToken(payload);
         const refreshToken = createRefreshToken(payload);
-        
-        jwt.verify(accessToken,Buffer.from(accessSecretKey,'utf-8'), (err, decode) => {
+
+        jwt.verify(accessToken, Buffer.from(accessSecretKey, 'utf-8'), (err, decode) => {
             if (err) {
                 console.error('error verify::', err);
             } else {
@@ -56,22 +56,22 @@ const verifyJWT = (token, keySecret) => {
     return decoded
 }
 
-const authentication = asyncHandler(async(req, res, next) => {
+const authentication = asyncHandler(async (req, res, next) => {
     const authorization = req.headers[HEADER.AUTHORIZATION];
     let accessToken;
-    if(authorization){
-        accessToken= authorization.split(' ')[1];
+    if (authorization) {
+        accessToken = authorization.split(' ')[1];
     }
 
     const refreshtoken = req.headers[HEADER.REFRESHTOKEN];
-    if(!accessToken && !refreshtoken){
+    if (!accessToken && !refreshtoken) {
         throw new UnauthorizedError('invalid request');
     }
-    if(refreshtoken){
+    if (refreshtoken) {
         try {
-            const {userId,jti} = verifyJWT(refreshtoken, refreshSecretKey);
-            const exists = await RedisService.checkElementExistInRedisBloomFilter("blacklist_token",jti)
-            if(exists) throw new UnauthorizedError("invalid request")
+            const { userId, jti } = verifyJWT(refreshtoken, refreshSecretKey);
+            const exists = await RedisService.checkElementExistInRedisBloomFilter("blacklist_token", jti)
+            if (exists) throw new UnauthorizedError("invalid request")
             req.userId = userId
             req.refreshToken = refreshtoken;
             return next();
@@ -80,12 +80,12 @@ const authentication = asyncHandler(async(req, res, next) => {
             throw new UnauthorizedError('invalid request::');
         }
     }
-    if(accessToken){
+    if (accessToken) {
         try {
-            const {userId,jti} = verifyJWT(accessToken, accessSecretKey);
+            const { userId, jti } = verifyJWT(accessToken, accessSecretKey);
             req.userId = userId
             req.accessToken = accessToken;
-            if(!userId){
+            if (!userId) {
                 throw new UnauthorizedError('invalid request');
             }
             return next();
@@ -95,17 +95,21 @@ const authentication = asyncHandler(async(req, res, next) => {
     }
 })
 
-const optionalAuthentication = asyncHandler (async(req, res, next)=>{
+const optionalAuthentication = asyncHandler(async (req, res, next) => {
     const authorization = req.headers[HEADER.AUTHORIZATION]
     let accessToken
-    if(authorization) accessToken = authorization.split(' ')[1];
-    
-    if(accessToken) {
-        const {userId, jti} = verifyJWT(accessToken,accessSecretKey)
-        if(!userId){
-            throw new UnauthorizedError("invalid request")
+    if (authorization) accessToken = authorization.split(' ')[1];
+
+    if (accessToken) {
+        try {
+            const { userId, jti } = verifyJWT(accessToken, accessSecretKey);
+            if (!userId) {
+                throw new UnauthorizedError('Invalid request');
+            }
+            req.userId = userId;
+        } catch (error) {
+            throw new UnauthorizedError(`Invalid token${error}`);
         }
-        req.userId = userId
     }
     next()
 })
@@ -114,4 +118,4 @@ const optionalAuthentication = asyncHandler (async(req, res, next)=>{
 
 
 
-module.exports = { createTokenPair, authentication, verifyJWT,createAccessToken,createRefreshToken, createResetToken, optionalAuthentication }
+module.exports = { createTokenPair, authentication, verifyJWT, createAccessToken, createRefreshToken, createResetToken, optionalAuthentication }
