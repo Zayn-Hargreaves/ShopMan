@@ -1,4 +1,5 @@
-const { OkResponse } = require("../cores/success.response")
+const { OkResponse } = require("../cores/success.response");
+const CommentService = require("../services/Comment.service");
 const ProductService = require("../services/Product.service")
 class ProductController {
     getProductDetail = async (req, res, next) => {
@@ -42,6 +43,23 @@ class ProductController {
         new OkResponse({
             message: "get new arrivals success",
             metadata: await ProductService.getNewArrivals(parseInt(page), parseInt(limit))
+        }).send(res)
+    }
+    CreateComment = async(req,res,next)=>{
+        const userId = req.userId
+        const productId = req.params.productId
+        const {content, rating, ParentId} = req.body
+        new OkResponse({
+            message:"create comment success",
+            metadata:await CommentService.createComment({userId,productId, content, rating, ParentId})
+        }).send(res)
+    }
+    GetRootComment = async(req, res, next)=>{
+        const productId = req.params.productId
+        const {page, limit} = req.query
+        new OkResponse({
+            message:"get comment success",
+            metadata: await CommentService.getRootComments(productId,page, limit)
         }).send(res)
     }
 }

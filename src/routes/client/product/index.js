@@ -2,7 +2,7 @@ const router = require('express').Router();
 const SearchController = require('../../../controllers/Search.Controller');
 const { asyncHandler } = require('../../../helpers/asyncHandler');
 const ProductController = require('../../../controllers/Product.Controller');
-const {optionalAuthentication} = require("../../../auth/authUtils")
+const {optionalAuthentication, authentication} = require("../../../auth/authUtils")
 /**
  * @swagger
  * components:
@@ -811,5 +811,8 @@ router.get('/all-trending-products', asyncHandler(ProductController.getAllTrendi
 
 router.get("/new-arrivals", asyncHandler(ProductController.getNewArrivals));
 
+router.get("/:productId/comments", asyncHandler(ProductController.GetRootComment))
+
+router.post("/:productId/comments", authentication, asyncHandler(ProductController.CreateComment))
 
 module.exports = router;

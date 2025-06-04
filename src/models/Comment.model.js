@@ -14,6 +14,10 @@ const initializeComments = async (sequelize) => {
         ProductId: {
             type: DataTypes.INTEGER
         },
+        ParentId:{
+            type:DataTypes.INTEGER,
+            defaultValue:null
+        },
         rating: {
             type: DataTypes.INTEGER
         },

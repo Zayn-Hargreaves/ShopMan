@@ -2,7 +2,7 @@ const router = require("express").Router();
 const SearchController = require("../../../controllers/Search.Controller");
 const ShopController = require("../../../controllers/Shop.Controller.js");
 const { asyncHandler } = require("../../../helpers/asyncHandler.js");
-
+const {optionalAuthentication, authentication} = require("../../../auth/authUtils.js")
 /**
  * @swagger
  * /api/v1/shop/{slug}:
@@ -135,5 +135,10 @@ router.get("/:slug", asyncHandler(ShopController.getShopDetails));
  *         description: Không tìm thấy cửa hàng
  */
 router.get("/:slug/product", asyncHandler(SearchController.getProductByShop));
+router.get("/info/:ShopId",optionalAuthentication, asyncHandler(ShopController.getShopInfo))
 
+router.use(authentication)
+    
+router.post("/:ShopId/follow", asyncHandler(ShopController.FollowShop))
+router.delete("/:ShopId/follow", asyncHandler(ShopController.UnfollowShop))
 module.exports = router;

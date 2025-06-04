@@ -27,6 +27,30 @@ class ShopController {
             })
         }).send(res);
     }
+    getShopInfo = async(req, res, next)=>{
+        const ShopId = req.params.ShopId
+        const userId = req.userId
+        new OkResponse({
+            message: "get shop info success",
+            metadata : await ShopService.getShopInfo(ShopId, userId)
+        }).send(res)
+    }
+    FollowShop = async(req, res, next)=>{
+        const ShopId = req.params.ShopId
+        const userId = req.userId
+        new OkResponse({
+            message:"user follow shop successfull",
+            metadata: await ShopService.followShop(userId,ShopId)
+        }).send(res)
+    }
+    UnfollowShop = async(req, res, next)=>{
+        const ShopId = req.params.ShopId
+        const userId = req.userId
+        new OkResponse({
+            message:" user unfollow shop successfull",
+            metadata: await ShopService.unfollowShop(userId,ShopId)
+        }).send(res)
+    }
 }
 
 module.exports = new ShopController()

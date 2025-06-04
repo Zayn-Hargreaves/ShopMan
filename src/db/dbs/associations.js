@@ -91,6 +91,15 @@ const initializeModels = async () => {
             as: "parent",
             foreignKey: { name: "ParentId", onDelete: "CASCADE" } // Đặt trong foreignKey
         });
+        Comment.hasMany(Comment, {
+            as: "children",
+            foreignKey: { name: "ParentId", onDelete: "CASCADE" }, // Đặt trong foreignKey
+            inverse: { as: "parent" }
+        });
+        Comment.belongsTo(Comment, {
+            as: "parent",
+            foreignKey: { name: "ParentId", onDelete: "CASCADE" } // Đặt trong foreignKey
+        });
 
         // Quan hệ User - Comment (1-n)
         User.hasMany(Comment, { foreignKey: { name: "UserId", allowNull: false }, as: "comments" });

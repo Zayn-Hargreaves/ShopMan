@@ -13,7 +13,10 @@ const OrderRepository = require("./order.repo")
 const InventoryRepository = require("./inventory.repo")
 const PaymentRepository = require("./payment.repo")
 const NotificationRepository = require("./notification.repo")
+
 const initializeModels = require("../../db/dbs/associations")
+const FollowRepository = require("./follow.repo")
+const CommentRepository = require("./comment.repo")
 
 class RepositoryFactory {
     constructor() {
@@ -41,7 +44,9 @@ class RepositoryFactory {
                 OrderRepository: new OrderRepository(this.models),
                 InventoryRepository: new InventoryRepository(this.models),
                 PaymentRepository: new PaymentRepository(this.models),
-                NotificationRepository: new NotificationRepository(this.models)
+                NotificationRepository: new NotificationRepository(this.models),
+                FollowRepository: new FollowRepository(this.models),
+                CommentRepository: new CommentRepository(this.models)
             };
         }
     }

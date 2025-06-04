@@ -252,8 +252,39 @@ class RedisService {
       await redis.expire(hashKey, ttl);
     }
   }
-
-
+  static async addToSet(key, member) {
+    const redis = await getRedis();
+    return await redis.sadd(key, member);
+  }
+  static async addManyToSet(key, members = []) {
+    if (!Array.isArray(members) || members.length === 0) return 0;
+    const redis = await getRedis();
+    return await redis.sadd(key, ...members);
+  }
+  static async isMemberOfSet(key, member) {
+    const redis = await getRedis();
+    return await redis.sismember(key, member);
+  }
+  static async getAllMembersFromSet(key) {
+    const redis = await getRedis();
+    return await redis.smembers(key);
+  }
+  static async getRandomMembersFromSet(key, count = 10) {
+    const redis = await getRedis();
+    return await redis.srandmember(key, count);
+  }
+  static async removeFromSet(key, member) {
+    const redis = await getRedis();
+    return await redis.srem(key, member);
+  }
+  static async getSetCardinality(key) {
+    const redis = await getRedis();
+    return await redis.scard(key);
+  }
+  static async scanSet(key, cursor = 0, count = 100) {
+    const redis = await getRedis();
+    return await redis.sscan(key, cursor, "COUNT", count);
+  }
 }
 
 module.exports = RedisService;

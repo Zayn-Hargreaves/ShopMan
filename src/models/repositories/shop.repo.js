@@ -17,12 +17,18 @@ class ShopRepository {
             }
         })
     }
+    async findShopByPk(ShopId){
+        if(!ShopId){
+            throw NotFoundError("Shop not found")
+        }
+        return await this.Shop.findByPk(ShopId)
+    }
 
     async findShopBySlug(slug) {
         if (!slug) throw new NotFoundError("Shop not found");
         const shop = await this.Shop.findOne({
             where: {
-                slug: 'muuv_it',
+                slug: slug,
                 status: 'active'
             },
             include: [
