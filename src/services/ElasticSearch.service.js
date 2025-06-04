@@ -8,6 +8,7 @@ class ElasticSearchService {
         query,
         minPrice,
         maxPrice,
+        CategoryId,
         CategorySlug,
         ShopSlug,
         sortBy = null,
@@ -44,6 +45,8 @@ class ElasticSearchService {
             if (!category) throw new Error("Category not found");
 
             categoryIds = await CategoryRepo.getAllDescendantCategoryIds(category.id);
+        }else if(CategoryId){
+            categoryIds = await CategoryRepo.getAllDescendantCategoryIds(CategoryId);
         }
         const filters = {
             minPrice: minPrice !== undefined ? Number(minPrice) : undefined,

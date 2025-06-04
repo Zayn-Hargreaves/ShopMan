@@ -45,6 +45,22 @@ class SearchController {
             })
         }).send(res);
     }
+    getProductByCategoryId = async (req, res, next) => {
+        const CategoryId = req.params.CategoryId
+        const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
+        new OkResponse({
+            message: "Get products by category successfully",
+            metadata: await ElasticSearchService.searchProducts({
+                CategoryId:CategoryId,
+                minPrice: minPrice ? Number(minPrice) : undefined,
+                maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                sortBy: sortBy ? JSON.parse(sortBy) : undefined,
+                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
+                pageSize: pageSize ? Number(pageSize) : undefined,
+                isAndroid: isAndroid === 'true'
+            })
+        }).send(res);
+    }
 
     getProductByShop = async (req, res, next) => {
         const { slug } = req.params;
@@ -52,15 +68,15 @@ class SearchController {
         new OkResponse({
             message: "Get products by shop successfully",
             metadata: await ElasticSearchService.searchProducts({
-                query:undefined,
-                minPrice:minPrice ? Number(minPrice) : undefined,
-                maxPrice:maxPrice ? Number(maxPrice) : undefined,
-                CategorySlug:undefined,
-                ShopSlug:slug,
-                sortBy : sortBy ? JSON.parse(sortBy) : undefined,
-                lastSortValues : lastSortValues ? JSON.parse(lastSortValues) : undefined,
-                pageSize : pageSize ? Number(pageSize) : undefined,
-                isAndroid : isAndroid === 'true'
+                query: undefined,
+                minPrice: minPrice ? Number(minPrice) : undefined,
+                maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                CategorySlug: undefined,
+                ShopSlug: slug,
+                sortBy: sortBy ? JSON.parse(sortBy) : undefined,
+                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
+                pageSize: pageSize ? Number(pageSize) : undefined,
+                isAndroid: isAndroid === 'true'
             })
         }).send(res);
     }

@@ -99,7 +99,6 @@ const optionalAuthentication = asyncHandler(async (req, res, next) => {
     const authorization = req.headers[HEADER.AUTHORIZATION]
     let accessToken
     if (authorization) accessToken = authorization.split(' ')[1];
-
     if (accessToken) {
         try {
             const { userId, jti } = verifyJWT(accessToken, accessSecretKey);

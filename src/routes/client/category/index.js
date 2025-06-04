@@ -140,5 +140,5 @@ router.get("/", asyncHandler(categoryController.getAllCategoriesNoParent));
  *         description: Không tìm thấy category
  */
 router.get('/:slug/product', asyncHandler(SearchController.getProductByCategory));
-
+router.get("/:CategoryId/related-product", asyncHandler(SearchController.getProductByCategoryId))
 module.exports = router;

@@ -60,8 +60,9 @@ class ShopService {
 
         await FollowRepo.createFollow(userId, shopId);
 
-        await RedisService.addToSet(`user:follow:${userId}`, `${shopId}`);
-        await RedisService.addToSet(`shop:followers:${shopId}`, `${userId}`);
+        const tmp1=await RedisService.addToSet(`user:follow:${userId}`, `${shopId}`);
+        const tmp2= await RedisService.addToSet(`shop:followers:${shopId}`, `${userId}`);
+        console.log(tmp1,tmp2)
         return { success: true, message: "Followed successfully" };
     }
 
