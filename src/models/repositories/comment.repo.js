@@ -2,17 +2,18 @@ const { Op } = require("sequelize")
 class CommentRepository {
     constructor(models) {
         this.Comment = models.Comment;
+        this.Product = models.Products
     }
 
     async findById(commentId) {
         return await this.Comment.findByPk(commentId);
     }
 
-    async createNestedComment({ userId, productId, content, rating, ParentId }) {
+    async createNestedComment({ userId, productId, content, rating, parentId }) {
         return await this.Comment.sequelize.transaction(async (t) => {
             let left, right;
 
-            if (!ParentId) {
+            if (!parentId) {
                 const maxRight = await this.Comment.max("right", {
                     where: { ProductId: productId },
                     transaction: t
@@ -21,7 +22,7 @@ class CommentRepository {
                 left = maxRight + 1;
                 right = maxRight + 2;
             } else {
-                const parent = await this.Comment.findByPk(ParentId, { transaction: t });
+                const parent = await this.Comment.findByPk(parentId, { transaction: t });
                 if (!parent) throw new Error("Parent comment not found");
 
                 await this.Comment.update(
@@ -50,15 +51,38 @@ class CommentRepository {
                 right = parent.right + 1;
             }
 
-            return await this.Comment.create({
+            const newComment = await this.Comment.create({
                 UserId: userId,
                 ProductId: productId,
-                ParentId,
+                parentId,
                 content,
                 rating,
                 left,
                 right
             }, { transaction: t });
+
+            // ✅ Nếu là bình luận cấp 1 có rating → cập nhật lại rating sản phẩm
+            if (!parentId && rating !== null) {
+                const avgResult = await this.Comment.findOne({
+                    attributes: [[this.Comment.sequelize.fn('AVG', this.Comment.sequelize.col('rating')), 'avgRating']],
+                    where: {
+                        ProductId: productId,
+                        parentId: null,
+                        rating: { [Op.ne]: null }
+                    },
+                    raw: true,
+                    transaction: t
+                });
+
+                const avgRating = parseFloat(avgResult.avgRating || 0).toFixed(2);
+
+                await this.Product.update(
+                    { rating: avgRating },
+                    { where: { id: productId }, transaction: t }
+                );
+            }
+
+            return newComment;
         });
     }
 
