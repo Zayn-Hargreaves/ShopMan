@@ -4,10 +4,10 @@ const CommentService = require("../services/Comment.service")
 class CommentController {
     getCommentReply = async (req, res, next) => {
         const id = req.params.id
-        const limit = req.query.limit
+        const {page,limit} = req.query
         new OkResponse({
             message:"get replies comments",
-            metadata: await CommentService.getReplies(id,limit)
+            metadata: await CommentService.getReplies(id,page,limit)
         }).send(res)
     }
     deleteCommentByUser = async(req, res, next)=>{

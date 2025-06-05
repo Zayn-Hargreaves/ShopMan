@@ -17,10 +17,10 @@ class CommentService {
         return await CommentRepo.findRootComments(productId, page, limit);
     }
 
-    static async getReplies(parentCommentId, limit = 10) {
+    static async getReplies(parentCommentId, page = 1, limit = 10) {
         await repositoryFactory.initialize();
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
-        return await CommentRepo.findReplies(parentCommentId, limit);
+        return await CommentRepo.findReplies(parentCommentId, page,limit);
     }
 
     static async updateComment(commentId, userId, newContent) {
