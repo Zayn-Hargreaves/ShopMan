@@ -811,7 +811,7 @@ router.get('/all-trending-products', asyncHandler(ProductController.getAllTrendi
 
 router.get("/new-arrivals", asyncHandler(ProductController.getNewArrivals));
 
-router.get("/:productId/comments", asyncHandler(ProductController.GetRootComment))
+router.get("/:productId/comments", optionalAuthentication,asyncHandler(ProductController.GetRootComment))
 
 router.post("/:productId/comments", authentication, asyncHandler(ProductController.CreateComment))
 

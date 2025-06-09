@@ -57,10 +57,11 @@ class ProductController {
     }
     GetRootComment = async(req, res, next)=>{
         const productId = req.params.productId
-        const {page, limit} = req.query
+        const userId = req.userId
+        const {cursor, limit} = req.query
         new OkResponse({
             message:"get comment success",
-            metadata: await CommentService.getRootComments(productId,page, limit)
+            metadata: await CommentService.getRootComments(productId,cursor, limit,userId)
         }).send(res)
     }
 }

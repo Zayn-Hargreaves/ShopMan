@@ -11,16 +11,17 @@ class CommentService {
         return await CommentRepo.createNestedComment({ userId, productId, content, rating, ParentId });
     }
 
-    static async getRootComments(productId, page = 1, limit = 10) {
+    static async getRootComments(productId, cursor , limit = 10, userId = null) {
         await repositoryFactory.initialize();
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
-        return await CommentRepo.findRootComments(productId, page, limit);
+        return await CommentRepo.findRootComments(productId, cursor, limit, userId)
+        
     }
 
-    static async getReplies(parentCommentId, page = 1, limit = 10) {
+    static async getReplies(parentCommentId, cursor, limit = 10, userId= null) {
         await repositoryFactory.initialize();
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
-        return await CommentRepo.findReplies(parentCommentId, page,limit);
+        return await CommentRepo.findReplies(parentCommentId, cursor,limit,userId);
     }
 
     static async updateComment(commentId, userId, newContent) {

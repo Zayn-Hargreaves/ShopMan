@@ -1,6 +1,7 @@
 const { includes } = require("lodash");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { getSelectData } = require("../../utils");
+const { NotFoundError } = require("../../cores/error.response");
 class CommentRepository {
     constructor(models) {
         this.Comment = models.Comment;
@@ -88,47 +89,88 @@ class CommentRepository {
     }
 
 
-    async findRootComments(productId, page, limit) {
-        const offset = (page - 1) * limit;
-        console.log(typeof (this.User))
-        const { count, rows } = await this.Comment.findAndCountAll({
-            where: { ProductId: productId, ParentId: null },
-            include: {
-                model: this.User,
-                attributes: getSelectData(['id', 'name', 'avatar']),
-                as: "user"
-            },
-            order: [['left', 'ASC']],
-            limit,
-            offset
-        });
-        return {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page),
-            comments: rows
+    async findRootComments(productId, cursor, limit, userId) {
+        const whereClause = {ProductId:productId, ParentId:null}
+        if(cursor){
+            const cursorDate= new Date(cursor)
+            whereClause.createdAt = {[Op.lte]: cursorDate}
         }
+        const comments = await this.Comment.findAll({
+            where:whereClause,
+            include:{
+                model:this.User,
+                attributes:getSelectData(['id', 'name','avatar']),
+                as:'user'
+            },
+            limit:limit+1,
+            order:[['createdAt','DESC'],['id', "DESC"]],
+            attributes:getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId'])
+        })
+        const hasMore = comments.length > limit;
+        if (hasMore) comments.pop();
+        const resultComments = comments.map(comment=>{
+            const isOwner = userId !== null && comment.UserId === userId
+            const isEditable = isOwner
+            const isDeletable = isOwner
+            return {
+                ...comment.toJSON(),
+                isEditable,
+                isDeletable
+            }
+        })
+        const result = {
+            totalItems: await this.Comment.count({ where: { ProductId: productId, ParentId: null } }),
+            comments: resultComments,
+            nextCursor: hasMore ? comments[comments.length - 1].createdAt : null
+        };
+        return result
     }
 
-    async findReplies(parentId, page,limit) {
-        const offset = (page - 1) * limit
-    
-        const {count, rows} = await this.Comment.findAndCountAll({
-            where: { ParentId: parentId },
+    async findReplies(parentId, cursor ,limit, userId) {
+        const parent = await this.Comment.findByPk(parentId)
+        if(!parent){
+            throw NotFoundError("Comment not found")
+        }
+        const whereClause = {
+            left: { [Op.between]: [parent.left, parent.right] },
+            right: { [Op.between]: [parent.left, parent.right] }
+        };
+        if (cursor) {
+            const cursorDate = new Date(cursor);
+            whereClause.createdAt = { [Op.lt]: cursorDate };
+        }
+        const replies = await this.Comment.findAll({
+            where: whereClause,
             include: {
                 model: this.User,
                 attributes: getSelectData(['id', 'name', 'avatar']),
                 as: "user"
             },
-            order: [['left', 'ASC']],
-            offset
+            order: [['left', 'ASC'],['id','DESC']],
+            limit:limit + 1,
+            attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId'])
         });
-        return {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page),
-            comments: rows
-        }
+        const hasMore = replies.length > limit;
+        if (hasMore) replies.pop();
+
+        const resultReplies = replies.map(reply => {
+            const isOwner = userId !== null && reply.UserId === userId;
+            const isEditable = isOwner 
+            const isDeletable = isOwner; 
+
+            return {
+                ...reply.toJSON(),
+                isEditable,
+                isDeletable
+            };
+        });
+
+        const result = {
+            totalItems: await this.Comment.count({ where: whereClause }),
+            comments: resultReplies,
+            nextCursor: hasMore ? replies[replies.length - 1].createdAt : null
+        };
+        return result
     }
 
     async updateCommentContent(commentId, newContent) {
