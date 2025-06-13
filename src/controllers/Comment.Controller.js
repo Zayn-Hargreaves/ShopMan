@@ -22,10 +22,11 @@ class CommentController {
     updateCommentByUser = async(req, res, next)=>{
         const id = req.params.id
         const userId = req.userId
-        const newContent = req.body.content 
+        const {content, image_urls, rating} = req.body
+        console.log(req.body)
         new OkResponse({
             message:"update message success",
-            metadata: await CommentService.updateComment(id,userId, newContent)
+            metadata: await CommentService.updateComment(id,userId, content,image_urls)
         }).send(res)
     }
 }

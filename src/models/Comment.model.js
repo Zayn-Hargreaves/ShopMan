@@ -16,7 +16,7 @@ const initializeComments = async (sequelize) => {
         },
         ParentId:{
             type:DataTypes.INTEGER,
-            defaultValue:null
+            allowNull: true,
         },
         rating: {
             type: DataTypes.INTEGER
@@ -24,6 +24,10 @@ const initializeComments = async (sequelize) => {
         content: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        image_urls:{
+            type:DataTypes.JSONB,
+            defaultValue: []
         },
         left: {
             type: DataTypes.INTEGER,

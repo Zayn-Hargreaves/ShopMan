@@ -91,14 +91,20 @@ const initializeModels = async () => {
             as: "parent",
             foreignKey: { name: "ParentId", onDelete: "CASCADE" } // Đặt trong foreignKey
         });
+        // Một bình luận có thể có nhiều bình luận con
         Comment.hasMany(Comment, {
-            as: "children",
-            foreignKey: { name: "ParentId", onDelete: "CASCADE" }, // Đặt trong foreignKey
-            inverse: { as: "parent" }
+            as: 'children',
+            foreignKey: 'ParentId',
+            onDelete: 'CASCADE',
+            hooks: true
         });
+
+        // Một bình luận con thuộc về 1 cha
         Comment.belongsTo(Comment, {
-            as: "parent",
-            foreignKey: { name: "ParentId", onDelete: "CASCADE" } // Đặt trong foreignKey
+            as: 'parent',
+            foreignKey: 'ParentId',
+            onDelete: 'CASCADE',
+            hooks: true
         });
 
         // Quan hệ User - Comment (1-n)
@@ -249,18 +255,18 @@ const initializeModels = async () => {
             foreignKey: 'sku_no',
             targetKey: 'sku_no',
             as: 'Sku',
-            constraints: false,             
-            foreignKeyConstraints: false    
-          });
-          
-          Sku.hasMany(CartDetails, {
+            constraints: false,
+            foreignKeyConstraints: false
+        });
+
+        Sku.hasMany(CartDetails, {
             foreignKey: 'sku_no',
             sourceKey: 'sku_no',
             as: 'CartItems',
             constraints: false,
             foreignKeyConstraints: false
-          });
-          
+        });
+
 
         await sequelize.sync();
 

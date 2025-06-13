@@ -12,8 +12,18 @@ class CommentRepository {
     async findById(commentId) {
         return await this.Comment.findByPk(commentId);
     }
+    async findCommentAndUser(commentId){
+        return await this.Comment.findByPk(commentId,{
+            include: {
+                model: this.User,
+                attributes: getSelectData(['id', 'name', 'avatar']),
+                as: 'user'
+            },
+            attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId', 'image_urls'])
+        })
+    }
 
-    async createNestedComment({ userId, productId, content, rating, ParentId }) {
+    async createNestedComment({ userId, productId, content, rating, ParentId, image_urls }) {
         return await this.Comment.sequelize.transaction(async (t) => {
             let left, right;
             if (!ParentId) {
@@ -58,6 +68,7 @@ class CommentRepository {
                 UserId: userId,
                 ProductId: productId,
                 ParentId: ParentId,
+                image_urls: image_urls,
                 content,
                 rating,
                 left,
@@ -83,32 +94,33 @@ class CommentRepository {
                     { where: { id: productId }, transaction: t }
                 );
             }
+            
 
-            return newComment;
+            return newComment
         });
     }
 
 
     async findRootComments(productId, cursor, limit, userId) {
-        const whereClause = {ProductId:productId, ParentId:null}
-        if(cursor){
-            const cursorDate= new Date(cursor)
-            whereClause.createdAt = {[Op.lte]: cursorDate}
+        const whereClause = { ProductId: productId, ParentId: null }
+        if (cursor) {
+            const cursorDate = new Date(cursor)
+            whereClause.createdAt = { [Op.lte]: cursorDate }
         }
         const comments = await this.Comment.findAll({
-            where:whereClause,
-            include:{
-                model:this.User,
-                attributes:getSelectData(['id', 'name','avatar']),
-                as:'user'
+            where: whereClause,
+            include: {
+                model: this.User,
+                attributes: getSelectData(['id', 'name', 'avatar']),
+                as: 'user'
             },
-            limit:limit+1,
-            order:[['createdAt','DESC'],['id', "DESC"]],
-            attributes:getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId'])
+            limit: limit + 1,
+            order: [['createdAt', 'DESC'], ['id', "DESC"]],
+            attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId', 'image_urls'])
         })
         const hasMore = comments.length > limit;
         if (hasMore) comments.pop();
-        const resultComments = comments.map(comment=>{
+        const resultComments = comments.map(comment => {
             const isOwner = userId !== null && comment.UserId === userId
             const isEditable = isOwner
             const isDeletable = isOwner
@@ -126,9 +138,9 @@ class CommentRepository {
         return result
     }
 
-    async findReplies(parentId, cursor ,limit, userId) {
+    async findReplies(parentId, cursor, limit, userId) {
         const parent = await this.Comment.findByPk(parentId)
-        if(!parent){
+        if (!parent) {
             throw NotFoundError("Comment not found")
         }
         const whereClause = {
@@ -146,8 +158,8 @@ class CommentRepository {
                 attributes: getSelectData(['id', 'name', 'avatar']),
                 as: "user"
             },
-            order: [['left', 'ASC'],['id','DESC']],
-            limit:limit + 1,
+            order: [['left', 'ASC'], ['id', 'DESC']],
+            limit: limit + 1,
             attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId'])
         });
         const hasMore = replies.length > limit;
@@ -155,8 +167,8 @@ class CommentRepository {
 
         const resultReplies = replies.map(reply => {
             const isOwner = userId !== null && reply.UserId === userId;
-            const isEditable = isOwner 
-            const isDeletable = isOwner; 
+            const isEditable = isOwner
+            const isDeletable = isOwner;
 
             return {
                 ...reply.toJSON(),
@@ -173,9 +185,13 @@ class CommentRepository {
         return result
     }
 
-    async updateCommentContent(commentId, newContent) {
+    async updateCommentContent(commentId, newContent, image_urls, rating) {
+
         return await this.Comment.update(
-            { content: newContent },
+            {
+                content: newContent,
+                image_urls: image_urls,
+            },
             { where: { id: commentId } }
         );
     }
