@@ -48,10 +48,10 @@ class ProductController {
     CreateComment = async(req,res,next)=>{
         const userId = req.userId
         const productId = req.params.productId
-        const {content, rating, ParentId,image_urls} = req.body
+        const {content, rating, parentId,image_urls} = req.body
         new OkResponse({
             message:"create comment success",
-            metadata:await CommentService.createComment({userId,productId, content, rating, ParentId,image_urls})
+            metadata:await CommentService.createComment({userId,productId, content, rating, parentId,image_urls})
         }).send(res)
     }
     GetRootComment = async(req, res, next)=>{

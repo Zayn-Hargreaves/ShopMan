@@ -4,10 +4,10 @@ const repositoryFactory = require("../models/repositories/repositoryFactory.js")
 const { Op } = require("sequelize")
 
 class CommentService {
-    static async createComment({ userId, productId, content, rating = null, ParentId = null,image_urls= null }) {
+    static async createComment({ userId, productId, content, rating = null, parentId = null,image_urls= null }) {
         await repositoryFactory.initialize();
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
-        const comment = await CommentRepo.createNestedComment({ userId, productId, content, rating, ParentId,image_urls });
+        const comment = await CommentRepo.createNestedComment({ userId, productId, content, rating, parentId,image_urls });
         const rawComment = (await CommentRepo.findCommentAndUser(comment.id)).toJSON()
         rawComment.isDeletable=true
         rawComment.isEditable=true

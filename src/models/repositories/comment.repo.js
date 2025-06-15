@@ -23,10 +23,10 @@ class CommentRepository {
         })
     }
 
-    async createNestedComment({ userId, productId, content, rating, ParentId, image_urls }) {
+    async createNestedComment({ userId, productId, content, rating, parentId, image_urls }) {
         return await this.Comment.sequelize.transaction(async (t) => {
             let left, right;
-            if (!ParentId) {
+            if (!parentId) {
                 const maxRight = await this.Comment.max("right", {
                     where: { ProductId: productId },
                     transaction: t
@@ -35,7 +35,7 @@ class CommentRepository {
                 left = maxRight + 1;
                 right = maxRight + 2;
             } else {
-                const parent = await this.Comment.findByPk(ParentId, { transaction: t });
+                const parent = await this.Comment.findByPk(parentId, { transaction: t });
                 if (!parent) throw new Error("Parent comment not found");
 
                 await this.Comment.update(
@@ -67,7 +67,7 @@ class CommentRepository {
             const newComment = await this.Comment.create({
                 UserId: userId,
                 ProductId: productId,
-                ParentId: ParentId,
+                ParentId: parentId,
                 image_urls: image_urls,
                 content,
                 rating,
