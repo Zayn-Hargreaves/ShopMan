@@ -144,8 +144,8 @@ class CommentRepository {
             throw NotFoundError("Comment not found")
         }
         const whereClause = {
-            left: { [Op.between]: [parent.left, parent.right] },
-            right: { [Op.between]: [parent.left, parent.right] }
+            left: { [Op.between]: [parent.left+1, parent.right-1] },
+            right: { [Op.between]: [parent.left+1, parent.right-1] }
         };
         if (cursor) {
             const cursorDate = new Date(cursor);
