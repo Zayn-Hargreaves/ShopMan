@@ -49,6 +49,7 @@ class ProductController {
         const userId = req.userId
         const productId = req.params.productId
         const {content, rating, parentId,image_urls} = req.body
+        console.log(req.body)
         new OkResponse({
             message:"create comment success",
             metadata:await CommentService.createComment({userId,productId, content, rating, parentId,image_urls})

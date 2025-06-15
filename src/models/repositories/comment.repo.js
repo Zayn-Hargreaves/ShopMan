@@ -75,7 +75,7 @@ class CommentRepository {
                 right
             }, { transaction: t });
 
-            if (!ParentId && rating !== null) {
+            if (!parentId && rating !== null) {
                 const avgResult = await this.Comment.findOne({
                     attributes: [[this.Comment.sequelize.fn('AVG', this.Comment.sequelize.col('rating')), 'avgRating']],
                     where: {
