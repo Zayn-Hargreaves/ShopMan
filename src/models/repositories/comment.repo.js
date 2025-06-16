@@ -160,7 +160,7 @@ class CommentRepository {
             },
             order: [['left', 'ASC'], ['id', 'DESC']],
             limit: limit + 1,
-            attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId'])
+            attributes: getSelectData(['id', 'UserId', 'content', 'rating', 'createdAt', 'left', 'right', 'ParentId','image_urls'])
         });
         const hasMore = replies.length > limit;
         if (hasMore) replies.pop();
