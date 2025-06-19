@@ -56,7 +56,7 @@ const {optionalAuthentication, authentication} = require("../../../auth/authUtil
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/:slug", asyncHandler(ShopController.getShopDetails));
+router.get("/:slug", optionalAuthentication,asyncHandler(ShopController.getShopDetails));
 
 /**
  * @swagger

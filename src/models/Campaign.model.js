@@ -16,6 +16,10 @@ const initializeCampaign = async (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        thumb: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         start_time: {
             type: DataTypes.DATE,
             allowNull: false

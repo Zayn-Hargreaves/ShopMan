@@ -35,6 +35,10 @@ const initializeShop = async (sequelize) => {
         logo: {
             type: DataTypes.STRING
         },
+        thumb: {
+            type: DataTypes.STRING,
+            allowNull:true
+        },
         shopLocation: {
             type: DataTypes.STRING
         },

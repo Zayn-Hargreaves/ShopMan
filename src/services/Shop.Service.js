@@ -4,19 +4,31 @@ const ShopRepo = require("../models/repositories/shop.repo.js")
 const repositoryFactory = require("../models/repositories/repositoryFactory.js")
 const RedisService = require("./Redis.Service.js")
 class ShopService {
-    static async getShopDetails(slug) {
+    static async getShopDetails(userId,slug) {
         await repositoryFactory.initialize()
         const ShopRepo = repositoryFactory.getRepository("ShopRepository")
         const shop = await ShopRepo.findShopBySlug(slug)
         if (!shop) {
             throw new NotFoundError("Shop is not found")
         }
+        let isFollowing = false
+        try {
+            const result = await RedisService.isMemberOfSet(`user:follow:${userId}`, `${ShopId}`);
+            isFollowing = result === 1
+        } catch (error) {
+            console.warn(`[Redis] Failed to check follow status, fallback to DB::${error}`,);
+            const FollowRepo = repositoryFactory.getRepository("FollowRepository");
+            if(userId){
+                isFollowing = await FollowRepo.CheckUserFollow(userId, ShopId);
+            }
+        }
         return {
             shop: getInfoData({
-                fields: ['id', 'name', 'desc', 'slug', 'logo', 'shopLocation', 'rating', 'slug'],
+                fields: ['id', 'name', 'desc', 'slug', 'logo','thumb', 'shopLocation', 'rating', 'slug'],
                 object: shop
             }),
-            discount: shop.discounts
+            discount: shop.discounts,
+            isFollowing
         }
     }
     static async getShopInfo(ShopId, userId) {
@@ -40,7 +52,7 @@ class ShopService {
         }
         return {
             shop: getInfoData({
-                fields: ['id', 'name', 'slug', 'status', 'logo', 'desc', 'rating'],
+                fields: ['id', 'name', 'slug', 'status', 'logo','thumb', 'desc', 'rating'],
                 object: shop
             }),
             isFollowing

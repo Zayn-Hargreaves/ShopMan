@@ -4,10 +4,10 @@ const ShopService = require("../services/Shop.Service")
 class ShopController {
     getShopDetails = async (req, res, next) => {
         const slug = req.params.slug
-        console.log(slug)
+        const userId = req.userId
         new OkResponse({
             message: "get shop details sucess",
-            metadata: await ShopService.getShopDetails(slug)
+            metadata: await ShopService.getShopDetails(userId,slug)
         }).send(res)
     }
     getProductShop = async (req, res, next) => {
