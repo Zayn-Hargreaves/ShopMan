@@ -13,13 +13,13 @@ class ShopService {
         }
         let isFollowing = false
         try {
-            const result = await RedisService.isMemberOfSet(`user:follow:${userId}`, `${ShopId}`);
+            const result = await RedisService.isMemberOfSet(`user:follow:${userId}`, `${shop.id}`);
             isFollowing = result === 1
         } catch (error) {
             console.warn(`[Redis] Failed to check follow status, fallback to DB::${error}`,);
             const FollowRepo = repositoryFactory.getRepository("FollowRepository");
             if(userId){
-                isFollowing = await FollowRepo.CheckUserFollow(userId, ShopId);
+                isFollowing = await FollowRepo.CheckUserFollow(userId, shop.Id);
             }
         }
         return {

@@ -8,7 +8,7 @@ class CampaignService {
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         const cacheKey = `campaign:slug:${slug}`
         let campaign
-        campaign = await RedisService.getCachedData(cacheKey)
+        // campaign = await RedisService.getCachedData(cacheKey)
         if(!campaign){
             campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
             if(!campaign){

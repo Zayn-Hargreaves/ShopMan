@@ -14,7 +14,6 @@ class CampaignRepository {
         if (!slug) {
             throw new Error("Slug is required");
         }
-        
         const campaign = await this.Campaign.findOne({
             where: {
                 slug: slug,
