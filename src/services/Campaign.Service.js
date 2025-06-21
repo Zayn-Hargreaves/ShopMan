@@ -20,20 +20,20 @@ class CampaignService {
         }
         return {
             campaign:getInfoData({
-                fields:['id', 'title', 'slug', 'description','start_time','end_time'],
+                fields:['id', 'title', 'slug', 'description','thumb','start_time','end_time'],
                 object:campaign
             }),
             discount:campaign.discount,
         }
     } 
-    static async getProductsByCampaignSlug(slug, page = 1, limit = 10){
+    static async getProductsByCampaignSlug(slug, limit = 10, lastId){
         await RepositoryFactory.initialize()
-        const cacheKey = `campaign:slug:${slug}:product:page:${page}:limit:${limit}`
+        const cacheKey = `campaign:slug:${slug}:product:limit:${limit}:lastId${lastId}`
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         let result 
         result = await RedisService.getCachedData(cacheKey)
         if(!result){
-            result = await CampaignRepo.findProductsByCampaignSlug(slug, page, limit)
+            result = await CampaignRepo.findProductsByCampaignSlug(slug, limit, lastId)
             if(!result){
                 await RedisService.cacheData(cacheKey, {}, 600)
                 throw new NotFoundError("Campaign not found or ended");

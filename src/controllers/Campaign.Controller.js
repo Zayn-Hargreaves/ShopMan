@@ -12,16 +12,16 @@ class CampaignController {
     }
     getCampaignProduct = async (req, res, next) => {
         const slug = req.params.slug;
-        const { page, limit } = req.query;
+        const { limit, lastId } = req.query;
 
-        const parsedPage = parseInt(page) || 1;
+        const parsedLastId = parseInt(lastId) || 1;
         const parsedLimit = parseInt(limit) || 10;
-        const validPage = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
+        const validParsedLastId = isNaN(parsedLastId) || parsedLastId < 1 ? 1 : parsedLastId;
         const validLimit = isNaN(parsedLimit) || parsedLimit < 1 ? 10 : parsedLimit;
 
         new OkResponse({
             message: "get product campaign success",
-            metadata: await CampaignService.getProductsByCampaignSlug(slug, validPage, validLimit),
+            metadata: await CampaignService.getProductsByCampaignSlug(slug,validLimit, validParsedLastId),
         }).send(res);
     };
 }
