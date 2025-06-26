@@ -1,6 +1,7 @@
 const { OkResponse } = require("../cores/success.response");
 const CommentService = require("../services/Comment.service");
 const ProductService = require("../services/Product.service")
+const ElasticSearchService = require("../services/ElasticSearch.service")
 class ProductController {
     getProductDetail = async (req, res, next) => {
         const { slug } = req.params
@@ -11,26 +12,24 @@ class ProductController {
         }).send(res)
     }
     getDealOfTheDay = async (req, res, next) => {
-        const { page, limit } = req.query
+        const { cursor, limit, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy } = req.query;
         new OkResponse({
             message: "get deal of the day success",
-            metadata: await ProductService.getDealOfTheDayProducts(parseInt(page), parseInt(limit))
-        }).send(res)
+            metadata: await ProductService.getDealOfTheDayProducts(
+                cursor,
+                parseInt(limit),
+                categoryId,
+                minPrice,
+                maxPrice,
+                minRating,
+                hasDiscount,
+                minStock,
+                sortBy
+            )
+        }).send(res);
     }
-    getAllDealProduct = async (req, res, next) => {
-        const { page, limit } = req.query
-        new OkResponse({
-            message: 'get all deal product success',
-            metadata: await ProductService.getAllDealProducts(parseInt(page), parseInt(limit))
-        }).send(res)
-    }
+
     getTrendingProducts = async (req, res, next) => {
-        new OkResponse({
-            message: "get trending products success",
-            metadata: await ProductService.getTrendingProduct()
-        }).send(res)
-    }
-    getAllTrendingProducts = async (req, res, next) => {
         const { cursorScore = "+inf", limit = 10 } = req.query;
         new OkResponse({
             message: "get trending products by cursor success",
@@ -39,29 +38,36 @@ class ProductController {
     }
 
     getNewArrivals = async (req, res, next) => {
-        const { page, limit } = req.query
+        const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
-            message: "get new arrivals success",
-            metadata: await ProductService.getNewArrivals(parseInt(page), parseInt(limit))
-        }).send(res)
+            message: "Get products list successfully",
+            metadata: await ElasticSearchService.searchProducts({
+                minPrice: minPrice ? Number(minPrice) : undefined,
+                maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                sortBy: sortBy ? JSON.parse(sortBy) : undefined,
+                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
+                pageSize: pageSize ? Number(pageSize) : undefined,
+                isAndroid: isAndroid === 'true'
+            })
+        }).send(res);
     }
-    CreateComment = async(req,res,next)=>{
+    CreateComment = async (req, res, next) => {
         const userId = req.userId
         const productId = req.params.productId
-        const {content, rating, parentId,image_urls} = req.body
+        const { content, rating, parentId, image_urls } = req.body
         console.log(req.body)
         new OkResponse({
-            message:"create comment success",
-            metadata:await CommentService.createComment({userId,productId, content, rating, parentId,image_urls})
+            message: "create comment success",
+            metadata: await CommentService.createComment({ userId, productId, content, rating, parentId, image_urls })
         }).send(res)
     }
-    GetRootComment = async(req, res, next)=>{
+    GetRootComment = async (req, res, next) => {
         const productId = req.params.productId
         const userId = req.userId
-        const {cursor, limit} = req.query
+        const { cursor, limit } = req.query
         new OkResponse({
-            message:"get comment success",
-            metadata: await CommentService.getRootComments(productId,cursor, limit,userId)
+            message: "get comment success",
+            metadata: await CommentService.getRootComments(productId, cursor, limit, userId)
         }).send(res)
     }
 }

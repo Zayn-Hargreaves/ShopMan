@@ -47,67 +47,63 @@ class ProductRepository {
         return product;
     }
 
-    async getDealOfTheDayProducts(page = 1, limit = 10) {
+    async getDealOfTheDayProducts(cursor = null, limit = 5, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy) {
+        const where = {
+            status: 'active',
+            ...(cursor && { id: { [Op.gt]: cursor } }),
+            ...(categoryId && { CategoryId: categoryId }),
+            ...(minPrice && { price: { [Op.gte]: minPrice } }),
+            ...(maxPrice && { price: { [Op.lte]: maxPrice } }),
+            ...(minRating && { rating: { [Op.gte]: minRating / 10 } }), // Chuyển 40/45 thành 4.0/4.5
+            ...(minStock && { stock: { [Op.gte]: minStock } }) // Giả sử stock có trong model
+        };
 
-        const offset = (page - 1) * limit;
-        const { count, rows } = await this.Products.findAndCountAll({
-            where: {
-                status: 'active',
-            },
-            offset,
-            limit,
-            order: [["sale_count", "DESC"]],
+        let order = [['id', 'DESC']];
+        if (sortBy) {
+            switch (sortBy) {
+                case 'popularity':
+                    order = [['sale_count', 'DESC']];
+                    break;
+                case 'price_asc':
+                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100)'), 'ASC'];
+                    break;
+                case 'price_desc':
+                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100)'), 'DESC'];
+                    break;
+                case 'created_at':
+                    order = [['createdAt', 'DESC']];
+                    break;
+                case 'rating':
+                    order = [['rating', 'DESC']];
+                    break;
+            }
+        }
+
+        const products = await this.Products.findAll({
+            where,
+            limit: Number(limit) + 1, // Lấy thêm 1 để lấy cursor tiếp theo
+            order,
             include: [
                 {
                     model: this.Discounts,
                     as: 'discounts',
                     through: { attributes: [] },
                     where: {
-                        status: "active",
-                        StartDate: { [Op.lte]: new Date() },
-                        EndDate: { [Op.gte]: new Date() },
-                    }
-                }
-            ]
-        });
-        return {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page),
-            products: rows
-        }
-    }
-
-    async getAllDealProducts(page = 1, limit = 20) {
-        const offset = (page - 1) * limit
-        const { count, rows } = await this.Products.findAndCountAll({
-            include: [
-                {
-                    model: this.Discounts,
-                    through: { attributes: [] },
-                    as: "discounts",
-                    where: {
                         status: 'active',
-                        StartDate: { [Op.lte]: new Date() },
-                        EndDate: { [Op.gte]: new Date() },
-                    }
+                        // startDate: { [Op.lte]: new Date() },
+                        // endDate: { [Op.gte]: new Date() },
+                    },
                 }
             ],
-            where: {
-                status: "active"
-            },
-            offset,
-            limit: limit,
-            order: [['sale_count', "DESC"]],
-        })
+        });
 
+        const nextCursor = products.length > limit ? products[products.length - 1].id : null;
         return {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page),
-            products: rows
-        }
+            products: products.slice(0, limit),
+            nextCursor,
+        };
     }
+    
     async getProductMetrics(productIds) {
         return await this.Products.findAll({
             where: {

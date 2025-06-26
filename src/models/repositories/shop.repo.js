@@ -26,9 +26,10 @@ class ShopRepository {
 
     async findShopBySlug(slug) {
         if (!slug) throw new NotFoundError("Shop not found");
+        console.log("Shop slug ",slug)
         const shop = await this.Shop.findOne({
             where: {
-                slug: slug,
+                slug:slug,
                 status: 'active'
             },
             include: [
