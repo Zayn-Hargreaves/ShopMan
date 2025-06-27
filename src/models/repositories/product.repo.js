@@ -51,7 +51,7 @@ class ProductRepository {
         console.log(sortBy)
         const where = {
             status: 'active',
-            ...(cursor && { id: { [Op.lt]: cursor } }),
+            ...(cursor && { id: { [Op.lte]: cursor } }),
             ...(minPrice && { price: { [Op.gte]: minPrice } }),
             ...(maxPrice && { price: { [Op.lte]: maxPrice } }),
             ...(minRating && { rating: { [Op.gte]: minRating / 10 } }), // Chuyển 40/45 thành 4.0/4.5
