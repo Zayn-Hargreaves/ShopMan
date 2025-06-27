@@ -1,5 +1,5 @@
 const { getSelectData } = require("../../utils");
-const { Op } = require("sequelize")
+const { Op, Sequelize } = require("sequelize")
 class ProductRepository {
     constructor(models) {
         this.Products = models.Products
@@ -48,7 +48,7 @@ class ProductRepository {
     }
 
     async getDealOfTheDayProducts(cursor = null, limit = 10, minPrice, maxPrice, minRating, sortBy) {
-        console.log(cursor)
+        console.log(sortBy)
         const where = {
             status: 'active',
             ...(cursor && { id: { [Op.lt]: cursor } }),
@@ -64,15 +64,16 @@ class ProductRepository {
                     order = [['sale_count', 'DESC']];
                     break;
                 case 'price_asc':
-                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100)'), 'ASC'];
+                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100) ASC')];
                     break;
                 case 'price_desc':
-                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100)'), 'DESC'];
+                    order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100) DESC')];
                     break;
                 case 'rating':
                     order = [['rating', 'DESC']];
                     break;
             }
+
         }
 
         const products = await this.Products.findAll({
@@ -99,7 +100,7 @@ class ProductRepository {
             nextCursor,
         };
     }
-    
+
     async getProductMetrics(productIds) {
         return await this.Products.findAll({
             where: {
