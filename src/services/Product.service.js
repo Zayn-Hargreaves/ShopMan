@@ -77,14 +77,13 @@ class ProductService {
         };
     }
 
-    static async getDealOfTheDayProducts(cursor, limit, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy) {
-        const cacheKey = `deal:day:page:${cursor}:limit:${limit}:cat:${categoryId}:minP:${minPrice}:maxP:${maxPrice}:minR:${minRating}:hasD:${hasDiscount}:minS:${minStock}:sort:${sortBy}`;
+    static async getDealOfTheDayProducts(cursor, limit, minPrice, maxPrice, minRating, sortBy) {
+        const cacheKey = `deal:day:page:${cursor}:limit:${limit}:minP:${minPrice}:maxP:${maxPrice}:minR:${minRating}:sort:${sortBy}`;
         await RepositoryFactory.initialize();
         const ProductRepo = RepositoryFactory.getRepository('ProductRepository');
         let result = await RedisService.getCachedData(cacheKey);
-
         if (!result) {
-            const data = await ProductRepo.getDealOfTheDayProducts(cursor, limit, categoryId, minPrice, maxPrice, minRating, sortBy);
+            const data = await ProductRepo.getDealOfTheDayProducts(cursor, limit, minPrice, maxPrice, minRating, sortBy);
             const filteredResult = data.products
                 .filter(product => {
                     const hasValidDiscount = product.discounts?.some(discount => discount.MaxUses > discount.UserCounts);

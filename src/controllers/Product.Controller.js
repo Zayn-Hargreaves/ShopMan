@@ -12,18 +12,16 @@ class ProductController {
         }).send(res)
     }
     getDealOfTheDay = async (req, res, next) => {
-        const { cursor, limit, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy } = req.query;
+        const { cursor, limit, minPrice, maxPrice, minRating, sortBy } = req.query;
+        console.log(cursor)
         new OkResponse({
             message: "get deal of the day success",
             metadata: await ProductService.getDealOfTheDayProducts(
                 cursor,
                 parseInt(limit),
-                categoryId,
                 minPrice,
                 maxPrice,
                 minRating,
-                hasDiscount,
-                minStock,
                 sortBy
             )
         }).send(res);

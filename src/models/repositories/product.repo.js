@@ -47,11 +47,11 @@ class ProductRepository {
         return product;
     }
 
-    async getDealOfTheDayProducts(cursor = null, limit = 5, categoryId, minPrice, maxPrice, minRating, sortBy) {
+    async getDealOfTheDayProducts(cursor = null, limit = 10, minPrice, maxPrice, minRating, sortBy) {
+        console.log(cursor)
         const where = {
             status: 'active',
-            ...(cursor && { id: { [Op.gt]: cursor } }),
-            ...(categoryId && { CategoryId: categoryId }),
+            ...(cursor && { id: { [Op.lt]: cursor } }),
             ...(minPrice && { price: { [Op.gte]: minPrice } }),
             ...(maxPrice && { price: { [Op.lte]: maxPrice } }),
             ...(minRating && { rating: { [Op.gte]: minRating / 10 } }), // Chuyển 40/45 thành 4.0/4.5
@@ -69,9 +69,6 @@ class ProductRepository {
                 case 'price_desc':
                     order = [Sequelize.literal('price * (1 - COALESCE(discount_percentage, 0) / 100)'), 'DESC'];
                     break;
-                case 'created_at':
-                    order = [['createdAt', 'DESC']];
-                    break;
                 case 'rating':
                     order = [['rating', 'DESC']];
                     break;
@@ -80,7 +77,7 @@ class ProductRepository {
 
         const products = await this.Products.findAll({
             where,
-            limit: Number(limit) + 1, // Lấy thêm 1 để lấy cursor tiếp theo
+            limit: Number(limit) + 1,
             order,
             include: [
                 {
