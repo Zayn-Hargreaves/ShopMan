@@ -47,7 +47,7 @@ class ProductRepository {
         return product;
     }
 
-    async getDealOfTheDayProducts(cursor = null, limit = 5, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy) {
+    async getDealOfTheDayProducts(cursor = null, limit = 5, categoryId, minPrice, maxPrice, minRating, sortBy) {
         const where = {
             status: 'active',
             ...(cursor && { id: { [Op.gt]: cursor } }),
@@ -55,7 +55,6 @@ class ProductRepository {
             ...(minPrice && { price: { [Op.gte]: minPrice } }),
             ...(maxPrice && { price: { [Op.lte]: maxPrice } }),
             ...(minRating && { rating: { [Op.gte]: minRating / 10 } }), // Chuyển 40/45 thành 4.0/4.5
-            ...(minStock && { stock: { [Op.gte]: minStock } }) // Giả sử stock có trong model
         };
 
         let order = [['id', 'DESC']];

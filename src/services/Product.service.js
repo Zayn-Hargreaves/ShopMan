@@ -84,18 +84,17 @@ class ProductService {
         let result = await RedisService.getCachedData(cacheKey);
 
         if (!result) {
-            const data = await ProductRepo.getDealOfTheDayProducts(cursor, limit, categoryId, minPrice, maxPrice, minRating, hasDiscount, minStock, sortBy);
+            const data = await ProductRepo.getDealOfTheDayProducts(cursor, limit, categoryId, minPrice, maxPrice, minRating, sortBy);
             const filteredResult = data.products
                 .filter(product => {
                     const hasValidDiscount = product.discounts?.some(discount => discount.MaxUses > discount.UserCounts);
                     const meetsPrice = (!minPrice || product.price >= minPrice) && (!maxPrice || product.price <= maxPrice);
                     const meetsRating = !minRating || product.rating >= (minRating / 10); 
-                    const meetsDiscount = !hasDiscount || (product.discounts && product.discounts.length > 0);
-                    return hasValidDiscount && meetsPrice && meetsRating && meetsDiscount;
+                    return hasValidDiscount && meetsPrice && meetsRating;
                 })
                 .map(product =>
                     getInfoData({
-                        fields: ['id', 'name', 'price', 'slug', 'thumbnail', 'sale_count', 'rating', 'stock'],
+                        fields: ['id', 'slug', 'name', 'sale_count', 'price', 'discount_percentage', 'thumb', 'rating', 'sale_count','desc'],
                         object: product.toJSON()
                     })
                 );
