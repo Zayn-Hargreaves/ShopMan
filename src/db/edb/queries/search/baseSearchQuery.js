@@ -1,4 +1,4 @@
-const buildBaseSearchQuery = ({ query, filters }) => {
+const buildBaseSearchQuery = ({ query, filters, isAndroid = false }) => {
     const must = [];
     const filter = [];
 
@@ -35,6 +35,11 @@ const buildBaseSearchQuery = ({ query, filters }) => {
 
     if (filters.shop !== undefined) {
         filter.push({ term: { ShopId: filters.shop } });
+    }
+
+    // Logic mới cho Android
+    if (isAndroid) {
+        filter.push({ term: { discount_status: 'active' } });
     }
 
     return {

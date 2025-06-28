@@ -12,18 +12,17 @@ class ProductController {
         }).send(res)
     }
     getDealOfTheDay = async (req, res, next) => {
-        const { cursor, limit, minPrice, maxPrice, minRating, sortBy } = req.query;
-        console.log(cursor)
+        const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
-            message: "get deal of the day success",
-            metadata: await ProductService.getDealOfTheDayProducts(
-                cursor,
-                parseInt(limit),
-                minPrice,
-                maxPrice,
-                minRating,
-                sortBy
-            )
+            message: "Get deal of the day successfull",
+            metadata: await ElasticSearchService.searchProducts({
+                minPrice: minPrice ? Number(minPrice) : undefined,
+                maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                sortBy: sortBy ? JSON.parse(sortBy) : undefined,
+                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
+                pageSize: pageSize ? Number(pageSize) : undefined,
+                isAndroid: isAndroid
+            })
         }).send(res);
     }
 
@@ -45,7 +44,7 @@ class ProductController {
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,
-                isAndroid: isAndroid === 'true'
+                isAndroid: false
             })
         }).send(res);
     }

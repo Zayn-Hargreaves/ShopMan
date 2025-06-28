@@ -14,12 +14,12 @@ class ProductRepositoryEdb {
   }) {
     const client = await getClient();
 
-    // Xây dựng body query
+    // Xây dựng body query với điều kiện isAndroid
     const body = {
       size: pageSize,
       query: {
         function_score: {
-          query: buildBaseSearchQuery({ query, filters }),
+          query: buildBaseSearchQuery({ query, filters, isAndroid }),
           functions: buildReRankingFunctions(),
           score_mode: 'sum',
           boost_mode: 'multiply'
@@ -30,8 +30,8 @@ class ProductRepositoryEdb {
         { '_id': 'asc' } // Tie-breaker
       ],
       _source: isAndroid
-        ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath',]
-        : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt','slug','categoryPath'],
+        ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt', 'slug', 'categoryPath', 'discount_status']
+        : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt', 'slug', 'categoryPath', 'discount_status'],
       suggest: undefined
     };
 
