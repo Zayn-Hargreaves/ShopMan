@@ -13,7 +13,6 @@ class ProductRepositoryEdb {
     isAndroid = false // Xác định client Android
   }) {
     const client = await getClient();
-
     // Xây dựng body query với điều kiện isAndroid
     const body = {
       size: pageSize,
@@ -25,10 +24,10 @@ class ProductRepositoryEdb {
           boost_mode: 'multiply'
         }
       },
-      sort: [
-        sortBy ? { [sortBy.field]: sortBy.order || 'asc' } : '_score',
-        { '_id': 'asc' } // Tie-breaker
-      ],
+        sort: [
+          sortBy ? { [sortBy.field]: sortBy.order || 'asc' } : '_score',
+          { '_id': 'asc' } // Tie-breaker
+        ],
       _source: isAndroid
         ? ['name', 'desc', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt', 'slug', 'categoryPath', 'discount_status']
         : ['name', 'desc', 'desc_plain', 'price', 'thumb', 'rating', 'ShopId', 'CategoryId', 'sale_count', 'discount_percentage', 'createdAt', 'slug', 'categoryPath', 'discount_status'],

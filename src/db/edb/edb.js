@@ -3,10 +3,10 @@ const config = require("../../config/index");
 
 class ElasticsearchClient {
     constructor() {
-            this.client = null;
-            this.maxRetries = 5;
-            this.retryDelay = 2000;
-        }
+        this.client = null;
+        this.maxRetries = 5;
+        this.retryDelay = 2000;
+    }
 
 
     async initializeClient() {
@@ -14,7 +14,7 @@ class ElasticsearchClient {
         while (retries < this.maxRetries) {
             try {
                 this.client = new Client({
-                    host: config.elasticsearch.url, // URL Bonsai: "https://user:pass@cluster.bonsai.io"
+                    host: config.elasticsearch.url, // URL Bonsai: "https://user:pass@cluster.bonsai.io",
                 });
                 await this.client.ping();
                 console.log(`Elasticsearch connected successfully`);
@@ -36,21 +36,21 @@ class ElasticsearchClient {
         }
         return this.client;
     }
-    static async getInstance(){
-        if(!ElasticsearchClient.instance){
+    static async getInstance() {
+        if (!ElasticsearchClient.instance) {
             ElasticsearchClient.instance = new ElasticsearchClient()
             await ElasticsearchClient.instance.initializeClient()
         }
-        return ElasticsearchClient.instance 
+        return ElasticsearchClient.instance
     }
 }
 
 const elasticsearchClient = ElasticsearchClient.getInstance();
 
 module.exports = {
-    initElasticSearch:async()=>{
+    initElasticSearch: async () => {
         await elasticsearchClient;
         return elasticsearchClient
     },
-    getClient: async() => (await elasticsearchClient).getClient(),
+    getClient: async () => (await elasticsearchClient).getClient(),
 };

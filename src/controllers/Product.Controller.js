@@ -13,6 +13,8 @@ class ProductController {
     }
     getDealOfTheDay = async (req, res, next) => {
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
+
+        console.log("controller:",lastSortValues)
         new OkResponse({
             message: "Get deal of the day successfull",
             metadata: await ElasticSearchService.searchProducts({

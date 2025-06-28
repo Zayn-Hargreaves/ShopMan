@@ -15,7 +15,6 @@ const buildBaseSearchQuery = ({ query, filters, isAndroid = false }) => {
             }
         });
     }
-
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
         filter.push({
             range: {
@@ -39,9 +38,11 @@ const buildBaseSearchQuery = ({ query, filters, isAndroid = false }) => {
 
     // Logic mới cho Android
     if (isAndroid) {
-        filter.push({ term: { discount_status: 'active' } });
+        filter.push({ term: { discount_status: "active" } });
     }
-
+    if (must.length === 0) {
+        must.push({ match_all: {} });
+    }
     return {
         bool: {
             must,
