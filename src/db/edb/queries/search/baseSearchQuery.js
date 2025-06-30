@@ -1,4 +1,4 @@
-const buildBaseSearchQuery = ({ query, filters, isAndroid = false }) => {
+const   buildBaseSearchQuery = ({ query, filters, isAndroid = false }) => {
     const must = [];
     const filter = [];
 

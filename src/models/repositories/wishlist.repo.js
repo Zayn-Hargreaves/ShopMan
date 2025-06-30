@@ -1,42 +1,48 @@
 const initializeModels = require("../../db/dbs/associations")
 const { getSelectData } = require("../../utils")
+const { Op, Sequerlize } = require("sequelize")
 class WishlistRepository {
     constructor(models) {
         this.Wishlists = models.Wishlists
         this.Products = models.Products
     }
-    async getProductInWishlist(UserId, page = 1, limit = 10) {
-        const offset = (page - 1) * limit
-        const { count, rows } = await this.Wishlists.findAndCountAll({
-            where: { UserId: UserId },
+    async getProductInWishlist(UserId, lastId, limit = 10) {
+        let where = { UserId: UserId }
+        if (lastId) {
+            where.id = { [this.Sequerlize.Op.let]: lastId }
+        }
+        const rows = await this.Wishlists.findAll({
+            where,
             include: {
                 model: this.Products,
-                as:'product',
+                as: 'product',
                 attributes: getSelectData(['id', 'name', 'thumb', 'price', 'rating', 'desc', 'ShopId', 'slug'])
             },
-            offset,
+            order: [['id', 'ASC']],
             limit,
-        })
+        });
+
+        const newLastId = rows.length > 0 ? rows[rows.length - 1].id : null;
+
         return {
-            totalItems: count,
-            totalPages: Math.ceil(count / limit),
-            currentPage: parseInt(page),
-            products: rows
+            products: rows,
+            nextCursor: newLastId,
+            hasMore: rows.length === limit,
         }
     }
-    async addProductToWishlist(userId,productId){
+    async addProductToWishlist(userId, productId) {
         let item = await this.Wishlists.findOne({
-            where:{
-                UserId:userId,
-                ProductId:productId
+            where: {
+                UserId: userId,
+                ProductId: productId
             }
         })
-        if(item){
+        if (item) {
             return item
         }
         return await this.Wishlists.create({
-            UserId:userId,
-            ProductId:productId
+            UserId: userId,
+            ProductId: productId
         })
     }
     async checkProductInWishlist({ ProductId, UserId }) {

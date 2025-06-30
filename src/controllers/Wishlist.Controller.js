@@ -4,10 +4,10 @@ const WishlistService = require("../services/Wishlist.service")
 class wishlistController {
     getProductInWishlist = async (req, res, next) => {
         const userId = req.userId
-        const { page, limit } = req.query
+        const { lastId, limit } = req.query
         new OkResponse({
             message: "get wishlist success",
-            metadata: await WishlistService.getWishlist(userId, parseInt(page), parseInt(limit))
+            metadata: await WishlistService.getWishlist(userId, parseInt(lastId), parseInt(limit))
         }).send(res)
     }
     addProductToWishlist = async (req, res, next) => {

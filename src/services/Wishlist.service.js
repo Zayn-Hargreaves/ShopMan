@@ -1,10 +1,10 @@
 const wishlistRepo = require("../models/repositories/wishlist.repo")
 const RepositoryFactory = require("../models/repositories/repositoryFactory")
 class WishlistService {
-    static async getWishlist(userId, page, limit) {
+    static async getWishlist(userId, lastId, limit) {
         await RepositoryFactory.initialize()
         const wishlistRepo = RepositoryFactory.getRepository("WishListRepository")
-        return await wishlistRepo.getProductInWishlist(userId, page, limit)
+        return await wishlistRepo.getProductInWishlist(userId, lastId, limit)
     }
     static async addProductToWishlist(userId, productId) {
         await RepositoryFactory.initialize()
