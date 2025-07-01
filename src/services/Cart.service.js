@@ -6,10 +6,8 @@ class CartService {
     static async getCart(UserId) {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
-
         const hashKey = `cart:user:${UserId}`;
         let cart = await RedisService.getAllHashField(hashKey);
-
         if (!cart || cart.length === 0) {
             const dbCartItems = await CartRepo.findAllProductInCart(UserId);
             if (!dbCartItems || dbCartItems.length === 0) return [];

@@ -165,7 +165,7 @@ router.post("/", asyncHandler(wishlistController.addProductToWishlist));
 
 router.delete("/:productId", asyncHandler(wishlistController.removeProductFromWishlist));
 
-router.delete("/", asyncHandler(wishlistController.removeAllProductFromWishlist));
+router.post("/remove-many", asyncHandler(wishlistController.removeAllProductFromWishlist));
 
 router.get("/count", asyncHandler(wishlistController.getCountProductInWishlist));
 

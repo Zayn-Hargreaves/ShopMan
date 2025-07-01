@@ -1,6 +1,6 @@
 const initializeModels = require("../../db/dbs/associations")
 const { getSelectData } = require("../../utils")
-const { Op, Sequerlize } = require("sequelize")
+const { Op, Sequelize } = require("sequelize")
 class WishlistRepository {
     constructor(models) {
         this.Wishlists = models.Wishlists
@@ -16,7 +16,7 @@ class WishlistRepository {
             include: {
                 model: this.Products,
                 as: 'product',
-                attributes: getSelectData(['id', 'name', 'thumb', 'price', 'rating', 'desc', 'ShopId', 'slug'])
+                attributes: getSelectData(['id', 'name', 'thumb', 'price', 'rating', 'desc', 'ShopId', 'slug', 'discount_percentage'])
             },
             order: [['id', 'ASC']],
             limit,
@@ -54,13 +54,13 @@ class WishlistRepository {
         })
     }
     async removeProductFromWishlist(UserId, ProductId) {
-        if (!UserId || !ProductId) {
-            throw new Error("Missing UserId or ProductId")
+        if (!UserId) {
+            throw new Error("Missing UserId")
         }
         return await this.Wishlists.destroy({
             where: {
                 UserId,
-                ProductId
+                ProductId:ProductId
             }
         })
     }
@@ -71,7 +71,7 @@ class WishlistRepository {
         return await this.Wishlists.destroy({
             where: { 
                 UserId ,
-                id:WishlistItemIds
+               id:WishlistItemIds 
             }
         })
     }

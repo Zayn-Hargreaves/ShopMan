@@ -11,10 +11,10 @@ class WishlistService {
         const wishlistRepo = RepositoryFactory.getRepository("WishListRepository")
         return await wishlistRepo.addProductToWishlist(userId, productId)
     }
-    static async removeProductFromWishlist(userId, productId) {
+    static async removeProductFromWishlist(userId, ProductId) {
         await RepositoryFactory.initialize()
         const wishlistRepo = RepositoryFactory.getRepository("WishListRepository")
-        return await wishlistRepo.removeProductFromWishlist(userId, productId)
+        return await wishlistRepo.removeProductFromWishlist(userId, ProductId)
     }
     static async removeAllProductFromWishlist(userId, WishlistItemIds) {
         await RepositoryFactory.initialize()

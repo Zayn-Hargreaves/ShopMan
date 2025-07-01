@@ -33,7 +33,6 @@ class CartController {
         const userId = req.userId
         const { productId} = req.params
         const {skuNo} = req.query
-        console.log(productId, skuNo)
         new OkResponse({
             message: "remove product from cart success",
             metadata: await CartService.removeProductFromCart(userId, productId, skuNo)
