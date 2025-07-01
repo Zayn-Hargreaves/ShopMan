@@ -64,12 +64,15 @@ class WishlistRepository {
             }
         })
     }
-    async removeAllProductFromWishlist(UserId) {
+    async removeAllProductFromWishlist(UserId, WishlistItemIds) {
         if (!UserId) {
             throw new Error("Missing UserId")
         }
         return await this.Wishlists.destroy({
-            where: { UserId }
+            where: { 
+                UserId ,
+                id:WishlistItemIds
+            }
         })
     }
     async countProductInWishlist(UserId) {

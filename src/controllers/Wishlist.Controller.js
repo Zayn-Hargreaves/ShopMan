@@ -28,9 +28,10 @@ class wishlistController {
     }
     removeAllProductFromWishlist = async (req, res, next) => {
         const userId = req.userId
+        const {WishlistItemIds} = req.body
         new OkResponse({
             message: 'remove all product success',
-            metadata: await WishlistService.removeAllProductFromWishlist(userId)
+            metadata: await WishlistService.removeAllProductFromWishlist(userId, WishlistItemIds)
         }).send(res)
     }
     getCountProductInWishlist = async (req, res, next) => {

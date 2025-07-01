@@ -122,18 +122,16 @@ class CartRepository {
     }
 
     async removeProductFromCart(UserId, ProductId, sku_no) {
-        console.log(UserId, ProductId, sku_no)
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new Error("Cart not found");
 
         return await this.CartDetails.destroy({ where: { CartId: cart.id, ProductId, sku_no } });
     }
 
-    async deleteAllProductFromCart(UserId) {
-        console.log(UserId)
+    async deleteAllProductFromCart(UserId, CartDetailIds) {
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) return 0;
-        return await this.CartDetails.destroy({ where: { CartId: cart.id } });
+        return await this.CartDetails.destroy({ where: { CartId: cart.id, id:CartDetailIds } });
     }
     async getAvailableDiscounts(productId) {
         const now = new Date();

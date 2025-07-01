@@ -133,14 +133,13 @@ class CartService {
         return { message: "Removed from cart" };
     }
 
-    static async removeAllProductFromCart(UserId) {
+    static async removeAllProductFromCart(UserId,CartDetailIds) {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
-        await CartRepo.deleteAllProductFromCart(UserId);
-
+        
         const hashKey = `cart:user:${UserId}`;
         await RedisService.deleteHashKey(hashKey);
-        return { message: "Cart cleared" };
+        return await CartRepo.deleteAllProductFromCart(UserId, CartDetailIds);
     }
 
     static async getNumberProductInCart(UserId) {

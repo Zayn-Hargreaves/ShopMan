@@ -42,9 +42,10 @@ class CartController {
 
     removeAllProductFromCart = async (req, res, next) => {
         const userId = req.userId
+        const CartDetailIds = req.body.CartDetailIds
         new OkResponse({
             message: 'remove all product from cart success',
-            metadata: await CartService.removeAllProductFromCart(userId)
+            metadata: await CartService.removeAllProductFromCart(userId, CartDetailIds)
         }).send(res)
     }
     getNumberOfProductInCart = async(req, res,next)=>{
