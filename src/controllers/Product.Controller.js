@@ -72,6 +72,13 @@ class ProductController {
             metadata: await CommentService.getRootComments(productId, cursor, limit, userId)
         }).send(res)
     }
+    getProductSkus = async(req, res, next)=>{
+        const productId = req.params.productId
+        new OkResponse({
+            message:"get produt sku success",
+            metadata: await ProductService.getProductSkus(productId)
+        }).send(res)
+    }
 }
 
 module.exports = new ProductController()

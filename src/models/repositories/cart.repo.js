@@ -1,5 +1,5 @@
 const { getSelectData } = require("../../utils")
-const { Sequelize, Op } = require("sequelize")
+const { Sequelize, Op, where } = require("sequelize")
 
 class CartRepository {
     constructor(models) {
@@ -12,6 +12,7 @@ class CartRepository {
         this.Shop = models.Shop
         this.CartDetails = models.CartDetails
         this.Discounts = models.Discounts
+        this.DiscountsProducts = models.DiscountsProducts
     }
 
     async getOrCreateCart(UserId) {
@@ -42,9 +43,11 @@ class CartRepository {
     }
 
     async findAllProductInCart(UserId) {
-        console.log(UserId)
+        const cart = await this.Cart.findOne({
+            where:{UserId:UserId}
+        })
         return await this.CartDetails.findAll({
-            where: { CartId: UserId },
+            where: { CartId: cart.id },
             include: [
                 {
                     model: this.Products,
@@ -131,37 +134,29 @@ class CartRepository {
     async deleteAllProductFromCart(UserId, CartDetailIds) {
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) return 0;
-        return await this.CartDetails.destroy({ where: { CartId: cart.id, id:CartDetailIds } });
+        return await this.CartDetails.destroy({ where: { CartId: cart.id, id: CartDetailIds } });
     }
     async getAvailableDiscounts(productId) {
         const now = new Date();
 
         const discounts = await this.Discounts.findAll({
-            include: [
-                {
-                    model: this.Products,
-                    as: "products", // đúng alias
-                    through: {
-                        attributes: [],
-                        where: { ProductId: productId }
-                    },
-                    attributes: []
-                },
-            ],
             where: {
-                status: "active",
-                StartDate: { [Op.lte]: now },
-                EndDate: { [Op.gte]: now },
-                UserCounts: { [Op.lt]: Sequelize.col("MaxUses") },
+                status: 'active',
+                UserCounts: { [Op.lt]: Sequelize.col('MaxUses') },
+                // StartDate: { [Op.lte]: now },
+                // EndDate: { [Op.gte]: now }
             },
-            attributes: getSelectData([
-                "id", "name", "desc", "value", "type",
-                "code", "StartDate", "EndDate", "MinValueOrders"
-            ]),
+            include: [{
+                model: this.DiscountsProducts,
+                as: 'DiscountsProducts', // dùng đúng alias khai báo association!
+                where: { ProductId: productId },
+                required: true, // INNER JOIN: chỉ lấy những voucher thực sự gắn với product này
+            }]
         });
 
         return discounts;
     }
+
     async removeItemsFromCart(cartId, items = []) {
         for (const item of items) {
             await this.CartDetails.destroy({

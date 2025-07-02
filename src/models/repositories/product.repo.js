@@ -1,5 +1,5 @@
 const { getSelectData } = require("../../utils");
-const { Op, Sequelize } = require("sequelize")
+const { Op, Sequelize, where, col } = require("sequelize")
 class ProductRepository {
     constructor(models) {
         this.Products = models.Products
@@ -151,6 +151,50 @@ class ProductRepository {
             { sale_count: quantity },
             { where: { id: productId } }
         );
+    }
+    async getProductSkus(productId) {
+        const skus = await this.Sku.findAll({
+            where: { ProductId: productId, status: 'active' },
+            include: [
+                {
+                    model: this.SkuAttr,
+                    as: "SkuAttr",
+                    required: false,
+                },
+                {
+                    model: this.SkuSpecs,
+                    as: "SkuSpecs",
+                    required: false,
+                }
+            ],
+            attributes: [
+                "id",
+                "sku_no",
+                "sku_name",
+                "sku_desc",
+                "sku_price",
+                "sku_stock",
+                "sku_type",
+                "sort"
+            ],
+            order: [["sort", "ASC"], ["id", "ASC"]]
+        });
+
+
+        // Format lại trả ra cho FE
+        return skus.map(sku => ({
+            skuId: sku.id,
+            skuNo: sku.sku_no,
+            name: sku.sku_name,
+            desc: sku.sku_desc,
+            price: sku.sku_price,
+            stock: sku.sku_stock,
+            type: sku.sku_type,
+            sort: sku.sort,
+            image: sku.sku_image || sku.SkuAttr?.sku_image, // nếu có
+            attrs: sku.SkuAttr?.sku_attrs || {},
+            specs: sku.SkuSpecs?.sku_specs || {}
+        }));
     }
 }
 

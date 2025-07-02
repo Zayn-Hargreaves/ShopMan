@@ -7,46 +7,79 @@ class CartService {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
         const hashKey = `cart:user:${UserId}`;
-        let cart = await RedisService.getAllHashField(hashKey);
-        if (!cart || cart.length === 0) {
-            const dbCartItems = await CartRepo.findAllProductInCart(UserId);
-            if (!dbCartItems || dbCartItems.length === 0) return [];
+
+        // 1. Lấy cart từ cache Redis
+        // let cart = await RedisService.getAllHashField(hashKey);
+        let cart
+        // 2. Lấy cart thực tế từ DB (các item thực tế user đã add)
+        const dbCartItems = await CartRepo.findAllProductInCart(UserId);
+
+        // 3. Nếu cache miss hoặc lệch số lượng -> đồng bộ lại cache
+        if (!cart || cart.length === 0 || cart.length !== dbCartItems.length) {
+            await RedisService.deleteHashKey(hashKey);
 
             for (const item of dbCartItems) {
                 const fieldKey = `${item.ProductId}|${item.sku_no}`;
+                // Chuẩn hóa variant: Ưu tiên sku_attrs, rồi sku_specs, fallback là type/name
+                let variant = {};
+                if (item.SkuAttr?.sku_attrs && typeof item.SkuAttr.sku_attrs === 'object' && Object.keys(item.SkuAttr.sku_attrs).length > 0) {
+                    variant = item.SkuAttr.sku_attrs;
+                } else if (item.SkuSpecs?.sku_specs && typeof item.SkuSpecs.sku_specs === 'object' && Object.keys(item.SkuSpecs.sku_specs).length > 0) {
+                    variant = item.SkuSpecs.sku_specs;
+                } else if (item.Sku) {
+                    if (item.Sku.sku_type) variant.type = item.Sku.sku_type;
+                    if (item.Sku.sku_name) variant.name = item.Sku.sku_name;
+                }
+
+
                 const simplified = {
                     productId: item.ProductId,
-                    productName: item.Product?.name || "",
+                    productName: item.product?.name || "",
+                    discount_percentage: item.product.discount_percentage,
+                    slug: item.product.slug,
                     skuNo: item.sku_no,
                     quantity: item.quantity,
                     price: item.SkuAttr?.sku_price || item.Sku?.sku_price || 0,
-                    image: item.Product?.thumb || "",
-                    variant: item.SkuAttr?.sku_attrs || item.SkuSpecs?.sku_specs || {},
-                    discounts: []
+                    image: item.product?.thumb || "",
+                    variant,
+
+                    discounts: [] // Chưa enrich ở đây
                 };
                 await RedisService.cacheHashField(hashKey, fieldKey, simplified, 3600);
             }
 
+            // Enrich: lấy đủ thông tin discount cho từng item
             const enrichedCart = await Promise.all(
                 dbCartItems.map(async (item) => {
+                    let variant = {};
+                    if (item.SkuAttr?.sku_attrs && typeof item.SkuAttr.sku_attrs === 'object' && Object.keys(item.SkuAttr.sku_attrs).length > 0) {
+                        variant = item.SkuAttr.sku_attrs;
+                    } else if (item.SkuSpecs?.sku_specs && typeof item.SkuSpecs.sku_specs === 'object' && Object.keys(item.SkuSpecs.sku_specs).length > 0) {
+                        variant = item.SkuSpecs.sku_specs;
+                    } else if (item.Sku) {
+                        if (item.Sku.sku_type) variant.type = item.Sku.sku_type;
+                        if (item.Sku.sku_name) variant.name = item.Sku.sku_name;
+                    }
                     const discounts = await CartRepo.getAvailableDiscounts(item.ProductId);
                     return {
                         field: `${item.ProductId}|${item.sku_no}`,
                         productId: item.ProductId,
-                        productName: item.Product?.name || "",
+                        productName: item.product?.name || "",
+                        discount_percentage: item.product.discount_percentage,
+                        slug: item.product.slug,
                         skuNo: item.sku_no,
                         quantity: item.quantity,
                         price: item.SkuAttr?.sku_price || item.Sku?.sku_price || 0,
-                        image: item.Product?.thumb || "",
-                        variant: item.SkuAttr?.sku_attrs || item.SkuSpecs?.sku_specs || {},
+                        image: item.product?.thumb || "",
+                        variant,
                         discounts: discounts || [],
                     };
                 })
             );
-
             return enrichedCart;
         }
 
+        // 4. Nếu cache đúng, enrich thêm discount cho từng item (variant đã sẵn chuẩn)
         const enrichedCachedCart = await Promise.all(
             cart.map(async (item) => {
                 const discounts = await CartRepo.getAvailableDiscounts(item.productId);
@@ -59,6 +92,8 @@ class CartService {
 
         return enrichedCachedCart;
     }
+
+
 
     static async addProductToCart(UserId, productId, skuNo, quantity) {
         if (!UserId || !productId || !skuNo || !quantity || quantity <= 0) {
@@ -131,10 +166,10 @@ class CartService {
         return { message: "Removed from cart" };
     }
 
-    static async removeAllProductFromCart(UserId,CartDetailIds) {
+    static async removeAllProductFromCart(UserId, CartDetailIds) {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
-        
+
         const hashKey = `cart:user:${UserId}`;
         await RedisService.deleteHashKey(hashKey);
         return await CartRepo.deleteAllProductFromCart(UserId, CartDetailIds);

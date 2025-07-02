@@ -136,6 +136,17 @@ class ProductService {
         await RedisService.cacheData(cacheKey, result, 3600)
         return result
     }
+    static async getProductSkus(productId){
+        await RepositoryFactory.initialize()
+        const ProductRepo = await RepositoryFactory.getRepository("ProductRepository")
+        const cacheKey = `product:${productId}:sku`
+        let result = await RedisService.getCachedData(cacheKey)
+        if(!result){
+            result = await ProductRepo.getProductSkus(productId)
+            await RedisService.cacheData(cacheKey, result, 600)
+        }
+        return result
+    }
 }
 
 module.exports = ProductService

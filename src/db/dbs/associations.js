@@ -134,6 +134,23 @@ const initializeModels = async () => {
             as: 'products'
         });
 
+        Discounts.hasMany(DiscountsProducts, {
+            foreignKey: 'DiscountId',
+            as: 'DiscountsProducts'
+        });
+        DiscountsProducts.belongsTo(Discounts, {
+            foreignKey: 'DiscountId'
+        });
+
+        // Ngược lại nếu cần lấy Product từ DiscountsProducts
+        Products.hasMany(DiscountsProducts, {
+            foreignKey: 'ProductId',
+            as: 'DiscountsProducts'
+        });
+        DiscountsProducts.belongsTo(Products, {
+            foreignKey: 'ProductId'
+        });
+
         // Quan hệ User - Follows (1-n)
         User.hasMany(Follows, { foreignKey: { name: "UserId" }, as: "follows" });
         Follows.belongsTo(User, { foreignKey: { name: "UserId" }, as: "user" });
