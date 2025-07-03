@@ -33,6 +33,7 @@ class CartService {
 
 
                 const simplified = {
+                    id:item.id,
                     productId: item.ProductId,
                     productName: item.product?.name || "",
                     discount_percentage: item.product.discount_percentage,
@@ -62,6 +63,7 @@ class CartService {
                     }
                     const discounts = await CartRepo.getAvailableDiscounts(item.ProductId);
                     return {
+                        id:item.id,
                         field: `${item.ProductId}|${item.sku_no}`,
                         productId: item.ProductId,
                         productName: item.product?.name || "",
@@ -150,8 +152,9 @@ class CartService {
             },
             3600
         );
+        const holderItem = CartRepo.findProductInCart(UserId,productId,skuNo)
 
-        return { message: "Updated successfully" };
+        return holderItem
     }
 
     static async removeProductFromCart(UserId, productId, skuNo) {

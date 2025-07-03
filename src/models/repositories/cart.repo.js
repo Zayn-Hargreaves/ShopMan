@@ -23,15 +23,20 @@ class CartRepository {
         return cart;
     }
     async findProductInCart(userId, productId, skuNo) {
-        return await this.CartDetails.findAll({
-            where: { CartId: userId },
+        const cart = await this.Cart.findOne({
+            where:{UserId:userId}
+        })
+        return await this.CartDetails.findOne({
+            where: { CartId: cart.id },
             include: [
                 {
                     model: this.Products,
-                    as: 'product'
+                    as: 'product',
+                    where:{id:productId}
                 },
                 {
                     model: this.Sku,
+                    where:{sku_no:skuNo},
                     as: 'Sku',
                     include: [
                         { model: this.SkuAttr, as: 'SkuAttr' },

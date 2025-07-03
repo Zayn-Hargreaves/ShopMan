@@ -230,7 +230,7 @@ router.get("/", asyncHandler(CartController.getCart))
 router.post("/add", asyncHandler(CartController.addProductToCart))
 router.put("/update", asyncHandler(CartController.updateProductToCart))
 router.delete("/remove/:productId", asyncHandler(CartController.removeProductFromCart))
-router.delete("/remove/product/all", asyncHandler(CartController.removeAllProductFromCart))
+router.post("/remove/product/many", asyncHandler(CartController.removeAllProductFromCart))
 router.get("/size", asyncHandler(CartController.getNumberOfProductInCart))
 
 module.exports = router

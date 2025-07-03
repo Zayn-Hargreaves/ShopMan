@@ -20,8 +20,6 @@ class CartController {
 
     updateProductToCart = async (req, res, next) => {
         const { ProductId, skuNo, quantity } = req.body
-        console.log(req.body)
-        console.log(ProductId, skuNo, quantity)
         const userId = req.userId
         new OkResponse({
             message: 'update product to cart success',
