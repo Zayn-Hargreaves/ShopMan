@@ -22,9 +22,12 @@ class CartRepository {
         }
         return cart;
     }
+    async findCartDetailById(CartDetailId){
+        return await this.CartDetails.findOne({where:{id:CartDetailId}})
+    }
     async findProductInCart(userId, productId, skuNo) {
         const cart = await this.Cart.findOne({
-            where:{UserId:userId}
+            where: { UserId: userId }
         })
         return await this.CartDetails.findOne({
             where: { CartId: cart.id },
@@ -32,11 +35,11 @@ class CartRepository {
                 {
                     model: this.Products,
                     as: 'product',
-                    where:{id:productId}
+                    where: { id: productId }
                 },
                 {
                     model: this.Sku,
-                    where:{sku_no:skuNo},
+                    where: { sku_no: skuNo },
                     as: 'Sku',
                     include: [
                         { model: this.SkuAttr, as: 'SkuAttr' },
@@ -49,7 +52,7 @@ class CartRepository {
 
     async findAllProductInCart(UserId) {
         const cart = await this.Cart.findOne({
-            where:{UserId:UserId}
+            where: { UserId: UserId }
         })
         return await this.CartDetails.findAll({
             where: { CartId: cart.id },
@@ -98,36 +101,96 @@ class CartRepository {
         return test
     }
 
-    async updateProductToCart({ UserId, ProductId, sku_no, quantity }) {
-        console.log(UserId, ProductId, sku_no, quantity)
-        const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
+    async updateProductToCart({ UserId, CartDetailId, sku_no, quantity }) {
+        const { Cart, CartDetails, Products, Sku, SkuAttr, SkuSpecs } = this;
+        console.log(CartDetailId)
+        // Tìm cart đang active
+
+        const cart = await Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new Error("Cart not found");
 
-        const item = await this.CartDetails.findOne({ where: { CartId: cart.id, ProductId, sku_no } });
+        // Dòng cart cần update
+        const item = await CartDetails.findOne({ where: { CartId: cart.id, id: CartDetailId } });
         if (!item) throw new Error("Product not found in cart");
 
+        // Nếu số lượng = 0, xóa luôn dòng này
         if (quantity === 0) {
             await item.destroy();
-        } else {
-            item.quantity = quantity;
-            await item.save();
+            return null;
         }
 
-        return await this.CartDetails.findOne({
-            where: { id: item.id },
-            include: [
-                { model: this.Products, as: "product" },
-                {
-                    model: this.Sku,
-                    as: "Sku",
-                    include: [
-                        { model: this.SkuAttr, as: "SkuAttr" },
-                        { model: this.SkuSpecs, as: "SkuSpecs" },
-                    ]
+        // Nếu thay đổi SKU (sku_no mới khác dòng hiện tại)
+        if (sku_no && sku_no !== item.sku_no) {
+            // Check xem đã có dòng nào cùng ProductId + sku_no mới trong cart chưa
+            const existing = await CartDetails.findOne({
+                where: {
+                    CartId: cart.id,
+                    ProductId: item.ProductId,
+                    sku_no: sku_no
                 }
-            ]
-        });
+            });
+
+            if (existing) {
+                // Nếu đã có dòng, cộng dồn quantity, xoá dòng cũ
+                existing.quantity += quantity;
+                await existing.save();
+                await item.destroy();
+
+                // Trả về dòng vừa merge (có thể cần reload toàn bộ cart ở FE)
+                return existing.reload({
+                    include: [
+                        { model: Products, as: "product" },
+                        {
+                            model: Sku,
+                            as: "Sku",
+                            include: [
+                                { model: SkuAttr, as: "SkuAttr" },
+                                { model: SkuSpecs, as: "SkuSpecs" },
+                            ]
+                        }
+                    ]
+                });
+            } else {
+                // Nếu chưa có, chỉ update sku_no và quantity dòng này
+                item.sku_no = sku_no;
+                item.quantity = quantity;
+                await item.save();
+
+                return item.reload({
+                    include: [
+                        { model: Products, as: "product" },
+                        {
+                            model: Sku,
+                            as: "Sku",
+                            include: [
+                                { model: SkuAttr, as: "SkuAttr" },
+                                { model: SkuSpecs, as: "SkuSpecs" },
+                            ]
+                        }
+                    ]
+                });
+            }
+        } else {
+            // Không đổi SKU, chỉ update số lượng
+            item.quantity = quantity;
+            await item.save();
+
+            return item.reload({
+                include: [
+                    { model: Products, as: "product" },
+                    {
+                        model: Sku,
+                        as: "Sku",
+                        include: [
+                            { model: SkuAttr, as: "SkuAttr" },
+                            { model: SkuSpecs, as: "SkuSpecs" },
+                        ]
+                    }
+                ]
+            });
+        }
     }
+
 
     async removeProductFromCart(UserId, ProductId, sku_no) {
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });

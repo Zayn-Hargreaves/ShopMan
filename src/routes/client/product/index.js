@@ -672,4 +672,5 @@ router.get("/:productId/comments", optionalAuthentication,asyncHandler(ProductCo
 router.post("/:productId/comments", authentication, asyncHandler(ProductController.CreateComment))
 
 router.get("/:productId/skus", asyncHandler(ProductController.getProductSkus))
+router.get("/:ProductId/discounts", asyncHandler(ProductController.getDiscountOfProduct))
 module.exports = router;

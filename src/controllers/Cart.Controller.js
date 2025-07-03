@@ -19,11 +19,11 @@ class CartController {
     }
 
     updateProductToCart = async (req, res, next) => {
-        const { ProductId, skuNo, quantity } = req.body
+        const { CartDetailId, skuNo, quantity } = req.body
         const userId = req.userId
         new OkResponse({
             message: 'update product to cart success',
-            metadata: await CartService.updateProductToCart(userId, ProductId, skuNo, parseInt(quantity))
+            metadata: await CartService.updateProductToCart(userId, CartDetailId, skuNo, parseInt(quantity))
         }).send(res)
     }
 
@@ -52,6 +52,7 @@ class CartController {
             metadata:await CartService.getNumberProductInCart(userId)
         }).send(res)
     }
+   
 }
 
 module.exports = new CartController()

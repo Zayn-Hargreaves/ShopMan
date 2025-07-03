@@ -1,6 +1,7 @@
 const { OkResponse } = require("../cores/success.response");
 const CommentService = require("../services/Comment.service");
 const ProductService = require("../services/Product.service")
+const CartService = require("../services/Cart.service")
 const ElasticSearchService = require("../services/ElasticSearch.service")
 class ProductController {
     getProductDetail = async (req, res, next) => {
@@ -77,6 +78,13 @@ class ProductController {
         new OkResponse({
             message:"get produt sku success",
             metadata: await ProductService.getProductSkus(productId)
+        }).send(res)
+    }
+     getDiscountOfProduct = async(req, res, next)=>{
+        const ProductId = req.params.ProductId
+        new OkResponse({
+            message:"get Product discount success",
+            metadata:await CartService.getDiscountOfProduct(ProductId)
         }).send(res)
     }
 }
