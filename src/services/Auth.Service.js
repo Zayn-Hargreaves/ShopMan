@@ -238,7 +238,6 @@ class AuthService {
     }
 
     static async changePassword({ resetToken, newPassword, confirmedPassword }) {
-        console.log(resetToken, newPassword, confirmedPassword)
         await RepositoryFactory.initialize()
         const UserRepository = RepositoryFactory.getRepository("UserRepository")
         if (!resetToken || !newPassword || !confirmedPassword) {

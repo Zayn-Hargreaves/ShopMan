@@ -6,8 +6,8 @@ class PaymentFactory {
     static getPaymentService(method) {
         switch (method) {
             case 'Stripe': return StripeService;
-            case 'Cod': return CODService;
-            default: throw new Error("Unsupported payment method");
+            case 'COD': return CODService;
+            default: throw new Error("Unsupported payment method ::", method);
         }
     }
 }

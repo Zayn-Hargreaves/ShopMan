@@ -16,7 +16,6 @@ const initializeOrderDetails = async (sequelize) => {
         },
         sku_no:{
             type:DataTypes.STRING,
-            unique:true
         },
         ShopId: { type: DataTypes.INTEGER },
         quantity: {

@@ -11,10 +11,11 @@ class CheckoutController {
     }
 
     checkout = async (req, res, next) => {
-        const { selectedItems, addressId, paymentMethod, source } = req.body; // [{ productId, skuNo, quantity }]
+        console.log(req.body)
+        const { selectedItems, addressId, paymentMethodId, source } = req.body; // [{ productId, skuNo, quantity }]
         const userId = req.userId;
 
-        const result = await CheckoutService.checkout({ userId, selectedItems, addressId, paymentMethod, source });
+        const result = await CheckoutService.checkout({ userId, selectedItems, addressId, paymentMethodId, source });
 
         new OkResponse({
             message: "Tạo thanh toán từ cart thành công",

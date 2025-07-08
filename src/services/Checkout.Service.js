@@ -4,9 +4,15 @@ const RedisService = require("./Redis.Service");
 const EmailService = require("./Email.service");
 const { retry } = require("../helpers/retryFuntion");
 const { pushOrderToES, pushOrderDetailToES } = require("./elasticsearch/orderDetailES.service");
-const GhnService = require("./shipping/GHNService");
 const NotfiticationService = require("./Notification.service");
-
+const {
+    createShipment,
+    purchaseLabel,
+    refundLabel,
+    trackShipment,
+    getShipment,
+    getLabel
+} = require("./shipping/ShippoService");
 class CheckoutService {
     // 1. Lấy tất cả payment method cho FE
     static async getPaymentMethod() {
@@ -97,12 +103,13 @@ class CheckoutService {
             }
 
             // Payment Intent
-            const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentIntentId)
+            const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentMethodId)
+            console.log(paymentMethod)
             const paymentService = PaymentFactory.getPaymentService(paymentMethod.name);
             const paymentResult = await paymentService.createPayment({
                 amount: Math.round(totalAmount),
                 currency: "sgd",
-                meta: { userId: String(userId), type: source || (selectedItems.length > 1 ? 'cart' : 'buynow') },
+                meta: { userId: String(userId), type: source },
             });
 
             const paymentIntentId = paymentResult.paymentIntentId || `cod_${Date.now()}`;
@@ -112,7 +119,7 @@ class CheckoutService {
                 totalAmount,
                 addressId,
                 paymentMethodId,
-                type: source || (selectedItems.length > 1 ? 'cart' : 'buynow'),
+                type: source,
             }, 900);
 
             return {
@@ -140,15 +147,15 @@ class CheckoutService {
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
         const AddressRepo = RepositoryFactory.getRepository("AddressRepository");
-        const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository")
-        const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentIntentId)
+        const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository");
 
         // 1. Lấy checkout session
         const checkoutData = await RedisService.get(`checkout:${userId}:${paymentIntentId}`);
         if (!checkoutData) throw new Error("Checkout session expired or invalid");
 
         // 2. Xác thực payment
-        const paymentService = PaymentFactory.getPaymentService(checkoutData.paymentMethod);
+        const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(checkoutData.paymentMethodId);
+        const paymentService = PaymentFactory.getPaymentService(paymentMethod.name);
         const isPaid = await paymentService.verifyPayment(paymentIntentId);
         if (!isPaid) throw new Error("Payment not completed or invalid");
 
@@ -204,7 +211,6 @@ class CheckoutService {
                     shopId: ShopId || null,
                     categoryId: categoryId || null,
                 });
-
                 // Nếu là cart thì xóa khỏi cart
                 if (checkoutData.type === "cart") {
                     const cart = await CartRepo.getOrCreateCart(userId);
@@ -233,60 +239,69 @@ class CheckoutService {
                 PaymentMethodId: checkoutData.paymentMethodId,
             }, { transaction });
 
-            // =========================
-            // 7. Gọi GHN API Tạo vận đơn (GhnService.createOrder)
-            // =========================
-            let ghnOrderRes = null;
+            // ============ 7. Tạo shipment qua Shippo (North America) ============
+            let shippoShipment = null, shippoTransaction = null, trackingNumber = null, labelUrl = null;
+
             try {
-                // Lấy địa chỉ giao hàng
+                // Địa chỉ gửi (Trump Tower NYC)
+                const fromAddress = {
+                    name: "ShopMan Demo",
+                    street1: "721 5th Ave",
+                    city: "New York",
+                    state: "NY",
+                    zip: "10022",
+                    country: "US",
+                    phone: "212-832-2000",
+                    email: "shopman@example.com"
+                };
+
+                // Địa chỉ nhận (White House)
                 const addressObj = await AddressRepo.findById(checkoutData.addressId);
                 if (!addressObj) throw new Error("Không tìm thấy địa chỉ giao hàng!");
 
-                // Lấy user info để gửi recipient
-                const userInfo = await OrderRepo.getUserInfo(userId);
-
-                // Tạo body chuẩn GHN (tham khảo docs GHN)
-                const ghnOrderBody = {
-                    payment_type_id: checkoutData.paymentMethod === "cod" ? 2 : 1, // 2: người nhận trả, 1: shop trả
-                    note: "Giao nhanh giúp shop!",
-                    required_note: "KHONGCHOXEMHANG", // "CHOTHUHANG" (cho thử hàng) nếu cần
-                    from_name: "Tên Shop",
-                    from_phone: "0123456789",
-                    from_address: " số 101, đường Nguyễn Văn Trỗi",
-                    from_ward_name: "Phương liệt",
-                    from_district_name: "Thanh Xuân",
-                    from_province_name: "Hà Nội",
-                    to_name: userInfo.name,
-                    to_phone: userInfo.phone || "0123456789",
-                    to_address: addressObj.address,
-                    to_ward_name: addressObj.ward || "",
-                    to_district_name: addressObj.district || "",
-                    to_province_name: addressObj.city,
-                    cod_amount: checkoutData.paymentMethod === "cod" ? orderTotal : 0,
-                    content: "ShopMan - Đơn hàng #" + createdOrder.id,
-                    weight: 500, // gram, hoặc tổng khối lượng sản phẩm
-                    length: 20, width: 10, height: 10, // cm
-                    service_id: 53321, // lấy từ API GHN dịch vụ phù hợp (GHN Express, GHN Standard...)
-                    items: checkoutData.items.map(item => ({
-                        name: item.productName || "Sản phẩm",
-                        code: item.skuNo,
-                        quantity: item.quantity,
-                        price: item.unitPrice,
-                    })),
+                // Convert address DB sang Shippo
+                const toAddress = {
+                    name: "White House",
+                    street1: "1600 Pennsylvania Avenue NW",
+                    city: "Washington",
+                    state: "DC",
+                    zip: "20500",
+                    country: "US",
+                    phone: "202-456-1111",
+                    email: "customer@example.com"
                 };
 
-                // Gọi GHN
-                ghnOrderRes = await GhnService.createGhnOrder(ghnOrderBody);
+                // Tổng khối lượng kiện (demo: lấy tổng quantity)
+                const totalWeight = checkoutData.items.reduce((sum, i) => sum + (i.quantity * 2), 0) || 2; // 2lb/item (giả lập)
+                const parcel = {
+                    length: "10",
+                    width: "7",
+                    height: "4",
+                    distance_unit: "in",
+                    weight: "2",
+                    mass_unit: "lb"
+                };
+
+                // Tạo shipment
+                shippoShipment = await createShipment({ fromAddress, toAddress, parcel });
+
+                // Lấy rate rẻ nhất
+                const rate = shippoShipment.rates[0];
+                // Mua shipping label
+                shippoTransaction = await purchaseLabel(shippoShipment.object_id, rate.object_id);
+                trackingNumber = shippoTransaction.tracking_number;
+                labelUrl = shippoTransaction.label_url;
 
                 // Lưu tracking vào DB
                 await OrderRepo.update(createdOrder.id, {
-                    shippingProvider: "GHN",
-                    shippingTrackingCode: ghnOrderRes.data.order_code,
-                    shippingStatus: "WAITING_PICKUP"
+                    shippingProvider: "Shippo",
+                    shippingTrackingCode: shippoTransaction.object_id,
+                    shippingLabelUrl: labelUrl,
+                    shippingStatus: "LABEL_CREATED" 
                 }, { transaction });
 
             } catch (e) {
-                console.error("GHN API error:", e.message);
+                console.error("Shippo API error:", e.message || e);
                 // Có thể retry sau hoặc flag đơn hàng cho admin xử lý
             }
 
@@ -302,8 +317,8 @@ class CheckoutService {
                 paymentMethodId: checkoutData.paymentMethodId,
                 createdAt: createdOrder.createdAt,
                 products: esProducts,
-                shippingTrackingCode: ghnOrderRes?.data?.order_code || null,
-                shippingProvider: "GHN",
+                shippingTrackingCode: trackingNumber,
+                shippingProvider: "Shippo",
             });
 
             for (const item of orderDetailsData) {
@@ -329,11 +344,10 @@ class CheckoutService {
                     isRead: false,
                     meta: {
                         orderId: createdOrder.id,
-                        link: `/order/details/${createdOrder.id}` // hoặc deep link cho app mobile nếu có
+                        link: `/order/details/${createdOrder.id}`
                     }
                 })
             ).catch(console.error);
-
 
             // Email invoice
             const userInfo = await OrderRepo.getUserInfo(userId);
@@ -350,11 +364,18 @@ class CheckoutService {
                         itemTotal: item.itemTotal,
                     })),
                     orderTotal,
+                    trackingNumber,
+                    labelUrl
                 })
             ).catch(console.error);
-            retry(async () =>
-                await NotfiticationService.sendNotification(userId, "Thanh toans ")
-            ).catch(console.error);
+
+            retry(async () => {
+                const res = await NotfiticationService.sendNotification(userId, "Thanh toán đơn hàng thành công", `Bạn vừa thanh toán thành công đơn hàng ${createdOrder.id}`);
+                console.log("[NOTI] Gửi notification result:", res);
+                return res;
+            }).catch(err => {
+                console.error("[NOTI] Lỗi gửi notification:", err);
+            });
 
             await RedisService.remove(`checkout:${userId}:${paymentIntentId}`);
 
@@ -363,7 +384,8 @@ class CheckoutService {
                 paymentIntentId,
                 orderId: createdOrder.id,
                 total: orderTotal,
-                shippingTrackingCode: ghnOrderRes?.data?.order_code || null,
+                shippingTrackingCode: trackingNumber,
+                shippingLabelUrl: labelUrl
             };
         } catch (error) {
             if (transaction && !transaction.finished) await transaction.rollback();
@@ -371,6 +393,7 @@ class CheckoutService {
             throw error;
         }
     }
+
 
 }
 

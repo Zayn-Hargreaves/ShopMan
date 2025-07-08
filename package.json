@@ -35,6 +35,7 @@
     "pg-hstore": "^2.3.4",
     "pug": "^3.0.3",
     "sequelize": "^6.37.7",
+    "shippo": "^1.7.1",
     "slugify": "^1.6.6",
     "string-strip-html": "^13.4.12",
     "stripe": "^18.0.0",

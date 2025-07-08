@@ -55,8 +55,6 @@ class UserRepository {
     }
 
     async updatePassword(id, password) {
-        console.log(id)
-        console.log(password)
         return await this.User.update({ password: password }, { where: { id } });
     }
 

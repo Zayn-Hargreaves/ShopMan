@@ -1,6 +1,13 @@
 const RepositoryFactory = require("../models/repositories/repositoryFactory");
-const GhnService = require("./shipping/GHNService");
 const EmailService = require("./Email.service")
+const {
+    createShipment,
+    purchaseLabel,
+    refundLabel,
+    trackShipment,
+    getShipment,
+    getLabel
+} = require("./shipping/ShippoService");
 class OrderService {
     static async getOrderDetais(userId, orderId) {
         await RepositoryFactory.initialize();

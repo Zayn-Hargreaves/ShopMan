@@ -306,7 +306,7 @@ const initializeModels = async () => {
             constraints: false,
             foreignKeyConstraints: false
         });
-        await sequelize.sync();
+        await sequelize.sync({alter:true});
 
         return {
             sequelize,

@@ -94,6 +94,12 @@ class OrderRepository {
     async updateOrder(orderId, { Status }, options = {}) {
         return await this.Order.update({ where: { id: orderId }, status: Status }, ...options)
     }
+    async update(orderId, fieldsToUpdate = {}, options = {}) {
+    return await this.Order.update(
+        fieldsToUpdate,
+        { where: { id: orderId }, ...options }
+    );
+}
     async getOrderById(id) {
         return await this.Order.findByPk(id)
     }
