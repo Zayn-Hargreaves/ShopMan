@@ -2,7 +2,7 @@ const { OkResponse } = require("../cores/success.response");
 const CommentService = require("../services/Comment.service");
 const ProductService = require("../services/Product.service")
 const CartService = require("../services/Cart.service")
-const ElasticSearchService = require("../services/ElasticSearch.service")
+const ElasticSearchService = require("../services/elasticsearch/productES.service")
 class ProductController {
     getProductDetail = async (req, res, next) => {
         const { slug } = req.params

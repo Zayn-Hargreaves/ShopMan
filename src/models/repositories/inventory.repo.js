@@ -1,14 +1,21 @@
+const { NotFoundError } = require("../../cores/error.response");
+
 class InventoryRepository {
     constructor(models) {
         this.Inventories = models.Inventories;
         this.Products = models.Products;
+        this.Sku = models.Sku
     }
 
     /**
      * Trừ tồn kho khi xác nhận thanh toán
      */
-    async decrementStock({ ProductId, ShopId = null, quantity }) {
-        const whereClause = { ProductId };
+    async decrementStock({ skuNo, ShopId = null, quantity }) {
+        const holderSku = await this.Sku.findOne({where:{sku_no:skuNo}});
+        if(!holderSku){
+            throw new NotFoundError("Something went wrong, product not found")
+        }
+        const whereClause = { SkuId: holderSku.id};
         if (ShopId) whereClause.ShopId = ShopId;
 
         const inven = await this.Inventories.findOne({ where: whereClause });
@@ -22,27 +29,21 @@ class InventoryRepository {
     /**
      * Hoàn lại tồn kho (nếu thanh toán thất bại hoặc bị hủy)
      */
-    async restoreStock({ ProductId, ShopId = null, quantity }) {
-        const whereClause = { ProductId };
+    async restoreStock({ SkuId,
+                    ShopId,
+                    quantity,
+                    options}) {
+        const whereClause = { SkuId };
         if (ShopId) whereClause.ShopId = ShopId;
-
-        const inven = await this.Inventories.findOne({ where: whereClause });
-        if (!inven) {
-            throw new Error("Inventory not found to restore");
-        }
-        inven.inven_quantity += quantity;
-        await inven.save();
+        
+        return await this.Inventories.increment(
+            {quantity:quantity},
+            {where:whereClause},
+            ...options
+        )
     }
 
-    /**
-     * Cập nhật số lượng bán ra của sản phẩm
-     */
-    async increaseSaleCount(productId, quantity) {
-        await this.Products.increment(
-            { sale_count: quantity },
-            { where: { id: productId } }
-        );
-    }
+   
 
     /**
      * Truy vấn tồn kho hiện tại

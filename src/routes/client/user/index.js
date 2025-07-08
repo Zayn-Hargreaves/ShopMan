@@ -204,5 +204,7 @@ const userController = require("../../../controllers/User.Controller");
 
 router.get("/profile", asyncHandler(userController.getUserProfile));
 router.put("/profile/update", asyncHandler(userController.updateUserProfile));
+router.get("/address", asyncHandler(userController.getUserAddress))
+router.put("/address", asyncHandler(userController.addUserAddress))
 
 module.exports = router;

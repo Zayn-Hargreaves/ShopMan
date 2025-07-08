@@ -80,6 +80,12 @@ class UserRepository {
             { where: { id } }
         );
     }
+    async incrementBalance(userId, amount, options ={}){
+        return await this.User.increment(
+            {balance:amount},
+            {where:{id:userId}, ...options}
+        )
+    }
 }
 
 module.exports = UserRepository

@@ -48,7 +48,6 @@ class ProductRepository {
     }
 
     async getDealOfTheDayProducts(cursor = null, limit = 10, minPrice, maxPrice, minRating, sortBy) {
-        console.log(sortBy)
         const where = {
             status: 'active',
             ...(cursor && { id: { [Op.lte]: cursor } }),
@@ -195,6 +194,21 @@ class ProductRepository {
             attrs: sku.SkuAttr?.sku_attrs || {},
             specs: sku.SkuSpecs?.sku_specs || {}
         }));
+    }
+    async incrementStock(SkuId,quantity, options= {}){
+        return await this.Sku.increment({
+            sku_stock:quantity,
+            where:{id:SkuId},
+            ...options
+        })
+    }
+    async findSkuBySkuNo(sku_no, options = {}){
+        return await this.Sku.findOne({
+            where:{
+                sku_no
+            },
+            ...options
+        })
     }
 }
 

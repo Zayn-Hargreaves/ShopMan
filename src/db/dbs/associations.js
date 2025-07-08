@@ -267,7 +267,9 @@ const initializeModels = async () => {
 
         Category.hasMany(CampaignCategory, { foreignKey: { name: 'CategoryId' }, as: 'category' })
         CampaignCategory.belongsTo(Category, { foreignKey: { name: 'CategoryId' }, as: 'category' })
-
+        
+        Shop.hasMany(OrderDetails, {foreignKey:{name:"ShopId"}, as:"shop"})
+        OrderDetails.belongsTo(Shop,{foreignKey:{name:"ShopId"}, as:"Shop"})
         CartDetails.belongsTo(Sku, {
             foreignKey: 'sku_no',
             targetKey: 'sku_no',
@@ -284,7 +286,26 @@ const initializeModels = async () => {
             foreignKeyConstraints: false
         });
 
+        Address.hasMany(Order, {foreignKey:{name:"AddressId", as:"address"}})
+        Order.belongsTo(Address, {foreignKey:{name:"AddressId", as:'address'}})
+        
+        PaymentMethod.hasMany(Order,{foreignKey:{name:"PaymentMethodId", as:'paymentMethod'}})
+        Order.belongsTo(PaymentMethod, {foreignKey:{name:"PaymentMethodId", as:'paymentMethod'}})
+        OrderDetails.belongsTo(Sku, {
+            foreignKey: 'sku_no',
+            targetKey: 'sku_no',
+            as: 'Sku',
+            constraints: false,
+            foreignKeyConstraints: false
+        });
 
+        Sku.hasMany(OrderDetails, {
+            foreignKey: 'sku_no',
+            sourceKey: 'sku_no',
+            as: 'OrderDetails',
+            constraints: false,
+            foreignKeyConstraints: false
+        });
         await sequelize.sync();
 
         return {

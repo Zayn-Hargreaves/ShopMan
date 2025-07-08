@@ -4,6 +4,9 @@ class AddressRepository {
     constructor(models) {
         this.Address = models.Address
     }
+    async findById(id){
+        return await this.Address.findByPk(id)
+    }
     async findAddressByUserId({UserId, address_type = 'main'}) {
         return await this.Address.findOne({
             where: {

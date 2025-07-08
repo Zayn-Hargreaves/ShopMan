@@ -1,17 +1,29 @@
 const RepositoryFactory = require("../models/repositories/repositoryFactory");
-const Stripe = require("stripe");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const PaymentFactory = require("./payment/PaymentFactory");
 const RedisService = require("./Redis.Service");
-const EmailService = require("./Email.service")
-const { retry } = require("../helpers/retryFuntion")
+const EmailService = require("./Email.service");
+const { retry } = require("../helpers/retryFuntion");
+const { pushOrderToES, pushOrderDetailToES } = require("./elasticsearch/orderDetailES.service");
+const GhnService = require("./shipping/GHNService");
+const NotfiticationService = require("./Notification.service");
+
 class CheckoutService {
-    static async fromCart({ userId, selectedItems = [], shopDiscountIds = [] }) {
+    // 1. Lấy tất cả payment method cho FE
+    static async getPaymentMethod() {
+        await RepositoryFactory.initialize();
+        const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository");
+        return await PaymentMethodRepo.getAllPaymentMethod();
+    }
+
+    static async checkout({ userId, selectedItems = [], addressId, paymentMethodId, source = null }) {
         await RepositoryFactory.initialize();
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
         const DiscountRepo = RepositoryFactory.getRepository("DiscountRepository");
-
+        const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository")
         if (!selectedItems.length) throw new Error("No products selected for checkout");
+        if (!addressId) throw new Error("No address selected");
+        if (!paymentMethodId) throw new Error("No payment method selected");
 
         let totalAmount = 0;
         const finalItems = [];
@@ -21,23 +33,27 @@ class CheckoutService {
             for (const item of selectedItems) {
                 const { productId, skuNo, quantity, discountIds = [] } = item;
 
-                const productInCart = await CartRepo.findProductInCart(userId, productId, skuNo);
-                if (!productInCart || productInCart.quantity < quantity) {
-                    throw new Error(`Invalid or insufficient cart quantity for product ${productId} | ${skuNo}`);
+                // Nếu checkout từ cart thì kiểm tra lại giỏ
+                let productInCart = null;
+                if (source === 'cart' || source == null) {
+                    productInCart = await CartRepo.findProductInCart(userId, productId, skuNo);
+                    if (!productInCart || productInCart.quantity < quantity) {
+                        throw new Error(`Invalid or insufficient cart quantity for product ${productId} | ${skuNo}`);
+                    }
                 }
 
+                // Lấy thông tin sản phẩm
                 const productSku = await ProductRepo.getProductWithSku(productId, skuNo);
-                if (!productSku) {
-                    throw new Error(`Product ${productId} | ${skuNo} not found in product repository`);
-                }
+                if (!productSku) throw new Error(`Product ${productId} | ${skuNo} not found in product repository`);
 
+                // Check tồn kho
                 const availableStock = productSku.sku_stock;
                 const reservedQty = await RedisService.getReservedQuantity(productId, skuNo) || 0;
-
                 if ((availableStock - reservedQty) < quantity) {
                     throw new Error(`Not enough stock for product ${productId} | ${skuNo}`);
                 }
 
+                // Lock sản phẩm
                 const lock = await RedisService.acquireLock({
                     productID: productId,
                     skuNo: skuNo,
@@ -45,128 +61,70 @@ class CheckoutService {
                     quantity,
                     timeout: 15,
                 });
-
                 if (!lock) throw new Error(`Product ${productId} is being checked out by another user.`);
                 lockList.push(lock);
 
-                const unitPrice = productSku.sku_price;
-                let itemTotal = quantity * parseFloat(unitPrice);
+                // Giá & giảm giá
+                const unitPrice = parseFloat(productSku.sku_price);
+                let itemTotal = unitPrice * quantity;
 
-                const validDiscounts = await DiscountRepo.validateDiscountsForProduct(productId, discountIds, itemTotal);
-                const discountAmount = validDiscounts.reduce((sum, d) => {
-                    return sum + (d.type === 'amount' ? d.value : (itemTotal * d.value) / 100);
-                }, 0);
-
+                // Áp dụng discount sản phẩm
+                let discountAmount = 0;
+                let validDiscounts = [];
+                if (discountIds.length > 0) {
+                    validDiscounts = await DiscountRepo.validateDiscountsForProduct(productId, discountIds, itemTotal);
+                    for (const d of validDiscounts) {
+                        if (d.type === 'amount') discountAmount += d.value;
+                        else if (d.type === 'percent') discountAmount += itemTotal * d.value / 100;
+                    }
+                }
+                if (discountAmount > itemTotal) discountAmount = itemTotal;
                 itemTotal -= discountAmount;
+                if (itemTotal < 0) itemTotal = 0;
+
                 totalAmount += itemTotal;
 
                 finalItems.push({
                     ...item,
                     unitPrice,
-                    discountAmount,
                     itemTotal,
+                    discountAmount,
                     validDiscounts,
+                    ShopId: productSku.ShopId || productSku.shopId || null,
+                    productName: productSku.product_name || productSku.name || "",
+                    categoryId: productSku.categoryId || productSku.CategoryId || null
                 });
             }
 
-            const shopLevelDiscounts = await DiscountRepo.validateShopDiscounts(shopDiscountIds, totalAmount);
-            const shopDiscountTotal = shopLevelDiscounts.reduce((sum, d) => {
-                return sum + (d.type === 'amount' ? d.value : (totalAmount * d.value) / 100);
-            }, 0);
-            totalAmount -= shopDiscountTotal;
-
-            const paymentIntent = await stripe.paymentIntents.create({
+            // Payment Intent
+            const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentIntentId)
+            const paymentService = PaymentFactory.getPaymentService(paymentMethod.name);
+            const paymentResult = await paymentService.createPayment({
                 amount: Math.round(totalAmount),
                 currency: "sgd",
-                metadata: { userId: String(userId), type: "cart" },
+                meta: { userId: String(userId), type: source || (selectedItems.length > 1 ? 'cart' : 'buynow') },
             });
 
-            await RedisService.set(`checkout:${userId}:${paymentIntent.id}`, {
+            const paymentIntentId = paymentResult.paymentIntentId || `cod_${Date.now()}`;
+            await RedisService.set(`checkout:${userId}:${paymentIntentId}`, {
+                userId,
                 items: finalItems,
-                shopDiscounts: shopLevelDiscounts,
                 totalAmount,
-                type: "cart",
+                addressId,
+                paymentMethodId,
+                type: source || (selectedItems.length > 1 ? 'cart' : 'buynow'),
             }, 900);
 
             return {
-                paymentIntentClientSecret: paymentIntent.client_secret,
+                paymentIntentClientSecret: paymentResult.clientSecret,
+                paymentIntentId,
                 items: finalItems,
                 totalAmount,
-                shopDiscounts: shopLevelDiscounts,
+                addressId,
+                paymentMethodId,
             };
         } catch (error) {
-            for (const lock of lockList) {
-                await RedisService.releaseLock(lock);
-            }
-            throw error;
-        }
-    }
-
-
-    static async buyNow({ userId, productId, skuNo, quantity, discountIds = [] }) {
-        await RepositoryFactory.initialize();
-        const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
-        const DiscountRepo = RepositoryFactory.getRepository("DiscountRepository");
-
-        let lock = null;
-        try {
-            const productDetail = await ProductRepo.getProductWithSku(productId, skuNo);
-
-            if (!productDetail || productDetail.sku_stock < quantity) {
-                throw new Error("Product not available or insufficient stock");
-            }
-
-            const reservedQty = await RedisService.getReservedQuantity(productId, skuNo) || 0;
-            if ((productDetail.sku_stock - reservedQty) < quantity) {
-                throw new Error(`Not enough stock for product ${productId} | ${skuNo}`);
-            }
-
-            lock = await RedisService.acquireLock({
-                productID: productId,
-                skuNo: skuNo,
-                cartID: userId,
-                quantity,
-                timeout: 900,
-            });
-            if (!lock) throw new Error(`Product ${productId} is being processed by another user.`);
-
-            const unitPrice = productDetail.sku_price;
-            let itemTotal = quantity * parseFloat(unitPrice);
-
-            const validDiscounts = await DiscountRepo.validateDiscountsForProduct(productId, discountIds, itemTotal);
-            const discountAmount = validDiscounts.reduce((sum, d) => {
-                return sum + (d.type === 'amount' ? d.value : (itemTotal * d.value) / 100);
-            }, 0);
-
-            itemTotal -= discountAmount;
-
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: Math.round(itemTotal),
-                currency: "sgd",
-                metadata: { userId: String(userId), productId, skuNo, type: "buynow" },
-            });
-
-            await RedisService.set(`checkout:${userId}:${paymentIntent.id}`, {
-                productId,
-                skuNo,
-                quantity,
-                unitPrice,
-                itemTotal,
-                validDiscounts,
-                type: "buynow",
-            }, 900);
-
-            return {
-                paymentIntentClientSecret: paymentIntent.client_secret,
-                productId,
-                skuNo,
-                quantity,
-                unitPrice,
-                itemTotal,
-                validDiscounts,
-            };
-        } catch (error) {
-            if (lock) await RedisService.releaseLock(lock);
+            for (const lock of lockList) await RedisService.releaseLock(lock);
             throw error;
         }
     }
@@ -181,94 +139,80 @@ class CheckoutService {
         const PaymentRepo = RepositoryFactory.getRepository("PaymentRepository");
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
+        const AddressRepo = RepositoryFactory.getRepository("AddressRepository");
+        const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository")
+        const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentIntentId)
 
-        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-        if (!paymentIntent || paymentIntent.status !== "succeeded") {
-            throw new Error("Payment not completed or invalid");
-        }
-
+        // 1. Lấy checkout session
         const checkoutData = await RedisService.get(`checkout:${userId}:${paymentIntentId}`);
         if (!checkoutData) throw new Error("Checkout session expired or invalid");
+
+        // 2. Xác thực payment
+        const paymentService = PaymentFactory.getPaymentService(checkoutData.paymentMethod);
+        const isPaid = await paymentService.verifyPayment(paymentIntentId);
+        if (!isPaid) throw new Error("Payment not completed or invalid");
 
         let orderTotal = 0;
         const orderDetailsData = [];
         const lockReleaseQueue = [];
-
         const transaction = await sequelize.transaction();
+        let createdOrder = null;
 
         try {
-            const order = await OrderRepo.createOrder({
+            // 3. Tạo đơn hàng SQL
+            createdOrder = await OrderRepo.createOrder({
                 UserId: userId,
+                AddressId: checkoutData.addressId,
                 TotalPrice: 0,
                 Status: "paid",
+                PaymentMethodId: checkoutData.paymentMethodId,
             }, { transaction });
 
-            if (checkoutData.type === "cart") {
-                for (const item of checkoutData.items) {
-                    const { productId, skuNo, quantity, unitPrice } = item;
+            // 4. Tạo chi tiết đơn hàng + tổng hợp sản phẩm
+            const esProducts = [];
+            for (const item of checkoutData.items) {
+                const { productId, skuNo, quantity, unitPrice, itemTotal, ShopId, productName, discountAmount, categoryId } = item;
 
-                    await InventoryRepo.decrementStock({
-                        ProductId: productId,
-                        ShopId: item.ShopId || null,
-                        quantity,
-                        transaction,
-                    });
-
-                    await ProductRepo.increaseSaleCount(productId, quantity);
-
-                    const discounts = await DiscountRepo.getAvailableDiscounts(productId);
-                    for (const d of discounts) {
-                        await DiscountRepo.incrementUserCounts(d.id);
-                    }
-
-                    orderTotal += item.itemTotal;
-                    orderDetailsData.push({
-                        ProductId: productId,
-                        quantity,
-                        price_at_time: unitPrice,
-                    });
-
-                    const cart = await CartRepo.getOrCreateCart(userId);
-                    await CartRepo.removeItemsFromCart(cart.id, checkoutData.items.map(item => ({
-                        productId: item.productId,
-                        skuNo: item.skuNo
-                    })));
-
-
-                    lockReleaseQueue.push({
-                        key: `lock:product:${productId}:cart:${userId}`,
-                        token: null,
-                        productID: productId,
-                        skuNo,
-                        cartID: userId,
-                    });
-                }
-            } else if (checkoutData.type === "buynow") {
-                const { productId, skuNo, quantity, unitPrice, itemTotal } = checkoutData;
-
+                // Trừ kho, tăng sale
                 await InventoryRepo.decrementStock({
-                    ProductId: productId,
-                    ShopId: null,
+                    skuNo,
+                    ShopId: ShopId || null,
                     quantity,
                     transaction,
                 });
-
                 await ProductRepo.increaseSaleCount(productId, quantity);
 
-                const discounts = await DiscountRepo.getAvailableDiscounts(productId);
-                for (const d of discounts) {
+                for (const d of (item.validDiscounts || [])) {
                     await DiscountRepo.incrementUserCounts(d.id);
                 }
 
-                orderTotal = itemTotal;
+                orderTotal += itemTotal;
                 orderDetailsData.push({
                     ProductId: productId,
+                    ShopId: ShopId || null,
+                    sku_no: skuNo,
                     quantity,
                     price_at_time: unitPrice,
                 });
 
+                esProducts.push({
+                    productId,
+                    productName,
+                    quantity,
+                    unitPrice,
+                    discountAmount,
+                    shopId: ShopId || null,
+                    categoryId: categoryId || null,
+                });
+
+                // Nếu là cart thì xóa khỏi cart
+                if (checkoutData.type === "cart") {
+                    const cart = await CartRepo.getOrCreateCart(userId);
+                    await CartRepo.removeItemsFromCart(cart.id, [{ productId, skuNo }]);
+                }
+
                 lockReleaseQueue.push({
-                    key: `lock:product:${productId}:cart:${userId}`,
+                    key: `lock:product:${productId}:sku:${skuNo}:cart:${userId}`,
                     token: null,
                     productID: productId,
                     skuNo,
@@ -276,39 +220,129 @@ class CheckoutService {
                 });
             }
 
-            await OrderRepo.bulkCreateOrderDetails(order.id, orderDetailsData, { transaction });
-            await OrderRepo.updateOrderTotal(order.id, orderTotal, { transaction });
+            // 5. Ghi chi tiết đơn hàng
+            await OrderRepo.bulkCreateOrderDetails(createdOrder.id, orderDetailsData, { transaction });
+            await OrderRepo.updateOrderTotal(createdOrder.id, orderTotal, { transaction });
 
+            // 6. Lưu thông tin payment
             await PaymentRepo.create({
                 UserId: userId,
-                OrderId: order.id,
+                OrderId: createdOrder.id,
                 TotalPrice: orderTotal,
                 Status: "succeeded",
-                PaymentMethodId: 1,
+                PaymentMethodId: checkoutData.paymentMethodId,
             }, { transaction });
+
+            // =========================
+            // 7. Gọi GHN API Tạo vận đơn (GhnService.createOrder)
+            // =========================
+            let ghnOrderRes = null;
+            try {
+                // Lấy địa chỉ giao hàng
+                const addressObj = await AddressRepo.findById(checkoutData.addressId);
+                if (!addressObj) throw new Error("Không tìm thấy địa chỉ giao hàng!");
+
+                // Lấy user info để gửi recipient
+                const userInfo = await OrderRepo.getUserInfo(userId);
+
+                // Tạo body chuẩn GHN (tham khảo docs GHN)
+                const ghnOrderBody = {
+                    payment_type_id: checkoutData.paymentMethod === "cod" ? 2 : 1, // 2: người nhận trả, 1: shop trả
+                    note: "Giao nhanh giúp shop!",
+                    required_note: "KHONGCHOXEMHANG", // "CHOTHUHANG" (cho thử hàng) nếu cần
+                    from_name: "Tên Shop",
+                    from_phone: "0123456789",
+                    from_address: " số 101, đường Nguyễn Văn Trỗi",
+                    from_ward_name: "Phương liệt",
+                    from_district_name: "Thanh Xuân",
+                    from_province_name: "Hà Nội",
+                    to_name: userInfo.name,
+                    to_phone: userInfo.phone || "0123456789",
+                    to_address: addressObj.address,
+                    to_ward_name: addressObj.ward || "",
+                    to_district_name: addressObj.district || "",
+                    to_province_name: addressObj.city,
+                    cod_amount: checkoutData.paymentMethod === "cod" ? orderTotal : 0,
+                    content: "ShopMan - Đơn hàng #" + createdOrder.id,
+                    weight: 500, // gram, hoặc tổng khối lượng sản phẩm
+                    length: 20, width: 10, height: 10, // cm
+                    service_id: 53321, // lấy từ API GHN dịch vụ phù hợp (GHN Express, GHN Standard...)
+                    items: checkoutData.items.map(item => ({
+                        name: item.productName || "Sản phẩm",
+                        code: item.skuNo,
+                        quantity: item.quantity,
+                        price: item.unitPrice,
+                    })),
+                };
+
+                // Gọi GHN
+                ghnOrderRes = await GhnService.createGhnOrder(ghnOrderBody);
+
+                // Lưu tracking vào DB
+                await OrderRepo.update(createdOrder.id, {
+                    shippingProvider: "GHN",
+                    shippingTrackingCode: ghnOrderRes.data.order_code,
+                    shippingStatus: "WAITING_PICKUP"
+                }, { transaction });
+
+            } catch (e) {
+                console.error("GHN API error:", e.message);
+                // Có thể retry sau hoặc flag đơn hàng cho admin xử lý
+            }
 
             await transaction.commit();
 
-            for (const lock of lockReleaseQueue) {
-                await RedisService.releaseLock(lock);
+            // 8. Dual-write: Push lên ElasticSearch
+            await pushOrderToES({
+                orderId: createdOrder.id,
+                userId,
+                addressId: checkoutData.addressId,
+                totalPrice: orderTotal,
+                status: "paid",
+                paymentMethodId: checkoutData.paymentMethodId,
+                createdAt: createdOrder.createdAt,
+                products: esProducts,
+                shippingTrackingCode: ghnOrderRes?.data?.order_code || null,
+                shippingProvider: "GHN",
+            });
+
+            for (const item of orderDetailsData) {
+                await pushOrderDetailToES({
+                    orderId: createdOrder.id,
+                    productId: item.ProductId,
+                    shopId: item.ShopId,
+                    sku_no: item.sku_no,
+                    quantity: item.quantity,
+                    priceAtTime: item.price_at_time,
+                    createdAt: new Date(),
+                });
             }
 
+            // Release lock, gửi email, notification...
+            for (const lock of lockReleaseQueue) await RedisService.releaseLock(lock);
             retry(() =>
                 NotificationRepo.create({
                     type: "order",
                     option: "success",
-                    content: `Đơn hàng ${order.id} của bạn đã được thanh toán thành công`,
+                    content: `Đơn hàng #${createdOrder.id} của bạn đã được thanh toán thành công`,
                     UserId: userId,
+                    isRead: false,
+                    meta: {
+                        orderId: createdOrder.id,
+                        link: `/order/details/${createdOrder.id}` // hoặc deep link cho app mobile nếu có
+                    }
                 })
             ).catch(console.error);
 
+
+            // Email invoice
             const userInfo = await OrderRepo.getUserInfo(userId);
             const emailService = new EmailService(userInfo, null);
             retry(async () =>
                 await emailService.sendInvoice("invoice", "Xác nhận đơn hàng ShopMan", {
-                    orderId: order.id,
+                    orderId: createdOrder.id,
                     orderDate: new Date().toLocaleDateString("vi-VN"),
-                    paymentMethod: "Stripe",
+                    paymentMethod: paymentMethod.name,
                     orderItems: checkoutData.items.map(item => ({
                         productName: item.productName || item.skuNo,
                         quantity: item.quantity,
@@ -317,7 +351,9 @@ class CheckoutService {
                     })),
                     orderTotal,
                 })
-
+            ).catch(console.error);
+            retry(async () =>
+                await NotfiticationService.sendNotification(userId, "Thanh toans ")
             ).catch(console.error);
 
             await RedisService.remove(`checkout:${userId}:${paymentIntentId}`);
@@ -325,14 +361,13 @@ class CheckoutService {
             return {
                 orderCreated: true,
                 paymentIntentId,
-                orderId: order.id,
+                orderId: createdOrder.id,
                 total: orderTotal,
+                shippingTrackingCode: ghnOrderRes?.data?.order_code || null,
             };
         } catch (error) {
-            await transaction.rollback();
-            for (const lock of lockReleaseQueue) {
-                await RedisService.releaseLock(lock);
-            }
+            if (transaction && !transaction.finished) await transaction.rollback();
+            for (const lock of lockReleaseQueue) await RedisService.releaseLock(lock);
             throw error;
         }
     }

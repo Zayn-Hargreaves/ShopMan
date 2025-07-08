@@ -2,33 +2,21 @@ const { OkResponse } = require("../cores/success.response");
 const CheckoutService = require("../services/Checkout.Service");
 
 class CheckoutController {
-    /**
-     * POST /checkout/buynow
-     * @desc Checkout trực tiếp 1 sản phẩm
-     */
-    buyNow = async (req, res, next) => {
-        const { productId, skuNo, quantity } = req.body;
+
+    getAllPaymentMethod = async (req, res, next) => {
+        return new OkResponse({
+            message: " get all payment method success",
+            metadata: await CheckoutService.getPaymentMethod()
+        }).send(res)
+    }
+
+    checkout = async (req, res, next) => {
+        const { selectedItems, addressId, paymentMethod, source } = req.body; // [{ productId, skuNo, quantity }]
         const userId = req.userId;
 
-        const result = await CheckoutService.buyNow({ userId, productId, skuNo, quantity });
+        const result = await CheckoutService.checkout({ userId, selectedItems, addressId, paymentMethod, source });
 
-        return new OkResponse({
-            message: "Tạo thanh toán buy-now thành công",
-            metadata: result,
-        }).send(res);
-    };
-
-    /**
-     * POST /checkout/from-cart
-     * @desc Checkout từ danh sách sản phẩm trong giỏ hàng
-     */
-    fromCart = async (req, res, next) => {
-        const { selectedItems } = req.body; // [{ productId, skuNo, quantity }]
-        const userId = req.userId;
-
-        const result = await CheckoutService.fromCart({ userId, selectedItems });
-
-        return new OkResponse({
+        new OkResponse({
             message: "Tạo thanh toán từ cart thành công",
             metadata: result,
         }).send(res);
@@ -44,7 +32,7 @@ class CheckoutController {
 
         const result = await CheckoutService.confirmPayment({ userId, paymentIntentId });
 
-        return new OkResponse({
+        new OkResponse({
             message: "Xác nhận đơn hàng thành công",
             metadata: result,
         }).send(res);

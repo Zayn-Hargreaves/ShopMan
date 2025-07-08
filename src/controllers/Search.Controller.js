@@ -1,5 +1,5 @@
 const { OkResponse } = require("../cores/success.response")
-const ElasticSearchService = require("../services/ElasticSearch.service")
+const ElasticSearchService = require("../services/elasticsearch/productES.service")
 
 class SearchController {
     SearchProducts = async (req, res, next) => {

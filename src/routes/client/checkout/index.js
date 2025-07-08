@@ -172,8 +172,8 @@ const checkOutController = require("../../../controllers/Checkout.Controller");
  *                       type: number
  */
 
-router.post("/buynow", asyncHandler(checkOutController.buyNow));
-router.post("/from-cart", asyncHandler(checkOutController.fromCart));
+router.post("/", asyncHandler(checkOutController.checkout));
 router.post("/confirm", asyncHandler(checkOutController.confirmPayment));
+
 
 module.exports = router;

@@ -1,8 +1,9 @@
-const { NotFoundError } = require("../cores/error.response");
-const analysticsRepository = require("../db/edb/repositories/analysticsRepository");
-const ProductRepositoryEdb = require("../db/edb/repositories/productRepository");
-const userEventRepository = require("../db/edb/repositories/userEventRepository");
-const RepositoryFactory = require("../models/repositories/repositoryFactory.js")
+const { NotFoundError } = require("../../cores/error.response.js");
+const analysticsRepository = require("../../db/edb/repositories/analysticsRepository.js");
+const orderRepository = require("../../db/edb/repositories/orderRepository.js");
+const ProductRepositoryEdb = require("../../db/edb/repositories/productRepository.js");
+const userEventRepository = require("../../db/edb/repositories/userEventRepository.js");
+const RepositoryFactory = require("../../models/repositories/repositoryFactory.js")
 class ElasticSearchService {
     async searchProducts({
         query,
@@ -45,7 +46,7 @@ class ElasticSearchService {
             if (!category) throw new Error("Category not found");
 
             categoryIds = await CategoryRepo.getAllDescendantCategoryIds(category.id);
-        }else if(CategoryId){
+        } else if (CategoryId) {
             categoryIds = await CategoryRepo.getAllDescendantCategoryIds(CategoryId);
         }
         const filters = {
@@ -81,6 +82,26 @@ class ElasticSearchService {
 
     async trackingUserEvent({ event_type, user_id, product_id, timestamp }) {
         await userEventRepository.trackUserEvent({ event_type, user_id, product_id, timestamp });
+    }
+    async GetListOrderES({
+        userId,
+        shopId,
+        filters,
+        sortBy,
+        lastSortValues,
+        pageSize = 20,
+        isAdmin
+    }) {
+        const result =await orderRepository.searchOrders({
+            userId,
+            shopId,
+            filters,
+            sortBy,
+            lastSortValues,
+            pageSize,
+            isAdmin
+        })
+        return result
     }
 }
 

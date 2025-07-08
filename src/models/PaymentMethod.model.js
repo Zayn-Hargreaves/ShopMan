@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-class PaymentMethod extends Model {}
+class PaymentMethod extends Model { }
 const initializePaymentMethod = async (sequelize) => {
     PaymentMethod.init({
         id: {
@@ -14,6 +14,10 @@ const initializePaymentMethod = async (sequelize) => {
         },
         desc: {
             type: DataTypes.STRING
+        },
+        image_url: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
         status: {
             type: DataTypes.STRING,
