@@ -31,13 +31,17 @@ class OrderRepositoryEdb {
         };
         if (lastSortValues) body.search_after = lastSortValues;
 
-        const resp = await client.search({ index: "orders", body });
+        const response = await client.search({ index: "orders", body });
         return {
-            results: resp.hits.hits.map(hit => ({
+            results: response.hits.hits.map(hit => ({
                 ...hit._source,
+                id: hit._id,
+                score: hit._score,
                 sortValues: hit.sort
             })),
-            total: resp.hits.total.value
+            total: response.hits.total.value,
+            suggest: response.suggest ? response.suggest.name_suggest[0].options.map(opt => opt.text) : []
+
         };
     }
 }

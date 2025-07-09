@@ -1,5 +1,6 @@
 const RepositoryFactory = require("../models/repositories/repositoryFactory");
 const EmailService = require("./Email.service")
+const {retry} = require("./../helpers/retryFuntion")
 const {
     createShipment,
     purchaseLabel,
@@ -17,7 +18,7 @@ class OrderService {
         if (result && result.shippingProvider === "GHN" && result.shippingTrackingCode) {
             try {
                 const ghnInfo = await GhnService.getOrderInfo(result.shippingTrackingCode);
-                result.shippingInfo = ghnInfo.data; 
+                result.shippingInfo = ghnInfo.data;
             } catch (e) {
                 console.error("GHN getOrderInfo error", e.message);
                 result.shippingInfo = null;
@@ -49,14 +50,14 @@ class OrderService {
             await OrderRepo.updateOrder(orderId, { Status: "cancelled" }, { transaction });
 
             // 3. Lấy chi tiết đơn hàng (OrderDetails)
-            const orderDetails = await OrderRepo.getOrderDetails(orderId, { transaction });
+            const holderOrder = await OrderRepo.getOrderDetails(userId, orderId, { transaction });
 
             const PaymentMethod = await PaymentMethodRepo.findPaymentMethodById(order.PaymentMethodId)
             // 4. Trả lại tồn kho
-            for (const item of orderDetails) {
-                const sku = await this.ProductRepo.findSkuBySkuNo(item.sku_no)
+            for (const item of holderOrder.orderDetails) {
+                const sku = await ProductRepo.findSkuBySkuNo(item.sku_no)
                 // Cộng tồn kho Inventory theo SkuId, ShopId
-                await InventoryRepo.reStock({
+                await InventoryRepo.restoreStock({
                     SkuId: sku.id, // hoặc lấy từ sku_no
                     ShopId: item.ShopId,
                     quantity: item.quantity,
@@ -82,40 +83,39 @@ class OrderService {
             }
 
             await transaction.commit();
-            retry(() =>
-                NotificationRepo.create({
-                    type: "order",
-                    option: "cancel",
-                    content: `Đơn hàng ${createdOrder.id} của bạn đã được hủy thành công`,
-                    UserId: userId,
-                })
-            ).catch(console.error);
 
-            // Email invoice
-            const userInfo = await OrderRepo.getUserInfo(userId);
-            const emailService = new EmailService(userInfo, null);
-            retry(async () =>
-                await emailService.sendInvoice("invoice", "Xác nhận hủy đơn hàng ShopMan", {
-                    orderId: createdOrder.id,
-                    orderDate: new Date().toLocaleDateString("vi-VN"),
-                    paymentMethod: PaymentMethod.name,
-                    orderItems: checkoutData.items.map(item => ({
-                        productName: item.productName || item.skuNo,
-                        quantity: item.quantity,
-                        unitPrice: item.unitPrice,
-                        itemTotal: item.itemTotal,
-                    })),
-                    orderTotal,
-                })
-            ).catch(console.error);
-
-
-
-            return { cancelled: true, orderId };
+           
         } catch (error) {
             if (transaction) await transaction.rollback();
             throw error;
         }
+        retry(() =>
+            NotificationRepo.create({
+                type: "order",
+                option: "cancel",
+                content: `Đơn hàng ${createdOrder.id} của bạn đã được hủy thành công`,
+                UserId: userId,
+            })
+        ).catch(console.error);
+
+        // Email invoice
+        const userInfo = await OrderRepo.getUserInfo(userId);
+        const emailService = new EmailService(userInfo, null);
+        retry(async () =>
+            await emailService.sendInvoice("invoice", "Xác nhận hủy đơn hàng ShopMan", {
+                orderId: createdOrder.id,
+                orderDate: new Date().toLocaleDateString("vi-VN"),
+                paymentMethod: PaymentMethod.name,
+                orderItems: checkoutData.items.map(item => ({
+                    productName: item.productName || item.skuNo,
+                    quantity: item.quantity,
+                    unitPrice: item.unitPrice,
+                    itemTotal: item.itemTotal,
+                })),
+                orderTotal,
+            })
+        ).catch(console.error);
+        return { cancelled: true, orderId };
     }
 }
 module.exports = OrderService

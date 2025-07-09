@@ -30,7 +30,7 @@ async function GetListOrderES({
     pageSize,
     isAdmin
 }) {
-    return await orderRepository.searchOrders({
+    const result = await orderRepository.searchOrders({
         userId,
         shopId,
         filters,
@@ -39,6 +39,12 @@ async function GetListOrderES({
         pageSize,
         isAdmin
     })
+    return {
+        data: result.results,
+        total: result.total,
+        suggest: result.suggest,
+        lastSortValues: result.results.length > 0 ? result.results[result.results.length - 1].sortValues : null
+    }
 }
 
-module.exports = { pushOrderToES, pushOrderDetailToES, GetListOrderES};
+module.exports = { pushOrderToES, pushOrderDetailToES, GetListOrderES };

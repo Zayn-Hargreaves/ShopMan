@@ -38,8 +38,7 @@ class InventoryRepository {
         
         return await this.Inventories.increment(
             {quantity:quantity},
-            {where:whereClause},
-            ...options
+            {where:whereClause, ...options}
         )
     }
 

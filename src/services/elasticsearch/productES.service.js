@@ -92,7 +92,7 @@ class ElasticSearchService {
         pageSize = 20,
         isAdmin
     }) {
-        const result =await orderRepository.searchOrders({
+        const result = await orderRepository.searchOrders({
             userId,
             shopId,
             filters,
@@ -101,7 +101,12 @@ class ElasticSearchService {
             pageSize,
             isAdmin
         })
-        return result
+        return {
+            data: result.results,
+            total: result.total,
+            suggest: result.suggest,
+            lastSortValues: result.results.length > 0 ? result.results[result.results.length - 1].sortValues : null
+        }
     }
 }
 

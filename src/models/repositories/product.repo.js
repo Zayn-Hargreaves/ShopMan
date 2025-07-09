@@ -195,16 +195,16 @@ class ProductRepository {
             specs: sku.SkuSpecs?.sku_specs || {}
         }));
     }
-    async incrementStock(SkuId,quantity, options= {}){
-        return await this.Sku.increment({
-            sku_stock:quantity,
-            where:{id:SkuId},
-            ...options
-        })
+    async incrementStock(SkuId, quantity, options = {}) {
+        return await this.Sku.increment(
+            { sku_stock: quantity },
+            { where: { id: SkuId }, ...options }
+        );
     }
-    async findSkuBySkuNo(sku_no, options = {}){
+
+    async findSkuBySkuNo(sku_no, options = {}) {
         return await this.Sku.findOne({
-            where:{
+            where: {
                 sku_no
             },
             ...options

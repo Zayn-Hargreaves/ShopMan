@@ -12,7 +12,7 @@ class OrderController {
     // }
     getListOrder = async (req, res, next) => {
         const userId = req.userId
-        const pageSize = req.query.pageSize
+        const {pageSize, lastSortValues} = req.query
         new OkResponse({
             message: "get list user order success",
             metadata: await ElasticSearchService.GetListOrderES({
@@ -20,7 +20,7 @@ class OrderController {
                 shopId:undefined,
                 filters:undefined,
                 sortBy:undefined,
-                lastSortValues:undefined,
+                lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize:pageSize ? Number(pageSize) : 20 ,
                 isAdmin:'false'
             })
@@ -35,6 +35,8 @@ class OrderController {
         }).send(res)
     }
     cancelOrder = async (req, res, next) => {
+        const userId = req.userId
+        const orderId = req.params.id
         new OkResponse({
             message: " cancel order detail success",
             metadata: await OrderService.cancelOrder(userId, orderId)

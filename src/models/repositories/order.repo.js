@@ -52,7 +52,7 @@ class OrderRepository {
             name: order.user.name,
         };
     }
-    async getOrderDetails(userId, orderId) {
+    async getOrderDetails(userId, orderId, options = {}) {
         return await this.Order.findOne({
             where: {
                 id: orderId,
@@ -81,27 +81,31 @@ class OrderRepository {
                             attributes: ['name', 'thumb', 'slug', "ShopId"],
                         },
                         {
-                            model:this.Sku,
-                            as:'Sku',
-                            attributes:['sku_no','sku_name']
+                            model: this.Sku,
+                            as: 'Sku',
+                            attributes: ['sku_no', 'sku_name']
                         }
                     ]
                 }
 
             ]
-        })
+        ,...options})
     }
     async updateOrder(orderId, { Status }, options = {}) {
-        return await this.Order.update({ where: { id: orderId }, status: Status }, ...options)
+        return await this.Order.update(
+            { status: Status },
+            { where: { id: orderId }, ...options }
+        );
     }
+
     async update(orderId, fieldsToUpdate = {}, options = {}) {
-    return await this.Order.update(
-        fieldsToUpdate,
-        { where: { id: orderId }, ...options }
-    );
-}
-    async getOrderById(id) {
-        return await this.Order.findByPk(id)
+        return await this.Order.update(
+            fieldsToUpdate,
+            { where: { id: orderId }, ...options }
+        );
+    }
+    async getOrderById(id, options = {}) {
+        return await this.Order.findByPk(id, options)
     }
 }
 

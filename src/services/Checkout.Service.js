@@ -171,7 +171,7 @@ class CheckoutService {
                 UserId: userId,
                 AddressId: checkoutData.addressId,
                 TotalPrice: 0,
-                Status: "paid",
+                Status: paymentMethod.name == "COD" ? "unpaid": "paid",
                 PaymentMethodId: checkoutData.paymentMethodId,
             }, { transaction });
 
@@ -293,6 +293,7 @@ class CheckoutService {
                 labelUrl = shippoTransaction.label_url;
 
                 // Lưu tracking vào DB
+                console.log(shippoTransaction)
                 await OrderRepo.update(createdOrder.id, {
                     shippingProvider: "Shippo",
                     shippingTrackingCode: shippoTransaction.object_id,
