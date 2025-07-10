@@ -6,6 +6,7 @@ class OrderRepository {
         this.Address = models.Address
         this.Product = models.Products
         this.Sku = models.Sku
+        this.PaymentMethod = models.PaymentMethod
     }
 
     async createOrder(orderData, options) {
@@ -71,6 +72,11 @@ class OrderRepository {
                     attributes: ["pincode", 'address', 'city', 'country']
                 },
                 {
+                    model: this.PaymentMethod,
+                    as: 'paymentMethod',
+                    attributes: ['id', 'name', 'image_url']
+                },
+                {
                     model: this.OrderDetails,
                     as: "orderDetails",
                     attributes: ['quantity', 'price_at_time', 'ProductId', 'ShopId', 'sku_no'],
@@ -89,11 +95,15 @@ class OrderRepository {
                 }
 
             ]
-        ,...options})
+            , ...options
+        })
     }
-    async updateOrder(orderId, { Status }, options = {}) {
+    async updateOrder(orderId, { Status, shippingStatus }, options = {}) {
         return await this.Order.update(
-            { status: Status },
+            {
+                Status: Status,
+                shippingStatus:shippingStatus
+            },
             { where: { id: orderId }, ...options }
         );
     }

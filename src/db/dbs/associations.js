@@ -289,8 +289,8 @@ const initializeModels = async () => {
         Address.hasMany(Order, {foreignKey:{name:"AddressId", as:"address"}})
         Order.belongsTo(Address, {foreignKey:{name:"AddressId", as:'address'}})
         
-        PaymentMethod.hasMany(Order,{foreignKey:{name:"PaymentMethodId", as:'paymentMethod'}})
-        Order.belongsTo(PaymentMethod, {foreignKey:{name:"PaymentMethodId", as:'paymentMethod'}})
+        PaymentMethod.hasMany(Order,{foreignKey:{name:"PaymentMethodId"}, as:'order'})
+        Order.belongsTo(PaymentMethod, {foreignKey:{name:"PaymentMethodId"}, as:'paymentMethod'})
         OrderDetails.belongsTo(Sku, {
             foreignKey: 'sku_no',
             targetKey: 'sku_no',
@@ -306,7 +306,7 @@ const initializeModels = async () => {
             constraints: false,
             foreignKeyConstraints: false
         });
-        await sequelize.sync({alter:true});
+        await sequelize.sync();
 
         return {
             sequelize,

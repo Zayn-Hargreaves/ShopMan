@@ -1,6 +1,7 @@
 const RepositoryFactory = require("../models/repositories/repositoryFactory");
 const EmailService = require("./Email.service")
-const {retry} = require("./../helpers/retryFuntion")
+const { retry } = require("./../helpers/retryFuntion")
+const NotfiticationService = require("./Notification.service")
 const {
     createShipment,
     purchaseLabel,
@@ -35,6 +36,7 @@ class OrderService {
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository")
         const UserRepo = RepositoryFactory.getRepository("UserRepository")
         const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository")
+        const NotificationRepo = RepositoryFactory.getRepository("NotificationRepository")
         const transaction = await sequelize.transaction()
         try {
             // 1. Lấy đơn hàng và kiểm tra trạng thái
@@ -47,7 +49,7 @@ class OrderService {
             if (order.UserId !== userId) throw new Error("Không có quyền huỷ đơn hàng này!");
 
             // 2. Update trạng thái đơn hàng
-            await OrderRepo.updateOrder(orderId, { Status: "cancelled" }, { transaction });
+            await OrderRepo.updateOrder(orderId, { Status: "cancelled", shippingStatus:"cancelled" }, { transaction });
 
             // 3. Lấy chi tiết đơn hàng (OrderDetails)
             const holderOrder = await OrderRepo.getOrderDetails(userId, orderId, { transaction });
@@ -84,37 +86,53 @@ class OrderService {
 
             await transaction.commit();
 
-           
+            retry(() =>
+                NotificationRepo.create({
+                    type: "order",
+                    option: "cancel",
+                    content: `Đơn hàng ${orderId} của bạn đã được hủy thành công`,
+                    UserId: userId,
+                })
+            ).catch(console.error);
+
+            // Email invoice
+            const userInfo = await OrderRepo.getUserInfo(userId);
+            const emailService = new EmailService(userInfo, null);
+
+            let orderTotal = 0;
+            const orderItems = holderOrder.orderDetails.map(item => {
+                const quantity = item.quantity || (item.product && item.product.quantity) || 1;
+                const unitPrice = Number(item.price_at_time || 0);
+                const itemTotal = quantity * unitPrice;
+                orderTotal += itemTotal;
+                return {
+                    productName: (item.product && (item.product.productName || item.product.name)) || item.sku_no,
+                    quantity,
+                    unitPrice,
+                    itemTotal,
+                };
+            });
+            retry(async () =>
+                await emailService.sendInvoice("invoice", "Xác nhận hủy đơn hàng ShopMan", {
+                    orderId: holderOrder.id,
+                    orderDate: new Date().toLocaleDateString("vi-VN"),
+                    paymentMethod: PaymentMethod.name,
+                    orderItems,
+                    orderTotal,
+                })
+            ).catch(console.error);
+            retry(async () => {
+                const res = await NotfiticationService.sendNotification(userId, "Hủy đơn hàng thành công", `Bạn vừa hủy thành công đơn hàng ${orderId}`);
+                console.log("[NOTI] Gửi notification result:", res);
+                return res;
+            }).catch(err => {
+                console.error("[NOTI] Lỗi gửi notification:", err);
+            });
         } catch (error) {
             if (transaction) await transaction.rollback();
             throw error;
         }
-        retry(() =>
-            NotificationRepo.create({
-                type: "order",
-                option: "cancel",
-                content: `Đơn hàng ${createdOrder.id} của bạn đã được hủy thành công`,
-                UserId: userId,
-            })
-        ).catch(console.error);
 
-        // Email invoice
-        const userInfo = await OrderRepo.getUserInfo(userId);
-        const emailService = new EmailService(userInfo, null);
-        retry(async () =>
-            await emailService.sendInvoice("invoice", "Xác nhận hủy đơn hàng ShopMan", {
-                orderId: createdOrder.id,
-                orderDate: new Date().toLocaleDateString("vi-VN"),
-                paymentMethod: PaymentMethod.name,
-                orderItems: checkoutData.items.map(item => ({
-                    productName: item.productName || item.skuNo,
-                    quantity: item.quantity,
-                    unitPrice: item.unitPrice,
-                    itemTotal: item.itemTotal,
-                })),
-                orderTotal,
-            })
-        ).catch(console.error);
         return { cancelled: true, orderId };
     }
 }
