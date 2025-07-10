@@ -2,6 +2,7 @@ const RepositoryFactory = require("../models/repositories/repositoryFactory");
 const EmailService = require("./Email.service")
 const { retry } = require("./../helpers/retryFuntion")
 const NotfiticationService = require("./Notification.service")
+const {updateOrderStatusInES} = require("./elasticsearch/orderDetailES.service")
 const {
     createShipment,
     purchaseLabel,
@@ -50,7 +51,7 @@ class OrderService {
 
             // 2. Update trạng thái đơn hàng
             await OrderRepo.updateOrder(orderId, { Status: "cancelled", shippingStatus:"cancelled" }, { transaction });
-
+            await updateOrderStatusInES(orderId, "cancelled","cancelled");
             // 3. Lấy chi tiết đơn hàng (OrderDetails)
             const holderOrder = await OrderRepo.getOrderDetails(userId, orderId, { transaction });
 

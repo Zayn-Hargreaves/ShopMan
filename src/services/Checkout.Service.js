@@ -321,7 +321,7 @@ class CheckoutService {
                 shippingTrackingCode: trackingNumber,
                 shippingProvider: "Shippo",
             });
-
+            console.log(orderDetailsData)
             for (const item of orderDetailsData) {
                 await pushOrderDetailToES({
                     orderId: createdOrder.id,

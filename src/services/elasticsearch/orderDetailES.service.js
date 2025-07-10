@@ -20,31 +20,18 @@ async function pushOrderDetailToES(orderDetailDoc) {
         body: orderDetailDoc
     });
 }
-
-async function GetListOrderES({
-    userId,
-    shopId,
-    filters,
-    sortBy,
-    lastSortValues,
-    pageSize,
-    isAdmin
-}) {
-    const result = await orderRepository.searchOrders({
-        userId,
-        shopId,
-        filters,
-        sortBy,
-        lastSortValues,
-        pageSize,
-        isAdmin
-    })
-    return {
-        data: result.results,
-        total: result.total,
-        suggest: result.suggest,
-        lastSortValues: result.results.length > 0 ? result.results[result.results.length - 1].sortValues : null
-    }
+async function updateOrderStatusInES(orderId, status, shippingStatus) {
+    const es = await getClient();
+    await es.update({
+        index: 'orders',
+        id: String(orderId),
+        body: {
+            doc: {
+                status: status,
+                shippingStatus:shippingStatus
+            }
+        }
+    });
 }
 
-module.exports = { pushOrderToES, pushOrderDetailToES, GetListOrderES };
+module.exports = { pushOrderToES, pushOrderDetailToES, updateOrderStatusInES };
