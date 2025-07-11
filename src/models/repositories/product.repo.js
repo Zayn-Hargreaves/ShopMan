@@ -141,7 +141,14 @@ class ProductRepository {
             where: { ProductId: productId, sku_no: skuNo },
             include: [
                 { model: this.SkuAttr, as: 'SkuAttr' },
-                { model: this.SkuSpecs, as: 'SkuSpecs' },
+                {
+                    model: this.SpuToSku,
+                    include:{
+                        model: this.Products,
+                        as:'Product',
+                        attributes: ['id', 'name', 'ShopId', 'CategoryId']
+                    }
+                }
             ]
         });
     }
@@ -161,6 +168,9 @@ class ProductRepository {
                     required: false,
                 },
                 {
+                    model: this.Products,
+                },
+                {
                     model: this.SkuSpecs,
                     as: "SkuSpecs",
                     required: false,
@@ -178,7 +188,6 @@ class ProductRepository {
             ],
             order: [["sort", "ASC"], ["id", "ASC"]]
         });
-
 
         // Format lại trả ra cho FE
         return skus.map(sku => ({

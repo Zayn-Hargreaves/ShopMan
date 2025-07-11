@@ -51,7 +51,7 @@ class CheckoutService {
                 // Lấy thông tin sản phẩm
                 const productSku = await ProductRepo.getProductWithSku(productId, skuNo);
                 if (!productSku) throw new Error(`Product ${productId} | ${skuNo} not found in product repository`);
-
+                console.log(productSku.SpuToSkus[0].Product)
                 // Check tồn kho
                 const availableStock = productSku.sku_stock;
                 const reservedQty = await RedisService.getReservedQuantity(productId, skuNo) || 0;
@@ -89,22 +89,20 @@ class CheckoutService {
                 if (itemTotal < 0) itemTotal = 0;
 
                 totalAmount += itemTotal;
-
                 finalItems.push({
                     ...item,
                     unitPrice,
                     itemTotal,
                     discountAmount,
                     validDiscounts,
-                    ShopId: productSku.ShopId || productSku.shopId || null,
-                    productName: productSku.product_name || productSku.name || "",
-                    categoryId: productSku.categoryId || productSku.CategoryId || null
+                    ShopId: productSku.SpuToSkus[0].Product.ShopId || productSku.shopId || null,
+                    productName: productSku.SpuToSkus[0].Product.name || productSku.name || "",
+                    categoryId: productSku.SpuToSkus[0].Product.CategoryId || productSku.CategoryId || null
                 });
             }
 
             // Payment Intent
             const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(paymentMethodId)
-            console.log(paymentMethod)
             const paymentService = PaymentFactory.getPaymentService(paymentMethod.name);
             const paymentResult = await paymentService.createPayment({
                 amount: Math.round(totalAmount),
@@ -121,7 +119,12 @@ class CheckoutService {
                 paymentMethodId,
                 type: source,
             }, 900);
-
+            console.log(  userId,
+                finalItems,
+                totalAmount,
+                addressId,
+                paymentMethodId,
+                source,)
             return {
                 paymentIntentClientSecret: paymentResult.clientSecret,
                 paymentIntentId,
@@ -179,7 +182,7 @@ class CheckoutService {
             const esProducts = [];
             for (const item of checkoutData.items) {
                 const { productId, skuNo, quantity, unitPrice, itemTotal, ShopId, productName, discountAmount, categoryId } = item;
-
+                
                 // Trừ kho, tăng sale
                 await InventoryRepo.decrementStock({
                     skuNo,
@@ -293,7 +296,6 @@ class CheckoutService {
                 labelUrl = shippoTransaction.label_url;
 
                 // Lưu tracking vào DB
-                console.log(shippoTransaction)
                 await OrderRepo.update(createdOrder.id, {
                     shippingProvider: "Shippo",
                     shippingTrackingCode: shippoTransaction.object_id,
@@ -321,7 +323,6 @@ class CheckoutService {
                 shippingTrackingCode: trackingNumber,
                 shippingProvider: "Shippo",
             });
-            console.log(orderDetailsData)
             for (const item of orderDetailsData) {
                 await pushOrderDetailToES({
                     orderId: createdOrder.id,

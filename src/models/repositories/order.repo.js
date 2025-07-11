@@ -24,6 +24,7 @@ class OrderRepository {
         const details = items.map((item) => ({
             OrderId: orderId,
             ProductId: item.ProductId,
+            ShopId:item.ShopId,
             sku_no: item.sku_no,
             quantity: item.quantity,
             price_at_time: item.price_at_time,
