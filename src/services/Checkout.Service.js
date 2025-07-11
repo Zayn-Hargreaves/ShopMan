@@ -182,7 +182,7 @@ class CheckoutService {
             const esProducts = [];
             for (const item of checkoutData.items) {
                 const { productId, skuNo, quantity, unitPrice, itemTotal, ShopId, productName, discountAmount, categoryId } = item;
-                
+                console.log("confirm payment :::",item)
                 // Trừ kho, tăng sale
                 await InventoryRepo.decrementStock({
                     skuNo,
@@ -210,6 +210,7 @@ class CheckoutService {
                     productName,
                     quantity,
                     unitPrice,
+                    itemTotal:unitPrice * quantity,
                     discountAmount,
                     shopId: ShopId || null,
                     categoryId: categoryId || null,
