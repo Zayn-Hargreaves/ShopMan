@@ -25,6 +25,10 @@ const initializeOrderDetails = async (sequelize) => {
         price_at_time: {
             type: DataTypes.DECIMAL,
             allowNull: false
+        },
+        status:{
+            type:DataTypes.STRING,
+            defaultValue:"active"
         }
     }, {
         sequelize,

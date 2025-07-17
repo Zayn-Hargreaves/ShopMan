@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title Đơn hàng của bạn đã bị hủy
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  body(style="font-family: Arial, sans-serif; background-color: #f6fafd; margin:0; padding:0;")
+    .email-container(style="max-width: 600px; margin: auto; background: #fff; padding: 26px; border-radius: 8px; box-shadow: 0 2px 8px #e2e2e2;")
+      .email-header(style="text-align: center; margin-bottom: 16px;")
+        img.logo(src=logo alt="Logo" style="max-width: 120px;")
+      h2(style="color:#d9534f;") Đơn hàng #{orderId} đã bị hủy
+      p(style="color:#444; font-size: 16px;") Xin chào #{userName},
+      p Đơn hàng của bạn đã bị hủy bởi <b>#{canceledBy}</b> với lý do: 
+        span(style="color:#d9534f") #{cancelReason}
+      if orderDetails
+        p(style="font-weight: 500; margin-top: 12px;") Thông tin đơn hàng:
+        ul
+          each d in orderDetails
+            li #{d.productName} (Shop: #{d.shopName}) – SL: #{d.quantity}
+      p(style="margin:14px 0 0 0; font-size: 13px; color:#888;") Nếu bạn cần hỗ trợ, vui lòng liên hệ CSKH ShopMan.
+      .email-footer(style="margin-top: 30px; text-align: center; font-size: 12px; color: #aaa;")
+        p Cảm ơn bạn đã sử dụng ShopMan.

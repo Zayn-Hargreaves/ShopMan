@@ -49,7 +49,7 @@ const initializeShop = async (sequelize) => {
         },
         slug: {
             type: DataTypes.STRING,
-            allowNull: false
+            // allowNull: false
         }
     }, {
         sequelize,

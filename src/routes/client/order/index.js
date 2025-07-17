@@ -1,4 +1,4 @@
-const OrderController = require("../../../controllers/Order.Controller")
+const OrderController = require("../../../controllers/client/Order.Controller")
 const { asyncHandler } = require("../../../helpers/asyncHandler")
 
 const router = require("express").Router()

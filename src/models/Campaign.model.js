@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-class Campaign extends Model {}
+class Campaign extends Model { }
 const initializeCampaign = async (sequelize) => {
     Campaign.init({
         id: {
@@ -35,7 +35,6 @@ const initializeCampaign = async (sequelize) => {
         },
         slug: {
             type: DataTypes.STRING,
-            allowNull: false
         }
     }, {
         sequelize,
@@ -47,9 +46,12 @@ const initializeCampaign = async (sequelize) => {
             { fields: ['status', 'start_time', 'end_time'] } // Index composite
         ]
     });
-    Campaign.addHook('beforeCreate', (campaign) => {
-        campaign.slug = campaign.title.toLowerCase().replace(/ /g, '-');
+    Campaign.addHook('beforeValidate', (campaign) => {
+        if (!campaign.slug && campaign.title) {
+            campaign.slug = campaign.title.toLowerCase().replace(/ /g, '-');
+        }
     });
+
     return Campaign;
 };
 

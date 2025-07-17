@@ -1,4 +1,4 @@
-const { getSelectData } = require("../../utils");
+const { getSelectData, getUnselectData } = require("../../utils");
 const { Op, Sequelize, where, col } = require("sequelize")
 class ProductRepository {
     constructor(models) {
@@ -13,34 +13,30 @@ class ProductRepository {
         this.Category = models.Category
         this.DiscountsProducts = models.DiscountsProducts
         this.Campaign = models.Campaign
+        this.Inventories = models.Inventories
     }
     async findProductBySlug(slug) {
         const product = await this.Products.findOne({
             where: { slug },
             include: [
                 {
-                    model: this.SpuToSku,
-                    as: 'SpuToSkus',
+
+                    model: this.Sku,
+                    as: 'Sku',
                     required: false,
                     include: [
                         {
-                            model: this.Sku,
-                            as: 'Sku',
+                            model: this.SkuAttr,
+                            as: 'SkuAttr',
                             required: false,
-                            include: [
-                                {
-                                    model: this.SkuAttr,
-                                    as: 'SkuAttr',
-                                    required: false,
-                                },
-                                {
-                                    model: this.SkuSpecs,
-                                    as: 'SkuSpecs',
-                                    required: false,
-                                }
-                            ]
+                        },
+                        {
+                            model: this.SkuSpecs,
+                            as: 'SkuSpecs',
+                            required: false,
                         }
                     ]
+
                 }
             ]
         });
@@ -142,12 +138,10 @@ class ProductRepository {
             include: [
                 { model: this.SkuAttr, as: 'SkuAttr' },
                 {
-                    model: this.SpuToSku,
-                    include:{
-                        model: this.Products,
-                        as:'Product',
-                        attributes: ['id', 'name', 'ShopId', 'CategoryId']
-                    }
+                    model: this.Products,
+                    as: 'Product',
+                    attributes: ['id', 'name', 'ShopId', 'CategoryId']
+
                 }
             ]
         });
@@ -218,6 +212,220 @@ class ProductRepository {
             },
             ...options
         })
+    }
+    async getlistProductByAdmin(ShopId, status, name, categoryId, page = 1, limit = 10, minPrice, maxPrice, sort) {
+        let where = {}
+        if (ShopId) where.ShopId = ShopId
+        if (status) where.status = status
+        if (name) where.name = { [Op.iLike]: `%${name}%` }
+        if (categoryId) where.CategoryId = categoryId
+        if (minPrice) where.price = { ...(where.price || {}), [Op.gte]: minPrice };
+        if (maxPrice) where.price = { ...(where.price || {}), [Op.lte]: maxPrice };
+        let order = [['createdAt', 'DESC']];
+        if (sort === "price") order = [['price', 'ASC']];
+        if (sort === "price_desc") order = [['price', 'DESC']];
+
+        const offset = (page - 1) * limit
+        const { rows, count } = await this.Products.findAndCountAll({
+            where,
+            limit,
+            offset,
+            order
+        })
+        return {
+            items: rows,
+            total: count,
+            page: +page,
+            limit: +limit,
+            totalPages: Math.ceil(count / limit)
+        }
+    }
+
+    async buildCategoryPath(CategoryId) {
+        let path = []
+        let current = await this.Category.findByPk(CategoryId)
+        while (current) {
+            path.unshift(current.id)
+            if (!current.ParentId) break;
+            current = await this.Category.findByPk(current.ParentId)
+        }
+        return path
+    }
+    async findCategoryById(id, options = {}) {
+        return this.Category.findByPk(id, options)
+    }
+    async createProduct({ name, price, desc, attrs, CategoryId, discount_percentage, sort, ShopId, has_variations = "false", thumb }, options) {
+        const CategoryPath = await this.buildCategoryPath(CategoryId)
+        return await this.Products.create({ name, price, desc, attrs, CategoryId, attrs, discount_percentage, CategoryPath, sort, ShopId, has_variations, status: 'active', thumb, CategoryPath }, options)
+    }
+
+    async createNewSku(ProductId, ShopId, { sku_name, sku_desc, sku_attrs, sku_specs, sku_price, sku_stock, sku_type, sort, location, sku_no, spu_no }, options) {
+        const sku = await this.Sku.create({ ProductId, sku_no, sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price }, options)
+        console.log(`${sku.id}::::::::::`, sku)
+        const skuAttr = await this.SkuAttr.create({ sku_no, sku_stock, sku_price, sku_attrs }, options)
+        console.log(skuAttr)
+        const SkuSpecs = await this.SkuSpecs.create({ sku_specs, SkuId: sku.id }, options)
+        console.log(SkuSpecs)
+        const SpuToSku = await this.SpuToSku.create({ sku_no, spu_no, ProductId }, options)
+        console.log(SpuToSku)
+        const Inventory = await this.Inventories.create({ SkuId: sku.id, ShopId, quantity: sku_stock, location }, options)
+        console.log(Inventory)
+        return {
+            ...sku.toJSON(),
+            ...skuAttr.toJSON(),
+            ...SkuSpecs.toJSON(),
+            ...SpuToSku.toJSON(),
+            Inventory
+        }
+    }
+    async findProductById(id, options = {}) {
+        return await this.Products.findByPk(id, options);
+    }
+    async findAllSkus(ProductId, options) {
+        return await this.Sku.findAll({ where: { ProductId }, ...options })
+    }
+    async updateSku(
+        ProductId, ShopId,
+        { sku_name, sku_desc, sku_attrs, sku_specs, sku_price, sku_stock, sku_type, sort, location, sku_no, spu_no },
+        newSpuNo, newSkuNo,
+        options = {}
+    ) {
+        // Nếu thay đổi sku_no & spu_no
+        if (newSkuNo && newSpuNo) {
+            // Update Sku
+            await this.Sku.update(
+                { sku_no: newSkuNo, sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price },
+                { where: { ProductId, sku_no }, ...options }
+            );
+            // Update SkuAttr
+            await this.SkuAttr.update(
+                { sku_stock, sku_price, sku_attrs, sku_no: newSkuNo },
+                { where: { sku_no }, ...options }
+            );
+            // Tìm lại sku id mới theo newSkuNo
+            const sku = await this.Sku.findOne({ where: { ProductId, sku_no: newSkuNo }, ...options });
+
+            // Update SkuSpecs
+            await this.SkuSpecs.update(
+                { sku_specs },
+                { where: { SkuId: sku.id }, ...options }
+            );
+            // Update SpuToSku
+            await this.SpuToSku.update(
+                { sku_no: newSkuNo, spu_no: newSpuNo },
+                { where: { sku_no }, ...options }
+            );
+            // Update Inventory
+            await this.Inventories.update(
+                { quantity: sku_stock, location },
+                { where: { ShopId, SkuId: sku.id }, ...options }
+            );
+
+            // Có thể trả lại bản ghi mới nhất
+            return await this.getFullSku(ProductId, newSkuNo, options);
+        }
+        // Nếu không đổi sku_no/spu_no
+        else {
+            // Update Sku
+            await this.Sku.update(
+                { sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price },
+                { where: { ProductId, sku_no }, ...options }
+            );
+            // Update SkuAttr
+            await this.SkuAttr.update(
+                { sku_stock, sku_price, sku_attrs },
+                { where: { sku_no }, ...options }
+            );
+            // Tìm lại sku id
+            const sku = await this.Sku.findOne({ where: { ProductId, sku_no }, ...options });
+
+            // Update SkuSpecs
+            await this.SkuSpecs.update(
+                { sku_specs },
+                { where: { SkuId: sku.id }, ...options }
+            );
+            // Update SpuToSku
+            await this.SpuToSku.update(
+                { spu_no },
+                { where: { sku_no }, ...options }
+            );
+            // Update Inventory
+            await this.Inventories.update(
+                { quantity: sku_stock, location },
+                { where: { ShopId, SkuId: sku.id }, ...options }
+            );
+
+            return await this.getFullSku(ProductId, sku_no, options);
+        }
+    }
+
+    // Hàm trả về đầy đủ bản ghi mới nhất của sku, attributes, specs, inventory...
+    async getFullSku(ProductId, sku_no, options = {}) {
+        const sku = await this.Sku.findOne({
+            where: { ProductId, sku_no },
+            include: [
+                { model: this.SkuAttr, as: 'SkuAttr', required: false },
+                { model: this.SkuSpecs, as: 'SkuSpecs', required: false },
+                { model: this.Inventories, as: 'inventories', required: false },
+                { model: this.SpuToSku, as: 'SpuToSkus', required: false },
+            ],
+            ...options
+        });
+        return sku;
+    }
+
+    async findOneSku(sku_no, ProductId, options) {
+        return await this.Sku.findOne({
+            where: {
+                sku_no,
+                ProductId,
+            },
+            include: [{
+                model: this.SkuAttr,
+                as: 'SkuAttr'
+            }], ...options
+        })
+    }
+
+    async findProductDetailForAdmin(ShopId, id) {
+        const product = await this.Products.findOne({
+            where: { ShopId, id },
+            attributes: getUnselectData(['desc_plain', 'sort', 'sale_count', 'categoryPath', 'deletedAt']),
+            include: [
+                {                                                                                                                                                                                                                               
+                    model: this.Sku,
+                    as: 'Sku',
+                    required: false,
+                    include: [
+                        {
+                            model: this.SkuAttr,                                                        
+                            as: 'SkuAttr',
+                            required: false,
+                        },
+                        {
+                            model: this.SkuSpecs,
+                            as: 'SkuSpecs',
+                            required: false,
+                        },
+                        {
+                            model: this.Inventories,
+                            as: "inventories",
+                            require: false
+                        },{
+                            model:this.SpuToSku,
+                        }
+                    ],
+                }
+            ]
+    });
+        return product;
+    }
+
+    async findSkuById(id){
+        return await this.Sku.findByPk(id)
+    }
+    async findProductInShop(ShopId, id){
+        return await this.Products.findOne({where:{ShopId,id}})
     }
 }
 

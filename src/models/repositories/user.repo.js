@@ -1,10 +1,13 @@
 const { getUnselectData } = require("../../utils/index");
-
+const {Op} = require("sequelize")
 class UserRepository {
     constructor(models) {
         this.User = models.User;
         this.Cart = models.Cart;
         this.Address = models.Address;
+        this.ShopUserRole = models.ShopUserRole
+        this.Shop = models.Shop
+        this.Roles = models.Roles
     }
 
     async findByEmail(email) {
@@ -34,7 +37,7 @@ class UserRepository {
         });
     }
     async getUserProfile(id) {
-        return await this.User.findOne({
+        const user = await this.User.findOne({
             where: { id },
             attributes: getUnselectData(['password']),
             include: [{
@@ -44,6 +47,21 @@ class UserRepository {
                 required: false
             }]
         });
+        const shopRoles = await this.ShopUserRole.findAll({
+            where: { UserId: id },
+            include: [
+                { model: this.Shop, as: 'shop' },
+                { model: this.Roles, as: 'role' }
+            ]
+        });
+        return {
+            user,
+            shops: shopRoles.map(r => ({
+                ShopId: r.ShopId,
+                shopName: r.shopName,
+                role: r.role.role_name
+            }))
+        }
     }
 
     async findByGoogleId(googleId) {
@@ -78,11 +96,45 @@ class UserRepository {
             { where: { id } }
         );
     }
-    async incrementBalance(userId, amount, options ={}){
+    async incrementBalance(userId, amount, options = {}) {
         return await this.User.increment(
-            {balance:amount},
-            {where:{id:userId}, ...options}
+            { balance: amount },
+            { where: { id: userId }, ...options }
         )
+    }
+    async findAllMember(ShopId) {
+        return this.ShopUserRole.findAll({
+            where: {
+                ShopId,
+                status:'active',
+            },
+            include: [
+                {
+                    model: this.User, as: 'user', attributes: ["id", 'name', 'email', 'avatar']
+                },
+                {
+                    model:this.Roles,
+                    as:"role",
+                    attributes:['id', 'role_name']
+                }
+            ],
+            order: [["joinedAt", "ASC"]]
+        })
+    }
+    async findShopUserRoleById(ShopId,UserId){
+        return this.ShopUserRole.findOne({where:{ShopId, UserId}})
+    }   
+    async createNewShopUserRole(ShopId, UserId, RoleId){
+        return this.ShopUserRole.create({
+            ShopId,
+            UserId,
+            RoleId,
+            status:'active'
+        })
+    }
+    async findAllRole(){
+        console.log("repository")
+        return this.Roles.findAll({where:{role_name:{[Op.notIn]:['superadmin', 'seller']}}},{ attributes: ["id", "role_name", "role_desc"] })
     }
 }
 

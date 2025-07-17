@@ -15,6 +15,7 @@ class ElasticsearchClient {
             try {
                 this.client = new Client({
                     host: config.elasticsearch.url, // URL Bonsai: "https://user:pass@cluster.bonsai.io",
+                    log:"trace"
                 });
                 await this.client.ping();
                 console.log(`Elasticsearch connected successfully`);

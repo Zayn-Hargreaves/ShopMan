@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
-const categoryController = require("../../../controllers/Category.Controller");
-const SearchController = require("../../../controllers/Search.Controller");
+const categoryController = require("../../../controllers/client/Category.Controller");
+const SearchController = require("../../../controllers/client/Search.Controller");
 
 /**
  * @swagger

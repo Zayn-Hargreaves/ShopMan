@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
-const wishlistController = require("../../../controllers/Wishlist.Controller.js");
+const wishlistController = require("../../../controllers/client/Wishlist.Controller.js");
 
 /**
  * @swagger

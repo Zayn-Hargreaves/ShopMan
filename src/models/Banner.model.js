@@ -46,11 +46,12 @@ const initializeBanner = async (sequelize) => {
         },
         priority: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
         },
         status: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            defaultValue:'pending'
         },
         fee: {
             type: DataTypes.DECIMAL,

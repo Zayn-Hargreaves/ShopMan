@@ -7,9 +7,9 @@ class ShopRepository {
     constructor(models) {
         this.Shop = models.Shop
         this.Discounts = models.Discounts
+        this.ShopUserRole = models.ShopUserRole
     }
     async findShopBySlug1(slug) {
-        if (!slug) throw new NotFoundError("Shop not found")
         return await this.Shop.findOne({
             where: {
                 slug: slug,
@@ -19,14 +19,12 @@ class ShopRepository {
     }
     async findShopByPk(ShopId){
         if(!ShopId){
-            throw NotFoundError("Shop not found")
+            throw new NotFoundError("Shop not found")
         }
         return await this.Shop.findByPk(ShopId)
     }
 
     async findShopBySlug(slug) {
-        if (!slug) throw new NotFoundError("Shop not found");
-        console.log("Shop slug ",slug)
         const shop = await this.Shop.findOne({
             where: {
                 slug:slug,
@@ -46,6 +44,37 @@ class ShopRepository {
         if (!shop) throw new NotFoundError("Shop not found");
         return shop;
     }
+    async findShopByUserId(UserId,ShopId){
+        return await this.Shop.findOne({where:{UserId,id:ShopId}})
+    }
+   
+    async createNewShop(UserId, data){
+        return await this.Shop.create({
+            ...data,
+            UserId,
+            status:'pending'
+        })
+    }
+    async getListShopsByAdmin(status,name, page, limit){
+        let where ={}
+        if(status) where.status = status
+        if(name) where.name = {[Op.iLike] :`%${name}%`}
+        const offset = (page - 1) * limit
+        const {rows, count} = await this.Shop.findAndCountAll({
+            where,
+            offset:+offset,
+            limit:+limit,
+            order: [['createdAt', 'DESC']]
+        })
+        return {
+            items: rows,
+            total:count,
+            page:+page,
+            limit:+limit,
+            totalPages:Math.ceil(count/limit)
+        }
+    }
+
 }
 
 module.exports = ShopRepository

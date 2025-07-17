@@ -1,0 +1,23 @@
+
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title Một phần đơn hàng của bạn đã bị hủy
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  body(style="font-family: Arial, sans-serif; background-color: #f6fafd; margin:0; padding:0;")
+    .email-container(style="max-width: 600px; margin: auto; background: #fff; padding: 26px; border-radius: 8px; box-shadow: 0 2px 8px #e2e2e2;")
+      .email-header(style="text-align: center; margin-bottom: 16px;")
+        img.logo(src=logo alt="Logo" style="max-width: 120px;")
+      h2(style="color:#f0ad4e;") Một phần đơn hàng #{orderId} đã bị hủy
+      p(style="color:#444; font-size: 16px;") Xin chào #{userName},
+      p(style="margin:10px 0 12px 0;") Đơn hàng của bạn đã bị hủy một phần bởi <b>#{canceledBy}</b> với lý do: 
+        span(style="color:#d9534f") #{cancelReason}
+      if canceledItems
+        p(style="font-weight: 500;") Các sản phẩm bị hủy:
+        ul
+          each item in canceledItems
+            li #{item.productName} (Shop: #{item.shopName}) – SL: #{item.quantity}
+      p(style="margin:16px 0 0 0; color:#555; font-size: 14px;") Các sản phẩm còn lại trong đơn vẫn đang được xử lý bình thường.
+      .email-footer(style="margin-top: 28px; text-align: center; font-size: 12px; color: #aaa;")
+        p Cảm ơn bạn đã sử dụng ShopMan.

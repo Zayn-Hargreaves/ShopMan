@@ -29,9 +29,39 @@ class NotificationRepository {
     }
     return result
   }
-  async updateNotification(id,userId){
-    return await this.Notifications.update({isRead:true},{where:{id:id,UserId:userId}})
+  async updateNotification(id, userId) {
+    return await this.Notifications.update({ isRead: true }, { where: { id: id, UserId: userId } })
   }
+  async findAllNotificationByPagePagination(ShopId, UserId, type, isRead, from, to, page, limit) {
+    let where = {}
+    if (ShopId) where.ShopId = ShopId
+    if (UserId) where.UserId = UserId
+    if (type) where.type = type;
+    if (typeof isRead !== "undefined") where.isRead = isRead === "true" || isRead === true;
+    if (from || to) {
+      where.createdAt = {}
+      if (from) where.createdAt[Op.gte] = new Date(from)
+      if (to) where.createdAt[Op.lte] = new Date(to)
+    }
+    const offset = (page - 1) * limit
+    const { rows, count } = await this.Notifications.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']]
+    })
+    return {
+      items: rows,
+      total:count, 
+      page,
+      limit,
+      totalPages: Math.ceil(count/limit)
+    }
+  }
+  async findNotificationById(id, UserId){
+    return await this.Notifications.findOne({where:{id,UserId}})
+  }
+  
 }
 
 module.exports = NotificationRepository;

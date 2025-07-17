@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
-const userController = require("../../../controllers/User.Controller");
+const userController = require("../../../controllers/client/User.Controller");
 
 /**
  * @swagger

@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Thông báo thay đổi trạng thái shop
+  body(style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f7f7f7;")
+    .container(style="max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 32px;")
+      .header(style="text-align: center; margin-bottom: 24px;")
+        if logo
+          img(src=logo alt="Logo" style="max-width: 120px; margin-bottom: 8px;")
+        h2(style="color: #333; font-size: 22px; margin-bottom: 8px;") Shop Status Notification
+      
+      .body-content
+        h3(style="color: #007bff; font-size: 20px; margin-bottom: 12px;") #{subject}
+        p(style="font-size: 16px; color: #444;") Kính gửi #{shopOwnerName},
+        p(style="font-size: 15px; color: #555;")
+          | Trạng thái shop của bạn vừa được cập nhật:
+          br
+          strong Tên shop: 
+          | #{shopName}
+          br
+          strong Trạng thái mới: 
+          span(style=`color:${statusColor}`) #{statusLabel}
+        if status == 'active'
+          p(style="color: #28a745; font-size: 15px; margin-top: 16px;") Xin chúc mừng! Shop của bạn đã được duyệt và chính thức hoạt động trên hệ thống. Bạn có thể bắt đầu đăng bán sản phẩm và sử dụng các tính năng dành cho shop.
+        else if status == 'pending'
+          p(style="color: #ffc107; font-size: 15px; margin-top: 16px;") Hồ sơ shop của bạn đang được kiểm duyệt. Vui lòng kiểm tra email hoặc đăng nhập hệ thống để cập nhật/bổ sung thông tin nếu cần.
+        else if status == 'banned'
+          p(style="color: #dc3545; font-size: 15px; margin-top: 16px;") Shop của bạn đã bị khóa do vi phạm chính sách. Nếu bạn cần khiếu nại hoặc hỗ trợ, vui lòng liên hệ bộ phận hỗ trợ khách hàng.
+        else if status == 'rejected'
+          p(style="color: #dc3545; font-size: 15px; margin-top: 16px;") Rất tiếc, hồ sơ shop của bạn chưa được duyệt. Lý do: #{reason}. Vui lòng bổ sung thông tin theo hướng dẫn.
+        else
+          p(style="color: #555; font-size: 15px; margin-top: 16px;") Trạng thái shop đã được thay đổi: #{statusLabel}. Vui lòng kiểm tra chi tiết trong hệ thống.
+
+        if note
+          p(style="color: #888; font-size: 14px; margin-top: 8px;") Lưu ý từ admin: #{note}
+
+        a.btn(href=shopDashboardLink style="display: inline-block; margin-top: 32px; padding: 10px 20px; background: #007bff; color: #fff; border-radius: 4px; text-decoration: none;") Đăng nhập shop
+
+      .footer(style="margin-top: 40px; text-align: center; color: #aaa; font-size: 13px;")
+        p Mọi thắc mắc cần hỗ trợ, liên hệ CSKH: 0911 827 775 | Email: support@Shopman.com.vn
+

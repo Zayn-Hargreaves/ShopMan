@@ -16,10 +16,6 @@ const initializeSpuToSku = async (sequelize) => {
         spu_no: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        ProductId: {
-            type: DataTypes.INTEGER,
-            allowNull: false
         }
     }, {
         sequelize,
@@ -29,7 +25,6 @@ const initializeSpuToSku = async (sequelize) => {
         freezeTableName: true,
         indexes: [
             { fields: ['spu_no'] },
-            { fields: ['ProductId'] },
             { fields: ['spu_no', 'sku_no'], unique: true }
         ]
     });

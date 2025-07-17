@@ -78,7 +78,6 @@ const initializeProducts = async (sequelize) => {
         modelName: 'Products',
         tableName: 'Products',
         freezeTableName: true,
-        paranoid: true,
         timestamps: true,
         indexes: [
             { fields: ['ShopId'] },

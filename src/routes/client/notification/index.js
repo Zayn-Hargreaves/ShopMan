@@ -1,4 +1,4 @@
-const NotificationController = require("../../../controllers/Notification.Controller")
+const NotificationController = require("../../../controllers/client/Notification.Controller")
 const { asyncHandler } = require("../../../helpers/asyncHandler")
 
 const router = require("express").Router()

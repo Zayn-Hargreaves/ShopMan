@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const SearchController = require('../../../controllers/Search.Controller');
+const SearchController = require('../../../controllers/client/Search.Controller');
 const { asyncHandler } = require('../../../helpers/asyncHandler');
-const ProductController = require('../../../controllers/Product.Controller');
+const ProductController = require('../../../controllers/client/Product.Controller');
 const {optionalAuthentication, authentication} = require("../../../auth/authUtils")
 /**
  * @swagger

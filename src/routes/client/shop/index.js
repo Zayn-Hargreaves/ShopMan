@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const SearchController = require("../../../controllers/Search.Controller");
-const ShopController = require("../../../controllers/Shop.Controller.js");
+const SearchController = require("../../../controllers/client/Search.Controller");
+const ShopController = require("../../../controllers/client/Shop.Controller.js");
 const { asyncHandler } = require("../../../helpers/asyncHandler.js");
 const {optionalAuthentication, authentication} = require("../../../auth/authUtils.js")
 /**

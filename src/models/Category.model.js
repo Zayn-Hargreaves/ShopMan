@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const slugify = require('slugify');
 
-class Category extends Model {}
+class Category extends Model { }
 const initializeCategory = async (sequelize) => {
     Category.init({
         id: {
@@ -23,6 +23,10 @@ const initializeCategory = async (sequelize) => {
         thumb: {
             type: DataTypes.STRING
         },
+        category_code: {
+            type: DataTypes.STRING,
+            unique: true,
+        },
         slug: {
             type: DataTypes.STRING,
             unique: true
@@ -38,6 +42,16 @@ const initializeCategory = async (sequelize) => {
             { fields: ['status'] },
             { fields: ['status', 'name'] } // Index composite
         ]
+    });
+
+    const slugify = require('slugify');
+
+    Category.addHook('afterCreate', async (category, options) => {
+        const prefix = slugify(category.name, { lower: false, strict: true, replacement: '' }).toUpperCase();
+        const code = `${prefix}-${category.id}`;
+        if (!category.category_code) {
+            await category.update({ category_code: code }, { transaction: options.transaction });
+        }
     });
 
     Category.addHook('beforeSave', (category) => {

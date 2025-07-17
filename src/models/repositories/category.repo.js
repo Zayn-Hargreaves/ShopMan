@@ -20,6 +20,9 @@ class CategoryRepository {
     async getAllCategories() {
         return this.Category.findAll({ attributes: ['id', 'parentId'] })
     }
+    async findOneCategoryById(id,options){
+        return this.Category.findOne({where:{id},...options})
+    }
     async getAllDescendantCategoryIds(categoryId) {
         const result = new Set();
         const Category = this.Category

@@ -18,6 +18,8 @@ const initializeModels = require("../../db/dbs/associations")
 const FollowRepository = require("./follow.repo")
 const CommentRepository = require("./comment.repo")
 const PaymentMethodRepository = require("./PaymentMethod.repo")
+const ShopUserRoleRepository = require("./ShopUserRole.repo")
+const RoleGrantRepository = require("./RoleGrant.repo")
 
 class RepositoryFactory {
     constructor() {
@@ -48,7 +50,9 @@ class RepositoryFactory {
                 NotificationRepository: new NotificationRepository(this.models),
                 FollowRepository: new FollowRepository(this.models),
                 CommentRepository: new CommentRepository(this.models),
-                PaymentMethodRepository: new PaymentMethodRepository(this.models)
+                PaymentMethodRepository: new PaymentMethodRepository(this.models),
+                ShopUserRoleRepository: new ShopUserRoleRepository(this.models),
+                RoleGrantRepository: new RoleGrantRepository(this.models)
             };
         }
     }
