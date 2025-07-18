@@ -136,8 +136,7 @@ class DiscountRepository {
     if (toRemove.length > 0) {
       await this.DiscountsProducts.destroy({ where: { DiscountId: id, ProductId: toRemove } })
     }
-    console.log("test")
-    if (toAdd > 0) {
+    if (toAdd.length > 0) {
       await this.DiscountsProducts.bulkCreate(toAdd.map(pid => ({ DiscountId: id, ProductId: pid })))
     }
     return 1

@@ -10,7 +10,6 @@ class ProductRepository {
         this.SkuSpecs = models.SkuSpecs
         this.Wishlists = models.Wishlists
         this.Discounts = models.Discounts
-        this.Category = models.Category
         this.DiscountsProducts = models.DiscountsProducts
         this.Campaign = models.Campaign
         this.Inventories = models.Inventories
@@ -256,12 +255,11 @@ class ProductRepository {
     }
     async createProduct({ name, price, desc, attrs, CategoryId, discount_percentage, sort, ShopId, has_variations = "false", thumb }, options) {
         const CategoryPath = await this.buildCategoryPath(CategoryId)
-        return await this.Products.create({ name, price, desc, attrs, CategoryId, attrs, discount_percentage, CategoryPath, sort, ShopId, has_variations, status: 'active', thumb, CategoryPath }, options)
+        return await this.Products.create({ name, price, desc, attrs, CategoryId, discount_percentage, CategoryPath, sort, ShopId, has_variations, status: 'active', thumb }, options)
     }
 
     async createNewSku(ProductId, ShopId, { sku_name, sku_desc, sku_attrs, sku_specs, sku_price, sku_stock, sku_type, sort, location, sku_no, spu_no }, options) {
         const sku = await this.Sku.create({ ProductId, sku_no, sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price }, options)
-        console.log(`${sku.id}::::::::::`, sku)
         const skuAttr = await this.SkuAttr.create({ sku_no, sku_stock, sku_price, sku_attrs }, options)
         console.log(skuAttr)
         const SkuSpecs = await this.SkuSpecs.create({ sku_specs, SkuId: sku.id }, options)

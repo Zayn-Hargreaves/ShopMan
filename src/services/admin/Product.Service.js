@@ -1,9 +1,10 @@
 const { NotFoundError } = require("../../cores/error.response");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
+const BaseProductService = require("../common/ProductService");
 const { Op } = require("sequelize");
 const { pushProductToES, deleteProductFromES } = require("../client/elasticsearch/orderDetailES.service");
 
-class ProductService {
+class ProductService extends BaseProductService {
     /**
      * Lấy danh sách sản phẩm (có filter, phân trang)
      */
@@ -207,10 +208,10 @@ class ProductService {
         return { success: true };
     }
 
-    static async getProductDetail(ShopId, ProductId) {
+    static async getProductDetailForShop(shopId, productId) {
         await RepositoryFactory.initialize();
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
-        return await ProductRepo.findProductDetailForAdmin(ShopId, ProductId)
+        return await ProductRepo.findProductDetailForAdmin(shopId, productId);
     }
 }
 

@@ -1,5 +1,4 @@
 
-const initializeModels = require("../../db/dbs/associations")
 const { Op, where } = require('sequelize')
 const { getSelectData } = require("../../utils")
 const { NotFoundError } = require("../../cores/error.response")
@@ -75,7 +74,7 @@ class BannerRepository {
         return this.Banner.findByPk(id)
     }
     async updateBanner(ShopId, BannerId, data){
-        return this.Banner.update({data, where:{id:BannerId, ShopId}})
+        return this.Banner.update(data, {where:{id:BannerId, ShopId}})
     }
 }
 module.exports = BannerRepository

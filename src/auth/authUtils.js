@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const { asyncHandler } = require('../helpers/asyncHandler');
 const { UnauthorizedError, NotFoundError, ForbiddenError } = require('../cores/error.response');
-const RedisService = require("../services/client/Redis.Service");
+const RedisService = require("../services/client/Ris.Service");
 const RepositoryFactory = require('../models/repositories/repositoryFactory');
 const HEADER = {
     CLIENT_ID: 'x-client-id',
@@ -12,10 +12,6 @@ const HEADER = {
 const accessSecretKey = process.env.ACCESS_SECRET_KEY;
 const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
 
-const accessSecretKey1 = process.env.ACCESS_SECRET_KEY;
-const refreshSecretKey1 = process.env.REFRESH_SECRET_KEY;
-let access
-let refresh
 const createAccessToken = (payload) => {
     return jwt.sign(payload, Buffer.from(accessSecretKey, 'utf-8'), {
         algorithm: 'HS256',

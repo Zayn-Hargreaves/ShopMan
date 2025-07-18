@@ -2,12 +2,12 @@ const { NotFoundError } = require("../../cores/error.response")
 const RedisService = require("./Redis.Service")
 const RepositoryFactory = require("../../models/repositories/repositoryFactory")
 const { getInfoData } = require("../../utils/index")
-class ProductService {
+const BaseProductService = require("../common/ProductService");
+class ProductService extends BaseProductService{
 
     static async getProductDetail(slug, UserId = null) {
         await RepositoryFactory.initialize()
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository")
-        const wishlistRepo = RepositoryFactory.getRepository("WishListRepository")
         if (!slug) throw new Error("Missing slug")
         const cacheKey = `product:slug:${slug}`
         let productDetail = await RedisService.getCachedData(cacheKey)
@@ -32,7 +32,7 @@ class ProductService {
 
         if (UserId !== null) {
             const ProductId = productDetail.id
-            const WishlistItem = RedisService.isMemberOfSet(`user:wishlist:${UserId}`, `${ProductId}`)
+            const WishlistItem = await RedisService.isMemberOfSet(`user:wishlist:${UserId}`, `${ProductId}`)
             if (WishlistItem) {
                 productDetail.isInWishlist = true
             }

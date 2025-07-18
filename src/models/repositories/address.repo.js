@@ -1,8 +1,9 @@
-const initializeModels = require("../../db/dbs/associations")
+const { NotFoundError } = require("../../cores/error.response")
 
 class AddressRepository {
     constructor(models) {
         this.Address = models.Address
+        this.User = models.User
     }
     async findById(id){
         return await this.Address.findByPk(id)
@@ -24,6 +25,10 @@ class AddressRepository {
         })
     }
     async createAddress({ UserId, address_type, pincode, address, city, country }) {
+        const user = await this.User.findByPk(UserId)
+        if(!user){
+            throw new NotFoundError("User not found")
+        }
         return await this.Address.create({
             UserId,
             address_type,
@@ -34,6 +39,10 @@ class AddressRepository {
         })
     }
     async updateUserAddress(UserId,{pincode, address, city, country }) {
+         const user = await this.User.findByPk(UserId)
+        if(!user){
+            throw new NotFoundError("User not found")
+        }
         return await this.Address.update({
             pincode,
             address,

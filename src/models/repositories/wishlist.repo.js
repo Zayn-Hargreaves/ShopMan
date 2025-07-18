@@ -5,11 +5,12 @@ class WishlistRepository {
     constructor(models) {
         this.Wishlists = models.Wishlists
         this.Products = models.Products
+        this.User = models.User
     }
     async getProductInWishlist(UserId, lastId, limit = 10) {
         let where = { UserId: UserId }
         if (lastId) {
-            where.id = { [this.Sequerlize.Op.let]: lastId }
+            where.id = { [this.Sequerlize.Op.lte]: lastId }
         }
         const rows = await this.Wishlists.findAll({
             where,
@@ -31,6 +32,13 @@ class WishlistRepository {
         }
     }
     async addProductToWishlist(userId, productId) {
+        if (!user) {
+            throw new NotFoundError("User not found")
+        }
+        const product = await this.Products.findByPk(productId)
+        if (!product) {
+            throw new NotFoundError("Product not found")
+        }
         let item = await this.Wishlists.findOne({
             where: {
                 UserId: userId,
@@ -60,7 +68,7 @@ class WishlistRepository {
         return await this.Wishlists.destroy({
             where: {
                 UserId,
-                ProductId:ProductId
+                ProductId: ProductId
             }
         })
     }
@@ -69,9 +77,9 @@ class WishlistRepository {
             throw new Error("Missing UserId")
         }
         return await this.Wishlists.destroy({
-            where: { 
-                UserId ,
-                ProductId:productItemIds 
+            where: {
+                UserId,
+                ProductId: productItemIds
             }
         })
     }

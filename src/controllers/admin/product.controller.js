@@ -30,7 +30,7 @@ class ProductController {
     getProductDetail = async(req,res,next)=>{
         new OkResponse({
             message:"get product details success",
-            metadata:await ProductService.getProductDetail(req.params.AdminShopId, req.params.ProductId)
+            metadata:await ProductService.getProductDetailForShop(req.params.AdminShopId, req.params.ProductId)
         }).send(res)
     }
 }
