@@ -639,6 +639,48 @@ router.post("/logout", asyncHandler(authController.logout));
 
 
 router.post("/handle-refreshtoken", asyncHandler(authController.handleRefreshToken));
-router.post("/update-fcm-token", asyncHandler(authController.updateFcmToken))
+/**
+ * @swagger
+ * /api/v1/auth/update-fcm-token:
+ *   post:
+ *     summary: Cập nhật FCM token
+ *     description: Cập nhật FCM token cho người dùng hiện tại để gửi thông báo đẩy.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fcmToken:
+ *                 type: string
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     responses:
+ *       200:
+ *         description: FCM token cập nhật thành công
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "Fcm token updated"
+ *                 metadata:
+ *                   id: 123
+ *                   name: "John Doe"
+ *                   email: "john@example.com"
+ *                   avatar: "https://..."
+ *                   status: "active"
+ *       400:
+ *         description: Dữ liệu không hợp lệ
+ *         content:
+ *           application/json:
+ *             $ref: '#/components/schemas/ErrorResponse'
+ */
+
+router.post("/update-fcm-token", asyncHandler(validate(authSchemas.fcmToken)),asyncHandler(authController.updateFcmToken))
 
 module.exports = router;

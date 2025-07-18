@@ -11,12 +11,12 @@ class BannerRepository {
     }
     async getListBanner() {
         return await this.Banner.findAll({
-            start_time: {
-                [Op.lte]: new Date(),
-            },
-            end_time: {
-                [Op.gte]: new Date
-            }
+            // start_time: {
+            //     [Op.lte]: new Date(),
+            // },
+            // end_time: {
+            //     [Op.gte]: new Date
+            // }
         })
     }
     async getListBannerForAdmin(status, banner_type, shopId, position, from, to, page, limit) {

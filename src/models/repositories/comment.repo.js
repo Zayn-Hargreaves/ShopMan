@@ -36,7 +36,7 @@ class CommentRepository {
                 right = maxRight + 2;
             } else {
                 const parent = await this.Comment.findByPk(parentId, { transaction: t });
-                if (!parent) throw new Error("Parent comment not found");
+                if (!parent) throw new NotFoundError("Parent comment not found");
 
                 await this.Comment.update(
                     { right: this.Comment.sequelize.literal('"right" + 2') },

@@ -2,7 +2,10 @@ const router = require('express').Router();
 const SearchController = require('../../../controllers/client/Search.Controller');
 const { asyncHandler } = require('../../../helpers/asyncHandler');
 const ProductController = require('../../../controllers/client/Product.Controller');
-const {optionalAuthentication, authentication} = require("../../../auth/authUtils")
+const {optionalAuthentication, authentication} = require("../../../auth/authUtils");
+const validate = require('../../../middlewares/validate.middleware');
+const productSchemas = require('../../../middlewares/schemas/product.schema');
+const commentSchemas = require('../../../middlewares/schemas/comment.schema');
 /**
  * @swagger
  * components:
@@ -147,7 +150,7 @@ const {optionalAuthentication, authentication} = require("../../../auth/authUtil
 
 
 
-router.get('/', asyncHandler(SearchController.getProductList));
+router.get('/', asyncHandler(validate(productSchemas.dealOfTheDayQuery,'query')),asyncHandler(SearchController.getProductList));
 
 /**
  * @swagger
@@ -265,7 +268,7 @@ router.get('/', asyncHandler(SearchController.getProductList));
  */
 
 
-router.get('/detail/:slug', optionalAuthentication,asyncHandler(ProductController.getProductDetail));
+router.get('/detail/:slug', optionalAuthentication,asyncHandler(validate(productSchemas.productSlugParam,"params")),asyncHandler(ProductController.getProductDetail));
 
 /**
  * @swagger
@@ -356,321 +359,287 @@ router.get('/detail/:slug', optionalAuthentication,asyncHandler(ProductControlle
  *         description: Lỗi máy chủ
  */
 
-
-router.get('/search', asyncHandler(SearchController.SearchProducts));
-
 /**
  * @swagger
- * /api/v1/deal-of-the-day:
+ * /api/v1/product/deal-of-the-day:
  *   get:
- *     summary: Lấy danh sách Deal Of The Day
- *     description: |
- *       Lấy các sản phẩm đang được khuyến mãi nổi bật trong ngày. 
- *       Ưu tiên các sản phẩm có lượt bán cao và còn số lượng khuyến mãi khả dụng.
- *     tags:
- *       - Product
+ *     summary: Get deal of the day products
+ *     description: Retrieve products with the best deals, sorted and filtered.
+ *     tags: [Product]
  *     parameters:
  *       - in: query
- *         name: page
- *         required: false
+ *         name: minPrice
  *         schema:
- *           type: integer
- *           example: 1
- *         description: Trang hiện tại
+ *           type: number
  *       - in: query
- *         name: limit
- *         required: false
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           example: '{"field":"price","order":"asc"}'
+ *       - in: query
+ *         name: lastSortValues
+ *         schema:
+ *           type: string
+ *           example: '[500000, "abc123"]'
+ *       - in: query
+ *         name: pageSize
  *         schema:
  *           type: integer
- *           example: 10
- *         description: Số sản phẩm mỗi trang
+ *           default: 10
+ *       - in: query
+ *         name: isAndroid
+ *         schema:
+ *           type: boolean
  *     responses:
  *       200:
- *         description: Lấy danh sách sản phẩm khuyến mãi thành công
+ *         description: Deals retrieved successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "get deal of the day success"
- *                 metadata:
- *                   type: object
- *                   properties:
- *                     totalItems:
- *                       type: integer
- *                       example: 30
- *                     totalPages:
- *                       type: integer
- *                       example: 3
- *                     currentPage:
- *                       type: integer
- *                       example: 1
- *                     products:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                             example: 101
- *                           name:
- *                             type: string
- *                             example: "Áo thun tay lỡ unisex"
- *                           slug:
- *                             type: string
- *                             example: "ao-thun-unisex"
- *                           price:
- *                             type: number
- *                             example: 350000
- *                           discount_percentage:
- *                             type: number
- *                             example: 30
- *                           rating:
- *                             type: number
- *                             example: 4.6
- *                           sale_count:
- *                             type: integer
- *                             example: 120
- *                           thumb:
- *                             type: string
- *                             example: "https://example.com/image.jpg"
- *                           discounts:
- *                             type: array
- *                             items:
- *                               type: object
- *                               properties:
- *                                 id:
- *                                   type: integer
- *                                   example: 5
- *                                 name:
- *                                   type: string
- *                                   example: "Flash Sale 30%"
- *                                 value:
- *                                   type: number
- *                                   example: 30
- *                                 type:
- *                                   type: string
- *                                   example: "percentage"
- *                                 MaxUses:
- *                                   type: integer
- *                                   example: 100
- *                                 UserCounts:
- *                                   type: integer
- *                                   example: 25
- *       500:
- *         description: Lỗi server
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
- *               message: "Internal server error"
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "Get deal of the day successfull"
+ *                 metadata:
+ *                   data: [...]
+ *                   total: 318
+ *                   suggest: []
+ *                   lastSortValues: [24.34, "products+0+825"]
  */
-
-router.get("/deal-of-the-day", asyncHandler(ProductController.getDealOfTheDay));
 
 /**
  * @swagger
- * /api/v1/all-deal-product:
+ * /api/v1/product/trending-products:
  *   get:
- *     summary: Lấy toàn bộ sản phẩm đang được khuyến mãi
- *     description: Trả về tất cả các sản phẩm đang có khuyến mãi đang hoạt động (theo ngày, trạng thái và số lượng).
- *     tags:
- *       - Product
+ *     summary: Get trending products
+ *     description: Retrieve trending products by cursor score.
+ *     tags: [Product]
  *     parameters:
  *       - in: query
- *         name: page
- *         required: false
+ *         name: cursorScore
  *         schema:
- *           type: integer
- *           example: 1
- *         description: Trang hiện tại (bắt đầu từ 1)
- *       - in: query
- *         name: limit
- *         required: false
- *         schema:
- *           type: integer
- *           example: 20
- *         description: Số sản phẩm mỗi trang
- *     responses:
- *       200:
- *         description: Lấy danh sách sản phẩm khuyến mãi thành công
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "get all deal product success"
- *                 metadata:
- *                   type: object
- *                   properties:
- *                     totalItems:
- *                       type: integer
- *                       example: 50
- *                     totalPages:
- *                       type: integer
- *                       example: 3
- *                     currentPage:
- *                       type: integer
- *                       example: 1
- *                     products:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                             example: 102
- *                           name:
- *                             type: string
- *                             example: "Quần short nam vải đũi"
- *                           slug:
- *                             type: string
- *                             example: "quan-short-nam-vai-dui"
- *                           price:
- *                             type: number
- *                             example: 250000
- *                           discount_percentage:
- *                             type: number
- *                             example: 15
- *                           rating:
- *                             type: number
- *                             example: 4.8
- *                           sale_count:
- *                             type: integer
- *                             example: 85
- *                           thumb:
- *                             type: string
- *                             example: "https://example.com/thumb.jpg"
- *                           discounts:
- *                             type: array
- *                             items:
- *                               type: object
- *                               properties:
- *                                 id:
- *                                   type: integer
- *                                   example: 12
- *                                 name:
- *                                   type: string
- *                                   example: "Summer Sale"
- *                                 type:
- *                                   type: string
- *                                   example: "percentage"
- *                                 value:
- *                                   type: number
- *                                   example: 15
- *                                 StartDate:
- *                                   type: string
- *                                   format: date-time
- *                                   example: "2025-04-01T00:00:00Z"
- *                                 EndDate:
- *                                   type: string
- *                                   format: date-time
- *                                   example: "2025-05-01T00:00:00Z"
- *       500:
- *         description: Lỗi hệ thống khi truy vấn sản phẩm
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               message: "Internal server error"
- */
-
-router.get("/trending-products", asyncHandler(ProductController.getTrendingProducts));
-/**
- * @swagger
- * /api/v1/all-trending-products:
- *   get:
- *     summary: Lấy danh sách tất cả sản phẩm thịnh hành (phân trang)
- *     description: Truy vấn toàn bộ sản phẩm trending dựa theo điểm số đã tính toán trong Redis, có hỗ trợ phân trang.
- *     tags:
- *       - Product
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           example: 1
- *         description: Số trang hiện tại
+ *           type: string
+ *           example: "39.6"
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           example: 10
- *         description: Số sản phẩm trên mỗi trang
  *     responses:
  *       200:
- *         description: Lấy danh sách sản phẩm trending thành công
+ *         description: Trending products retrieved successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "get all trending product sucess"
- *                 metadata:
- *                   type: object
- *                   properties:
- *                     totalItems:
- *                       type: integer
- *                       example: 45
- *                     totalPages:
- *                       type: integer
- *                       example: 5
- *                     currentPage:
- *                       type: integer
- *                       example: 1
- *                     products:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                             example: 123
- *                           name:
- *                             type: string
- *                             example: "Áo phông oversize hot trend"
- *                           slug:
- *                             type: string
- *                             example: "ao-phong-oversize-hot-trend"
- *                           price:
- *                             type: number
- *                             example: 199000
- *                           discount_percentage:
- *                             type: integer
- *                             example: 15
- *                           rating:
- *                             type: number
- *                             example: 4.5
- *                           sale_count:
- *                             type: integer
- *                             example: 50
- *                           thumb:
- *                             type: string
- *                             example: "https://example.com/image.jpg"
- *       500:
- *         description: Lỗi khi truy vấn danh sách trending
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
- *               message: "Internal server error"
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "get trending products by cursor success"
+ *                 metadata:
+ *                   products: [...]
+ *                   nextCursor: 12.8
  */
 
-router.get("/new-arrivals", asyncHandler(ProductController.getNewArrivals));
+/**
+ * @swagger
+ * /api/v1/product/new-arrivals:
+ *   get:
+ *     summary: Get newly arrived products
+ *     description: Retrieve newly added products for display.
+ *     tags: [Product]
+ *     parameters:
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: New arrivals retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "Get new arrval products successfully"
+ *                 metadata:
+ *                   data: [...]
+ *                   total: 318
+ *                   suggest: []
+ *                   lastSortValues: [1750585133415, "products+0+612"]
+ */
 
-router.get("/:productId/comments", optionalAuthentication,asyncHandler(ProductController.GetRootComment))
+/**
+ * @swagger
+ * /api/v1/product/{productId}/comments:
+ *   get:
+ *     summary: Get root comments of a product
+ *     description: Fetch top-level comments for a specific product.
+ *     tags: [Comment]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the product
+ *       - in: query
+ *         name: cursor
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         required: false
+ *         description: Pagination cursor
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         required: false
+ *         description: Number of comments to fetch
+ *     responses:
+ *       200:
+ *         description: Comments retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "get comment success"
+ *                 metadata:
+ *                   totalItems: 1
+ *                   comments: [...]
+ *                   nextCursor: null
+ */
 
-router.post("/:productId/comments", authentication, asyncHandler(ProductController.CreateComment))
+/**
+ * @swagger
+ * /api/v1/product/{productId}/comments:
+ *   post:
+ *     summary: Post a comment on a product
+ *     description: Submit a new comment for a product, including optional images and rating.
+ *     tags: [Comment]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the product
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *               rating:
+ *                 type: number
+ *                 minimum: 1
+ *                 maximum: 5
+ *               parentId:
+ *                 type: integer
+ *               image_urls:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: uri
+ *             example:
+ *               content: "Great product!"
+ *               rating: 5
+ *               parentId: null
+ *               image_urls: ["https://example.com/img1.jpg"]
+ *     responses:
+ *       200:
+ *         description: Comment created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "create comment success"
+ *                 metadata: { ... }
+ */
 
-router.get("/:productId/skus", asyncHandler(ProductController.getProductSkus))
-router.get("/:ProductId/discounts", asyncHandler(ProductController.getDiscountOfProduct))
+/**
+ * @swagger
+ * /api/v1/product/{productId}/skus:
+ *   get:
+ *     summary: Get SKUs for a product
+ *     description: Fetch all SKU variants for a product including attributes and specs.
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the product
+ *     responses:
+ *       200:
+ *         description: SKUs retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "get product sku success"
+ *                 metadata: [...]
+ */
+
+/**
+ * @swagger
+ * /api/v1/product/{ProductId}/discounts:
+ *   get:
+ *     summary: Get discounts for a product
+ *     description: Retrieve applicable discount campaigns for a product.
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: ProductId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the product
+ *     responses:
+ *       200:
+ *         description: Discounts retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "OK"
+ *               status: 200
+ *               metadata:
+ *                 message: "get Product discount success"
+ *                 metadata: [...]
+ */
+
+
+router.get('/search', asyncHandler(validate(productSchemas.dealOfTheDayQuery,'params')),asyncHandler(SearchController.SearchProducts));
+
+router.get("/deal-of-the-day",asyncHandler(validate(productSchemas.dealOfTheDayQuery,'query')), asyncHandler(ProductController.getDealOfTheDay));
+
+
+router.get("/trending-products", asyncHandler(validate(productSchemas.trendingQuery,'query')),asyncHandler(ProductController.getTrendingProducts));
+
+router.get("/new-arrivals", asyncHandler(validate(productSchemas.newArrivals)),asyncHandler(ProductController.getNewArrivals));
+
+router.get("/:productId/comments", optionalAuthentication,asyncHandler(validate(commentSchemas.getRootCommentsQuery)),asyncHandler(ProductController.GetRootComment))
+
+router.post("/:productId/comments", authentication, asyncHandler(validate(commentSchemas.createCommentBody)),asyncHandler(ProductController.CreateComment))
+
+router.get("/:productId/skus", asyncHandler(validate(productSchemas.productIdParam,'params')),asyncHandler(ProductController.getProductSkus))
+router.get("/:ProductId/discounts",asyncHandler(validate(productSchemas.productIdDiscountParam,'params')) ,asyncHandler(ProductController.getDiscountOfProduct))
 module.exports = router;

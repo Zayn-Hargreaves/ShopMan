@@ -14,7 +14,7 @@ class CampaignRepository {
 
     async findCampaignAndDiscountBySlug(slug) {
         if (!slug) {
-            throw new Error("Slug is required");
+            throw new NotFoundError("Slug is required");
         }
         const campaign = await this.Campaign.findOne({
             where: {

@@ -2,13 +2,14 @@ const router = require("express").Router();
 const SearchController = require("../../../controllers/client/Search.Controller");
 const ShopController = require("../../../controllers/client/Shop.Controller.js");
 const { asyncHandler } = require("../../../helpers/asyncHandler.js");
-const {optionalAuthentication, authentication} = require("../../../auth/authUtils.js")
+const { optionalAuthentication, authentication } = require("../../../auth/authUtils.js")
+
 /**
  * @swagger
  * /api/v1/shop/{slug}:
  *   get:
- *     summary: Lấy thông tin chi tiết cửa hàng
- *     description: Trả về thông tin cơ bản của cửa hàng theo slug
+ *     summary: Get shop details
+ *     description: Returns shop information by slug
  *     tags: [Shop]
  *     parameters:
  *       - in: path
@@ -16,10 +17,10 @@ const {optionalAuthentication, authentication} = require("../../../auth/authUtil
  *         required: true
  *         schema:
  *           type: string
- *         description: Slug của cửa hàng
+ *         description: Shop slug
  *     responses:
  *       200:
- *         description: Lấy thông tin shop thành công
+ *         description: Get shop detail success
  *         content:
  *           application/json:
  *             schema:
@@ -50,63 +51,63 @@ const {optionalAuthentication, authentication} = require("../../../auth/authUtil
  *                       type: string
  *                       example: "Chuyên đồ unisex chính hãng"
  *       404:
- *         description: Không tìm thấy shop
+ *         description: Shop not found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get("/:slug", optionalAuthentication,asyncHandler(ShopController.getShopDetails));
+router.get("/:slug", optionalAuthentication, asyncHandler(ShopController.getShopDetails));
 
 /**
  * @swagger
  * /api/v1/shop/{slug}/product:
  *   get:
- *     summary: Lấy sản phẩm của cửa hàng
- *     description: Trả về danh sách sản phẩm thuộc cửa hàng (hỗ trợ lọc, phân trang, sắp xếp)
+ *     summary: Get shop products
+ *     description: Returns product list for a shop with filters, sorting, and pagination
  *     tags: [Shop]
  *     parameters:
  *       - in: path
  *         name: slug
  *         required: true
- *         description: Slug của cửa hàng
+ *         description: Shop slug
  *         schema:
  *           type: string
  *       - in: query
  *         name: minPrice
  *         schema:
  *           type: number
- *         description: Giá tối thiểu
+ *         description: Minimum price
  *       - in: query
  *         name: maxPrice
  *         schema:
  *           type: number
- *         description: Giá tối đa
+ *         description: Maximum price
  *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
  *           example: '{"field":"price","order":"asc"}'
- *         description: Sắp xếp kết quả theo trường
+ *         description: Sort field and order
  *       - in: query
  *         name: lastSortValues
  *         schema:
  *           type: string
  *           example: '[299000, "abc123"]'
- *         description: Giá trị phân trang dạng search_after
+ *         description: Pagination cursor value (search_after)
  *       - in: query
  *         name: pageSize
  *         schema:
  *           type: integer
- *         description: Số sản phẩm mỗi trang
+ *         description: Number of items per page
  *       - in: query
  *         name: isAndroid
  *         schema:
  *           type: boolean
- *         description: Tối ưu dữ liệu cho client Android
+ *         description: Optimize response for Android client
  *     responses:
  *       200:
- *         description: Lấy danh sách sản phẩm thành công
+ *         description: Get shop products successfully
  *         content:
  *           application/json:
  *             schema:
@@ -132,13 +133,78 @@ router.get("/:slug", optionalAuthentication,asyncHandler(ShopController.getShopD
  *                       type: array
  *                       example: [299000, "abc123"]
  *       404:
- *         description: Không tìm thấy cửa hàng
+ *         description: Shop not found
  */
 router.get("/:slug/product", asyncHandler(SearchController.getProductByShop));
-router.get("/info/:ShopId",optionalAuthentication, asyncHandler(ShopController.getShopInfo))
 
-router.use(authentication)
-    
-router.post("/:ShopId/follow", asyncHandler(ShopController.FollowShop))
-router.delete("/:ShopId/follow", asyncHandler(ShopController.UnfollowShop))
+/**
+ * @swagger
+ * /api/v1/shop/info/{ShopId}:
+ *   get:
+ *     summary: Get shop info by ID
+ *     description: Returns shop info and follow status
+ *     tags: [Shop]
+ *     parameters:
+ *       - in: path
+ *         name: ShopId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the shop
+ *     responses:
+ *       200:
+ *         description: Shop info fetched successfully
+ *       404:
+ *         description: Shop not found
+ */
+router.get("/info/:ShopId", optionalAuthentication, asyncHandler(ShopController.getShopInfo))
+
+/**
+ * @swagger
+ * /api/v1/shop/{ShopId}/follow:
+ *   post:
+ *     summary: Follow a shop
+ *     description: Authenticated user follows the shop
+ *     tags: [Shop]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ShopId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Shop ID to follow
+ *     responses:
+ *       200:
+ *         description: Shop followed successfully
+ *       404:
+ *         description: Shop not found
+ */
+router.post("/:ShopId/follow", authentication, asyncHandler(ShopController.FollowShop))
+
+/**
+ * @swagger
+ * /api/v1/shop/{ShopId}/follow:
+ *   delete:
+ *     summary: Unfollow a shop
+ *     description: Authenticated user unfollows the shop
+ *     tags: [Shop]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: ShopId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Shop ID to unfollow
+ *     responses:
+ *       200:
+ *         description: Shop unfollowed successfully
+ *       404:
+ *         description: Shop not found
+ */
+router.delete("/:ShopId/follow", authentication, asyncHandler(ShopController.UnfollowShop))
+
 module.exports = router;

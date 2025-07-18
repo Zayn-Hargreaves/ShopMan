@@ -50,8 +50,8 @@ class CampaignService {
         const checkbanner = await BannerRepo.getDetailBanner(data.bannerId)
         if(!checkbanner) throw NotFoundError("Banner not found")
         if (!data.title || !data.start_time || !data.end_time || !data.status)
-            throw new Error('Missing required fields');
-        if (new Date(data.end_time) < new Date(data.start_time)) throw new Error('End time must after start time');
+            throw new NotFoundError('Missing required fields');
+        if (new Date(data.end_time) < new Date(data.start_time)) throw new ConflictError('End time must after start time');
         
         return await CampaignRepo.addCampaign(data);
     }
@@ -83,12 +83,12 @@ class CampaignService {
         if(!isAdmin){
             // Kiểm tra campaignId này có thuộc shop không
             const mapping = await CampaignRepo.findOneCampaignShop(campaignId, shopId)
-            if (!mapping) throw new Error("No permission to update this campaign");
+            if (!mapping) throw new NotFoundError("No permission to update this campaign");
         }
         const checkbanner = await BannerRepo.getDetailBanner(data.bannerId)
         if(!checkbanner) throw new NotFoundError("Banner not found")
         if (!data.title || !data.start_time || !data.end_time || !data.status)
-            throw new Error('Missing required fields');
+            throw new NotFoundError('Missing required fields');
        
         return await CampaignRepo.updateCampaign(campaignId, data)
 

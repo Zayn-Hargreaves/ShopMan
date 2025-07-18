@@ -85,8 +85,12 @@ class SearchController {
         new OkResponse({
             message: "Get products list successfully",
             metadata: await ElasticSearchService.searchProducts({
+                query:null,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                CategoryId:null,
+                CategorySlug:null,
+                ShopSlug:null,
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,

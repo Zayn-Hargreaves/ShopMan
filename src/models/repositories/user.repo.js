@@ -22,7 +22,6 @@ class UserRepository {
     async findById(id) {
         return await this.User.findByPk(id, {
             attributes: getUnselectData(['password']),
-            raw: true
         });
     }
 

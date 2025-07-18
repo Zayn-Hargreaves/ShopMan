@@ -14,13 +14,14 @@ class ProductController {
     }
     getDealOfTheDay = async (req, res, next) => {
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
-
-        console.log("controller:", lastSortValues)
         new OkResponse({
             message: "Get deal of the day successfull",
             metadata: await ElasticSearchService.searchProducts({
+                query: null,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
+                CategoryId: null,
+                CategorySlug:null,
                 sortBy: sortBy ? JSON.parse(sortBy) : undefined,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : undefined,
@@ -43,9 +44,12 @@ class ProductController {
         new OkResponse({
             message: "Get new arrval products successfully",
             metadata: await ElasticSearchService.searchProducts({
+                query:null,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
-                sortBy, // truyền object
+                CategoryId:null,
+                CategorySlug:null,
+                sortBy,
                 lastSortValues: lastSortValues ? JSON.parse(lastSortValues) : undefined,
                 pageSize: pageSize ? Number(pageSize) : 10,
                 isAndroid: isAndroid === 'true'

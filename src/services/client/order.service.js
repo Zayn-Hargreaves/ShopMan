@@ -11,6 +11,7 @@ const {
     getShipment,
     getLabel
 } = require("./shipping/ShippoService");
+const { NotFoundError } = require("../../cores/error.response");
 class OrderService {
     static async getOrderDetais(userId, orderId) {
         await RepositoryFactory.initialize();
@@ -42,12 +43,12 @@ class OrderService {
         try {
             // 1. Lấy đơn hàng và kiểm tra trạng thái
             const order = await OrderRepo.getOrderById(orderId, { transaction });
-            if (!order) throw new Error("Không tìm thấy đơn hàng!");
-            if (order.shippingStatus === "cancelled") throw new Error("Đơn hàng đã bị huỷ trước đó!");
+            if (!order) throw new NotFoundError("Không tìm thấy đơn hàng!");
+            if (order.shippingStatus === "cancelled") throw new NotFoundError("Đơn hàng đã bị huỷ trước đó!");
             if (["delivered", "completed"].includes(order.shippingStatus)) {
-                throw new Error("Không thể huỷ đơn đã giao!");
+                throw new NotFoundError("Không thể huỷ đơn đã giao!");
             }
-            if (order.UserId !== userId) throw new Error("Không có quyền huỷ đơn hàng này!");
+            if (order.UserId !== userId) throw new NotFoundError("Không có quyền huỷ đơn hàng này!");
 
             // 2. Update trạng thái đơn hàng
             await OrderRepo.updateOrder(orderId, { Status: "cancelled", shippingStatus: "cancelled" }, { transaction });

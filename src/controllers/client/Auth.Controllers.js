@@ -17,7 +17,7 @@ class AuthController{
     logout = async(req,res,next)=>{
         new OkResponse({
             message:"logout sucsess",
-            metadata:await AuthService.logout(req.headers['x-rtoken-id'])
+            metadata:await AuthService.logout(req.refreshToken)
         }).send(res)
     }
     handleRefreshToken = async(req, res, next)=>{

@@ -1,3 +1,4 @@
+const { NotFoundError } = require("../../cores/error.response")
 const { getSelectData } = require("../../utils")
 const { Sequelize, Op, where } = require("sequelize")
 
@@ -107,11 +108,11 @@ class CartRepository {
         // Tìm cart đang active
 
         const cart = await Cart.findOne({ where: { UserId, cart_status: "active" } });
-        if (!cart) throw new Error("Cart not found");
+        if (!cart) throw new NotFoundError("Cart not found");
 
         // Dòng cart cần update
         const item = await CartDetails.findOne({ where: { CartId: cart.id, id: CartDetailId } });
-        if (!item) throw new Error("Product not found in cart");
+        if (!item) throw new NotFoundError("Product not found in cart");
 
         // Nếu số lượng = 0, xóa luôn dòng này
         if (quantity === 0) {
@@ -194,7 +195,7 @@ class CartRepository {
 
     async removeProductFromCart(UserId, ProductId, sku_no) {
         const cart = await this.Cart.findOne({ where: { UserId, cart_status: "active" } });
-        if (!cart) throw new Error("Cart not found");
+        if (!cart) throw new NotFoundError("Cart not found");
 
         return await this.CartDetails.destroy({ where: { CartId: cart.id, ProductId, sku_no } });
     }

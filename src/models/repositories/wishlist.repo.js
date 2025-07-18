@@ -1,3 +1,4 @@
+const { NotFoundError } = require("../../cores/error.response")
 const initializeModels = require("../../db/dbs/associations")
 const { getSelectData } = require("../../utils")
 const { Op, Sequelize } = require("sequelize")
@@ -63,7 +64,7 @@ class WishlistRepository {
     }
     async removeProductFromWishlist(UserId, ProductId) {
         if (!UserId) {
-            throw new Error("Missing UserId")
+            throw new NotFoundError("Missing UserId")
         }
         return await this.Wishlists.destroy({
             where: {
@@ -74,7 +75,7 @@ class WishlistRepository {
     }
     async removeAllProductFromWishlist(UserId, productItemIds) {
         if (!UserId) {
-            throw new Error("Missing UserId")
+            throw new NotFoundError("Missing UserId")
         }
         return await this.Wishlists.destroy({
             where: {
@@ -85,7 +86,7 @@ class WishlistRepository {
     }
     async countProductInWishlist(UserId) {
         if (!UserId) {
-            throw new Error("Missing UserId")
+            throw new NotFoundError("Missing UserId")
         }
         return await this.Wishlists.count({
             where: { UserId }

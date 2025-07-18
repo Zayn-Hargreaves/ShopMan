@@ -119,6 +119,13 @@ const authSchemas = {
                 'any.required': 'Refresh token is required',
             }),
     }),
+    fcmToken:Joi.object({
+        fcmToken: Joi.string().trim().required().messages({
+            "any.required": "FCM token required.",
+            "string.base": "FCM token must be string.",
+            "string.empty": "FCM token not null.",
+        }),
+    })
 };
 
 module.exports = authSchemas;

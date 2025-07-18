@@ -29,13 +29,30 @@ const options = {
     "./src/routes/client/index.js",
     "./src/routes/client/user/index.js",
     "./src/routes/client/product/index.js",
+    "./src/routes/admin/product/index.js",
     "./src/routes/client/category/index.js",
     "./src/routes/client/banner/index.js",
     "./src/routes/client/campaign/index.js",
+    "./src/routes/client/comment/index.js",
     "./src/routes/client/cart/index.js",
     "./src/routes/client/checkout/index.js",
     "./src/routes/client/wishlist/index.js",
+    "./src/routes/client/paymentMethod/index.js",
+    "./src/routes/client/notification/index.js",
     "./src/routes/client/shop/index.js",
+    "./src/routes/admin/shop/index.js",
+    "./src/routes/admin/member/index.js",
+    "./src/routes/client/order/index.js",
+    "./src/routes/admin/order/index.js",
+    "./src/routes/client/wishlist/index.js",
+    "./src/routes/admin/inventory/index.js",
+    "./src/routes/admin/index.js",
+    "./src/routes/admin/campaign/index.js",
+    "./src/routes/admin/discount/index.js",
+    "./src/routes/admin/banner/index.js",
+    "./src/routes/admin/analytics/index.js"
+
+
 
   ]
 };

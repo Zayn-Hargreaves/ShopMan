@@ -1,5 +1,5 @@
 // CommentService.js
-const { NotFoundError, BadRequestError } = require("../../cores/error.response.js")
+const { NotFoundError, BadRequestError, ForbiddenError } = require("../../cores/error.response.js")
 const repositoryFactory = require("../../models/repositories/repositoryFactory.js")
 const { Op } = require("sequelize")
 
@@ -33,7 +33,7 @@ class CommentService {
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
         const comment = await CommentRepo.findById(commentId);
         if (!comment) throw new NotFoundError("Comment not found");
-        if (comment.UserId !== userId) throw new Error("Permission denied");
+        if (comment.UserId !== userId) throw new ForbiddenError("Permission denied");
         const result = await CommentRepo.updateCommentContent(commentId, content,image_urls,rating);
         if(result != 1){
             throw new BadRequestError("Update comment failed")
@@ -51,7 +51,7 @@ class CommentService {
         const CommentRepo = repositoryFactory.getRepository("CommentRepository")
         const comment = await CommentRepo.findById(commentId);
         if (!comment) throw new NotFoundError("Comment not found");
-        if (comment.UserId !== userId) throw new Error("Permission denied");
+        if (comment.UserId !== userId) throw new ForbiddenErrorError("Permission denied");
         return await CommentRepo.deleteRecursive(comment);
     }
 }

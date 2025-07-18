@@ -35,8 +35,8 @@ const CampaignController = require("../../../controllers/client/Campaign.Control
  * @swagger
  * /api/v1/campaign/{slug}:
  *   get:
- *     summary: Lấy chi tiết chiến dịch khuyến mãi
- *     description: Trả về thông tin cơ bản về campaign và discount đính kèm theo slug chiến dịch.
+ *     summary: Get campaign details by slug
+ *     description: Returns basic campaign information and attached discount by slug.
  *     tags:
  *       - Campaign
  *     parameters:
@@ -45,10 +45,10 @@ const CampaignController = require("../../../controllers/client/Campaign.Control
  *         required: true
  *         schema:
  *           type: string
- *         description: Slug của chiến dịch khuyến mãi
+ *         description: Slug of the campaign
  *     responses:
  *       200:
- *         description: Lấy thông tin campaign thành công
+ *         description: Campaign detail retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -64,9 +64,9 @@ const CampaignController = require("../../../controllers/client/Campaign.Control
  *                       $ref: '#/components/schemas/Campaign'
  *                     discount:
  *                       type: object
- *                       description: Thông tin discount đính kèm (nếu có)
+ *                       description: Attached discount information (if any)
  *       404:
- *         description: Không tìm thấy campaign hoặc đã kết thúc
+ *         description: Campaign not found or ended
  *         content:
  *           application/json:
  *             schema:
@@ -78,8 +78,8 @@ router.get("/:slug", asyncHandler(CampaignController.getCampaignDetails));
  * @swagger
  * /api/v1/campaign/{slug}/product:
  *   get:
- *     summary: Lấy danh sách sản phẩm thuộc campaign
- *     description: Lấy danh sách sản phẩm theo slug chiến dịch, có phân trang.
+ *     summary: Get products in a campaign
+ *     description: Returns a paginated list of products belonging to the campaign slug.
  *     tags:
  *       - Campaign
  *     parameters:
@@ -88,22 +88,22 @@ router.get("/:slug", asyncHandler(CampaignController.getCampaignDetails));
  *         required: true
  *         schema:
  *           type: string
- *         description: Slug của chiến dịch
+ *         description: Slug of the campaign
  *       - in: query
- *         name: page
+ *         name: lastId
  *         schema:
  *           type: integer
  *           example: 1
- *         description: Trang hiện tại
+ *         description: ID of the last product from previous page
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           example: 10
- *         description: Số sản phẩm mỗi trang
+ *         description: Number of products per page
  *     responses:
  *       200:
- *         description: Lấy danh sách sản phẩm thành công
+ *         description: Product list retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -151,7 +151,7 @@ router.get("/:slug", asyncHandler(CampaignController.getCampaignDetails));
  *                             type: integer
  *                             example: 20
  *       404:
- *         description: Không tìm thấy campaign hoặc không có sản phẩm
+ *         description: Campaign not found or no products
  *         content:
  *           application/json:
  *             schema:

@@ -1,7 +1,7 @@
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
 const { retry } = require("../../helpers/retryFuntion");
 const EmailService = require("../client/Email.service");
-const { ConflictError } = require("../../cores/error.response");
+const { ConflictError, NotFoundError } = require("../../cores/error.response");
 const NotfiticationService = require("../client/Notification.service");
 const { getInfoData } = require("../../utils");
 class MemberService {
@@ -69,7 +69,7 @@ class MemberService {
         await RepositoryFactory.initialize();
         const UserRepo = RepositoryFactory.getRepository("UserRepository");
         const member = await UserRepo.findShopUserRoleById(shopId, userId)
-        if (!member) throw new Error('Member not found');
+        if (!member) throw new NotFoundError('Member not found');
         member.RoleId = newRoleId;
         await member.save();
         return member;
@@ -82,7 +82,7 @@ class MemberService {
         // Cứng: Xoá bản ghi, hoặc mềm: đổi status
         // await ShopUserRole.destroy({ where: { ShopId: shopId, UserId: userId } });
         const member = await UserRepo.findShopUserRoleById(shopId, userId)
-        if (!member) throw new Error('Member not found');
+        if (!member) throw new NotFoundError('Member not found');
         member.status = 'removed';
         await member.save();
         return { success: true };
@@ -92,7 +92,7 @@ class MemberService {
         const UserRepo = RepositoryFactory.getRepository("UserRepository");
         const ShopUserRoleRepo =RepositoryFactory.getRepository("ShopUserRoleRepository")
         let member = await ShopUserRoleRepo.findMemberShip(userId,shopId)
-        if (!member) throw new Error('Member not found');
+        if (!member) throw new NotFoundError('Member not found');
         return  await UserRepo.getUserProfile(userId)
     }
     // Lấy danh sách vai trò khả dụng cho shop

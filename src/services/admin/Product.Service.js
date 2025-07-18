@@ -1,6 +1,6 @@
-const { NotFoundError } = require("../../cores/error.response");
+const { NotFoundError, ConflictError } = require("../../cores/error.response");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
-const BaseProductService = require("../common/ProductService");
+const BaseProductService = require("../common/Product.service");
 const { Op } = require("sequelize");
 const { pushProductToES, deleteProductFromES } = require("../client/elasticsearch/orderDetailES.service");
 
@@ -52,13 +52,13 @@ class ProductService extends BaseProductService {
             discount_percentage, sort, has_variations, skus, thumb
         } = data;
 
-        if (!shopId) throw new Error('ShopId is required');
-        if (!name || !price || !CategoryId) throw new Error('Missing required fields');
+        if (!shopId) throw new NotFoundError('ShopId is required');
+        if (!name || !price || !CategoryId) throw new NotFoundError('Missing required fields');
 
         const transaction = await sequelize.transaction();
         try {
             const category = await CategoryRepo.findOneCategoryById(CategoryId, { transaction });
-            if (!category) throw new Error("Category not found");
+            if (!category) throw new NotFoundError("Category not found");
 
             // Build category path
             const CategoryPath = await ProductRepo.buildCategoryPath(CategoryId);
@@ -81,9 +81,8 @@ class ProductService extends BaseProductService {
                     sku.spu_no = spu_no;
                     // Check trùng sku_no
                     const existSku = await ProductRepo.Sku.findOne({ where: { sku_no }, transaction });
-                    if (existSku) throw new Error(`SKU ${sku_no} already exists!`);
+                    if (existSku) throw new ConflictError(`SKU ${sku_no} already exists!`);
                     // Tạo các record liên quan
-                    console.log("controller::::", sku)
                     const newSku = await ProductRepo.createNewSku(product.id, shopId, sku, { transaction });
                     skuResult.push(newSku);
                 }
@@ -110,8 +109,8 @@ class ProductService extends BaseProductService {
         try {
             // 1. Kiểm tra quyền
             const product = await ProductRepo.findProductById(productId, { transaction });
-            if (!product) throw new Error('Product not found');
-            if (product.ShopId !== +shopId) throw new Error('No permission to update this product');
+            if (!product) throw new NotFoundError('Product not found');
+            if (product.ShopId !== +shopId) throw new NotFoundError('No permission to update this product');
 
             // 2. Update product info
             Object.assign(product, data);
@@ -119,7 +118,7 @@ class ProductService extends BaseProductService {
 
             // 3. Update CategoryPath nếu đổi category
             let category = await ProductRepo.findCategoryById(data.CategoryId || product.CategoryId, { transaction });
-            if (!category) throw new Error("Category not found");
+            if (!category) throw new NotFoundError("Category not found");
 
             if (data.CategoryId && data.CategoryId !== product.CategoryId) {
                 product.CategoryPath = await ProductRepo.buildCategoryPath(data.CategoryId);
@@ -201,8 +200,8 @@ class ProductService extends BaseProductService {
         await RepositoryFactory.initialize();
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
         const product = await ProductRepo.findProductById(productId);
-        if (!product) throw new Error('Product not found');
-        if (product.ShopId !== +shopId) throw new Error('No permission to delete this product');
+        if (!product) throw new NotFoundError('Product not found');
+        if (product.ShopId !== +shopId) throw new NotFoundError('No permission to delete this product');
         await product.destroy();
         await deleteProductFromES(productId)
         return { success: true };

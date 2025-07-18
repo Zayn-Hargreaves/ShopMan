@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const { asyncHandler } = require('../helpers/asyncHandler');
 const { UnauthorizedError, NotFoundError, ForbiddenError } = require('../cores/error.response');
-const RedisService = require("../services/client/Ris.Service");
+const RedisService = require("../services/client/Redis.Service");
 const RepositoryFactory = require('../models/repositories/repositoryFactory');
 const HEADER = {
     CLIENT_ID: 'x-client-id',
@@ -39,8 +39,6 @@ const createTokenPair = async (payload) => {
         jwt.verify(accessToken, Buffer.from(accessSecretKey, 'utf-8'), (err, decode) => {
             if (err) {
                 console.error('error verify::', err);
-            } else {
-                console.log('decode verify::', decode);
             }
         });
         return { accessToken, refreshToken };

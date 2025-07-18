@@ -1,4 +1,4 @@
-const { NotFoundError } = require("../../cores/error.response");
+const { NotFoundError, ConflictError } = require("../../cores/error.response");
 const { Op } = require("sequelize")
 class InventoryRepository {
     constructor(models) {
@@ -24,7 +24,7 @@ class InventoryRepository {
 
         const inven = await this.Inventories.findOne({ where: whereClause });
         if (!inven || inven.inven_quantity < quantity) {
-            throw new Error("Insufficient inventory");
+            throw new ConflictError("Insufficient inventory");
         }
         inven.inven_quantity -= quantity;
         await inven.save();

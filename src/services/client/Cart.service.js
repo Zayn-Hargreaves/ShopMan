@@ -1,6 +1,7 @@
 const cartRepo = require("../../models/repositories/cart.repo");
 const RedisService = require("./Redis.Service");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
+const { NotFoundError } = require("../../cores/error.response");
 
 class CartService {
     static async getCart(UserId) {
@@ -89,7 +90,7 @@ class CartService {
 
     static async addProductToCart(UserId, productId, skuNo, quantity) {
         if (!UserId || !productId || !skuNo || !quantity || quantity <= 0) {
-            throw new Error("Invalid input for adding product to cart");
+            throw new NotFoundError("Invalid input for adding product to cart");
         }
 
         await RepositoryFactory.initialize();
@@ -123,7 +124,7 @@ class CartService {
         const CartRepo = RepositoryFactory.getRepository("CartRepository");
 
         const oldItem = await CartRepo.findCartDetailById(CartDetailId);
-        if (!oldItem) throw new Error('Cart item not found');
+        if (!oldItem) throw new NotFoundError('Cart item not found');
 
         const result = await CartRepo.updateProductToCart({ UserId, CartDetailId, sku_no: skuNo, quantity });
 

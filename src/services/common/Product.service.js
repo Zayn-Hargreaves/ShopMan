@@ -13,7 +13,7 @@ class ProductService {
     static async getProductDetailBySlug(slug, UserId = null) {
         await RepositoryFactory.initialize();
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
-        if (!slug) throw new Error("Missing slug");
+        if (!slug) throw new NotFoundError("Missing slug");
         const cacheKey = `product:slug:${slug}`;
         let productDetail = await RedisService.getCachedData(cacheKey);
         if (!productDetail) {

@@ -1,3 +1,4 @@
+const { NotFoundError } = require("../../cores/error.response");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
 
 class NotificationService {
@@ -26,7 +27,7 @@ class NotificationService {
         await RepositoryFactory.initialize();
         const NotificationRepo = RepositoryFactory.getRepository("NotificationRepository");
         const noti = await NotificationRepo.findOne({ where: { id: notificationId, UserId: userId } });
-        if (!noti) throw new Error('Notification not found');
+        if (!noti) throw new NotFoundError('Notification not found');
         noti.isRead = true;
         await noti.save();
         return noti;

@@ -1,3 +1,4 @@
+const { NotFoundError } = require("../../cores/error.response");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
 const { Op } = require("sequelize");
 
@@ -14,7 +15,6 @@ class OrderService {
             page = 1,
             limit = 20,
         } = query;
-        console.log(shopId)
         return await OrderRepo.getListOrderByPagination(status, userId, from, to, page, limit, shopId)
     }
 
@@ -22,7 +22,6 @@ class OrderService {
     static async getOrder(shopId, orderDetailId) {
         await RepositoryFactory.initialize();
         const OrderRepo = RepositoryFactory.getRepository("OrderRepository");
-        console.log(shopId, orderDetailId)
         return await OrderRepo.getOrderDetailsByAdmin(orderDetailId, shopId)
     }
 
@@ -31,7 +30,7 @@ class OrderService {
         await RepositoryFactory.initialize();
         const OrderRepo = RepositoryFactory.getRepository("OrderRepository");
         const order = await OrderRepo.getOrderDetailsByAdmin(orderDetailId, shopId)
-        if (!order) throw new Error("Order not found!");
+        if (!order) throw new NotFoundError("Order not found!");
 
         order.status = status;
         await order.save();

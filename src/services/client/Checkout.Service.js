@@ -13,6 +13,7 @@ const {
     getShipment,
     getLabel
 } = require("./shipping/ShippoService");
+const { ConflictError, NotFoundError, BadGatewayError } = require("../../cores/error.response");
 class CheckoutService {
     // 1. Lấy tất cả payment method cho FE
     static async getPaymentMethod() {
@@ -27,9 +28,9 @@ class CheckoutService {
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
         const DiscountRepo = RepositoryFactory.getRepository("DiscountRepository");
         const PaymentMethodRepo = RepositoryFactory.getRepository("PaymentMethodRepository")
-        if (!selectedItems.length) throw new Error("No products selected for checkout");
-        if (!addressId) throw new Error("No address selected");
-        if (!paymentMethodId) throw new Error("No payment method selected");
+        if (!selectedItems.length) throw new ConflictError("No products selected for checkout");
+        if (!addressId) throw new NotFoundError("No address selected");
+        if (!paymentMethodId) throw new NotFoundError("No payment method selected");
 
         let totalAmount = 0;
         const finalItems = [];
@@ -44,18 +45,18 @@ class CheckoutService {
                 if (source === 'cart' || source == null) {
                     productInCart = await CartRepo.findProductInCart(userId, productId, skuNo);
                     if (!productInCart || productInCart.quantity < quantity) {
-                        throw new Error(`Invalid or insufficient cart quantity for product ${productId} | ${skuNo}`);
+                        throw new ConflictError(`Invalid or insufficient cart quantity for product ${productId} | ${skuNo}`);
                     }
                 }
 
                 // Lấy thông tin sản phẩm
                 const productSku = await ProductRepo.getProductWithSku(productId, skuNo);
-                if (!productSku) throw new Error(`Product ${productId} | ${skuNo} not found in product repository`);
+                if (!productSku) throw new NotFoundError(`Product ${productId} | ${skuNo} not found in product repository`);
                 // Check tồn kho
                 const availableStock = productSku.sku_stock;
                 const reservedQty = await RedisService.getReservedQuantity(productId, skuNo) || 0;
                 if ((availableStock - reservedQty) < quantity) {
-                    throw new Error(`Not enough stock for product ${productId} | ${skuNo}`);
+                    throw new NotFoundError(`Not enough stock for product ${productId} | ${skuNo}`);
                 }
 
                 // Lock sản phẩm
@@ -66,7 +67,7 @@ class CheckoutService {
                     quantity,
                     timeout: 15,
                 });
-                if (!lock) throw new Error(`Product ${productId} is being checked out by another user.`);
+                if (!lock) throw new BadGatewayError(`Product ${productId} is being checked out by another user.`);
                 lockList.push(lock);
 
                 // Giá & giảm giá
@@ -152,13 +153,13 @@ class CheckoutService {
 
         // 1. Lấy checkout session
         const checkoutData = await RedisService.get(`checkout:${userId}:${paymentIntentId}`);
-        if (!checkoutData) throw new Error("Checkout session expired or invalid");
+        if (!checkoutData) throw new BadGatewayError("Checkout session expired or invalid");
 
         // 2. Xác thực payment
         const paymentMethod = await PaymentMethodRepo.findPaymentMethodById(checkoutData.paymentMethodId);
         const paymentService = PaymentFactory.getPaymentService(paymentMethod.name);
         const isPaid = await paymentService.verifyPayment(paymentIntentId);
-        if (!isPaid) throw new Error("Payment not completed or invalid");
+        if (!isPaid) throw new BadGatewayError("Payment not completed or invalid");
 
         let orderTotal = 0;
         const orderDetailsData = [];
@@ -258,7 +259,7 @@ class CheckoutService {
 
                 // Địa chỉ nhận (White House)
                 const addressObj = await AddressRepo.findById(checkoutData.addressId);
-                if (!addressObj) throw new Error("Không tìm thấy địa chỉ giao hàng!");
+                if (!addressObj) throw new NotFoundError("Không tìm thấy địa chỉ giao hàng!");
 
                 // Convert address DB sang Shippo
                 const toAddress = {

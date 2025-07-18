@@ -1,3 +1,5 @@
+const { NotFoundError } = require("../../cores/error.response")
+
 class ShopUserRoleRepository {
     constructor(models) {
         this.ShopUserRole = models.ShopUserRole

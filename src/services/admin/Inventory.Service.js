@@ -1,3 +1,4 @@
+const { ConflictError } = require("../../cores/error.response");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
 const { Op } = require("sequelize");
 
@@ -30,7 +31,7 @@ class InventoryService {
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository");
 
         const inventory = await InventoryRepo.findInventoryById(shopId, inventoryId)
-        if (!inventory) throw new Error("Inventory not found or no permission");
+        if (!inventory) throw new ConflictError("Inventory not found or no permission");
         if (typeof data.quantity !== 'undefined') inventory.quantity = data.quantity;
         if (typeof data.location !== 'undefined') inventory.location = data.location;
 

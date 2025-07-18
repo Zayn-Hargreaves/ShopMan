@@ -21,30 +21,30 @@ class ElasticSearchService {
         const ShopRepo = RepositoryFactory.getRepository("ShopRepository")
         const CategoryRepo = RepositoryFactory.getRepository("CategoryRepository")
         let shop
-        if (!ShopSlug) throw new NotFoundError("Shop not found")
         if (ShopSlug) {
             shop = await ShopRepo.findShopBySlug1(ShopSlug)
+            if( shop) throw new NotFoundError("Shop not found")
         }
         if (minPrice !== undefined && (isNaN(minPrice) || minPrice < 0)) {
-            throw new Error("minPrice must be a non-negative number");
+            throw new NotFoundError("minPrice must be a non-negative number");
         }
         if (maxPrice !== undefined && (isNaN(maxPrice) || maxPrice < 0)) {
-            throw new Error("maxPrice must be a non-negative number");
+            throw new NotFoundError("maxPrice must be a non-negative number");
         }
         if (pageSize !== undefined && (isNaN(pageSize) || pageSize <= 0)) {
-            throw new Error("pageSize must be a positive number");
+            throw new NotFoundError("pageSize must be a positive number");
         }
         if (sortBy && (!sortBy.field || !['price', 'rating', 'createdAt', 'sale_count'].includes(sortBy.field))) {
-            throw new Error("sortBy.field must be one of: price, rating, createdAt, sale_count");
+            throw new NotFoundError("sortBy.field must be one of: price, rating, createdAt, sale_count");
         }
         if (sortBy && sortBy.order && !['asc', 'desc'].includes(sortBy.order)) {
-            throw new Error("sortBy.order must be 'asc' or 'desc'");
+            throw new NotFoundError("sortBy.order must be 'asc' or 'desc'");
         }
         let categoryIds = [];
         let category
         if (CategorySlug) {
             category = await CategoryRepo.findCategoryBySlug(CategorySlug);
-            if (!category) throw new Error("Category not found");
+            if (!category) throw new NotFoundError("Category not found");
 
             categoryIds = await CategoryRepo.getAllDescendantCategoryIds(category.id);
         } else if (CategoryId) {

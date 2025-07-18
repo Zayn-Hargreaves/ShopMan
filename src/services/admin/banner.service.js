@@ -45,14 +45,14 @@ class BannerService {
         const BannerRepo = RepositoryFactory.getRepository("BannerRepository");
         const CampaignRepo = RepositoryFactory.getRepository("CampaingRepository")
         if(!isAdmin && shopId != data.ShopId){
-            throw new Error("Missing required fields")
+            throw new NotFoundError("Missing required fields")
         }
         if(data.CampaignId){
             const campaign = await CampaignRepo.findOneCampaignShop(data.CampaignId,data.ShopId)
             if(!campaign) throw new NotFoundError("Campaign not found")
         }
         if (!data.title || !data.banner_type || !data.position || !data.start_time || !data.end_time)
-            throw new Error('Missing required fields');
+            throw new NotFoundError('Missing required fields');
         return await BannerRepo.addBanner(data)
     }
 
@@ -68,14 +68,14 @@ class BannerService {
         const BannerRepo = RepositoryFactory.getRepository("BannerRepository");
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         if(!isAdmin && shopId != data.ShopId){
-            throw new Error("Missing required fields")
+            throw new NotFoundError("Missing required fields")
         }
         if(data.CampaignId){
             const campaign = await CampaignRepo.findOneCampaignShop(data.CampaignId,data.shopId)
             if(!campaign) throw new NotFoundError("Campaign not found")
         }
         if (!data.title || !data.start_time || !data.end_time)
-            throw new Error('Missing required fields');
+            throw new NotFoundError('Missing required fields');
         
 
         const banner = await BannerRepo.getDetailBanner(bannerId);

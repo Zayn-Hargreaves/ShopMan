@@ -2,13 +2,13 @@ const { NotFoundError } = require("../../cores/error.response")
 const RedisService = require("./Redis.Service")
 const RepositoryFactory = require("../../models/repositories/repositoryFactory")
 const { getInfoData } = require("../../utils/index")
-const BaseProductService = require("../common/ProductService");
+const BaseProductService = require("../common/Product.service");
 class ProductService extends BaseProductService{
 
     static async getProductDetail(slug, UserId = null) {
         await RepositoryFactory.initialize()
         const ProductRepo = RepositoryFactory.getRepository("ProductRepository")
-        if (!slug) throw new Error("Missing slug")
+        if (!slug) throw new NotFoundError("Missing slug")
         const cacheKey = `product:slug:${slug}`
         let productDetail = await RedisService.getCachedData(cacheKey)
         if (!productDetail) {

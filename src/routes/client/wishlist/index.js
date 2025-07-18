@@ -2,158 +2,141 @@ const router = require("express").Router();
 const { asyncHandler } = require("../../../helpers/asyncHandler");
 const wishlistController = require("../../../controllers/client/Wishlist.Controller.js");
 
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *   parameters:
- *     AccessTokenHeader:
- *       in: header
- *       name: authorization
- *       required: true
- *       schema:
- *         type: string
- *         example: "Bearer <access_token>"
- *       description: "Access token để xác thực người dùng, định dạng: Bearer <access_token>"
- */
 
 /**
  * @swagger
  * tags:
  *   - name: Wishlist
- *     description: |
- *       Các API trong nhóm này yêu cầu người dùng gửi access token để xác thực.
- *       
- *       👉 Cách gửi access token:
- *       - Trên Swagger UI, nhấn nút "Authorize" góc trên phải.
- *       - Trên app Android hoặc khi gửi request, cần đính kèm access token trong header như sau:
- *         - req.headers['authorization'] = 'Bearer ' + accessToken
- *       - Hoặc nếu test bằng Postman thì vào tab Headers và thêm:
- *         - Key: authorization
- *         - Value: Bearer <access_token>
+ *     description: Quản lý danh sách yêu thích của người dùng (yêu cầu token).
  */
 
 /**
  * @swagger
  * /api/v1/wishlist:
  *   get:
- *     summary: Get wishlist products
- *     description: Trả về danh sách sản phẩm trong wishlist của người dùng.
+ *     summary: Lấy danh sách sản phẩm yêu thích
  *     tags: [Wishlist]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: query
- *         name: page
+ *         name: lastId
  *         schema:
  *           type: integer
- *         required: false
- *         description: Page number
+ *         description: ID sản phẩm cuối cùng đã lấy (cursor-based paging)
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         required: false
- *         description: Number of items per page
+ *           example: 10
+ *         description: Số lượng sản phẩm trả về
  *     responses:
  *       200:
- *         description: Success
+ *         description: Danh sách sản phẩm yêu thích
  *       401:
- *         description: Unauthorized
+ *         description: Không xác thực
  */
 
 /**
  * @swagger
  * /api/v1/wishlist:
  *   post:
- *     summary: Add product to wishlist
- *     description: Thêm sản phẩm vào wishlist của người dùng.
+ *     summary: Thêm sản phẩm vào danh sách yêu thích
  *     tags: [Wishlist]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - productId
  *             properties:
  *               productId:
  *                 type: integer
  *                 example: 101
  *     responses:
  *       200:
- *         description: Product added
+ *         description: Thêm thành công
  *       401:
- *         description: Unauthorized
+ *         description: Không xác thực
  */
 
 /**
  * @swagger
  * /api/v1/wishlist/{productId}:
  *   delete:
- *     summary: Remove product from wishlist
- *     description: Xoá một sản phẩm khỏi wishlist của người dùng.
+ *     summary: Xoá sản phẩm khỏi danh sách yêu thích
  *     tags: [Wishlist]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
  *       - in: path
  *         name: productId
+ *         required: true
  *         schema:
  *           type: integer
- *         required: true
- *         description: ID của sản phẩm cần xoá
+ *         description: ID sản phẩm cần xoá
  *     responses:
  *       200:
- *         description: Product removed
+ *         description: Xoá thành công
  *       401:
- *         description: Unauthorized
+ *         description: Không xác thực
  */
 
 /**
  * @swagger
- * /api/v1/wishlist:
- *   delete:
- *     summary: Remove all products from wishlist
- *     description: Xoá toàn bộ sản phẩm trong wishlist của người dùng.
+ * /api/v1/wishlist/remove-many:
+ *   post:
+ *     summary: Xoá nhiều sản phẩm khỏi danh sách yêu thích
  *     tags: [Wishlist]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - productItemIds
+ *             properties:
+ *               productItemIds:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [101, 102, 103]
  *     responses:
  *       200:
- *         description: Wishlist cleared
+ *         description: Xoá thành công
  *       401:
- *         description: Unauthorized
+ *         description: Không xác thực
  */
 
 /**
  * @swagger
  * /api/v1/wishlist/count:
  *   get:
- *     summary: Get wishlist count
- *     description: Lấy số lượng sản phẩm trong wishlist của người dùng.
+ *     summary: Lấy số lượng sản phẩm trong danh sách yêu thích
  *     tags: [Wishlist]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
  *     responses:
  *       200:
- *         description: Count retrieved
+ *         description: Trả về số lượng
  *       401:
- *         description: Unauthorized
+ *         description: Không xác thực
  */
+
+router.get("/", asyncHandler(wishlistController.getProductInWishlist));
+router.post("/", asyncHandler(wishlistController.addProductToWishlist));
+router.delete("/:productId", asyncHandler(wishlistController.removeProductFromWishlist));
+router.post("/remove-many", asyncHandler(wishlistController.removeAllProductFromWishlist));
+router.get("/count", asyncHandler(wishlistController.getCountProductInWishlist));
+
+module.exports = router;
 
 
 

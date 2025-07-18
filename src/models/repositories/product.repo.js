@@ -162,6 +162,8 @@ class ProductRepository {
                 },
                 {
                     model: this.Products,
+                    as:'Product',
+                    require:false
                 },
                 {
                     model: this.SkuSpecs,

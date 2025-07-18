@@ -275,7 +275,9 @@ class AuthService {
         if(!user){
             throw NotFoundError("User not found")
         }
-        return await UserRepository.updateFcmToken(userId,fcmToken)
+        Object.assign(user,fcmToken)
+        user.save()
+        return user
     }
 }
 

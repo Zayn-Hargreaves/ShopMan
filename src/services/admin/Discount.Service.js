@@ -28,10 +28,10 @@ class DiscountService {
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         // Validate đơn giản
         if (!data.name || !data.value || !data.type || !data.code)
-            throw new Error('Missing required fields');
+            throw new NotFoundError('Missing required fields');
         // Tạo mới
         if (!ShopId && !data.CampaignId) {
-            throw new Error("Missing required fields")
+            throw new NotFoundError("Missing required fields")
         }
         if(data.CampaignId){
             const campaign = await CampaignRepo.findOneCampaignShop(data.CampaignId,data.ShopId)

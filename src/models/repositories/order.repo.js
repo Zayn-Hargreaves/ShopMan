@@ -1,4 +1,5 @@
-const { Op, where } = require("sequelize")
+const { Op, where } = require("sequelize");
+const { NotFoundError } = require("../../cores/error.response");
 class OrderRepository {
     constructor(models) {
         this.Order = models.Order;
@@ -48,7 +49,7 @@ class OrderRepository {
         });
 
         if (!order || !order.user) {
-            throw new Error("Không tìm thấy thông tin user để gửi mail.");
+            throw new NotFoundError("Không tìm thấy thông tin user để gửi mail.");
         }
 
         return {

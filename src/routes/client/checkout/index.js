@@ -4,6 +4,10 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
 
 /**
  * @swagger
+ * tags:
+ *   - name: Checkout
+ *     description: API thanh toán (giỏ hàng và mua ngay dùng chung)
+ *
  * components:
  *   securitySchemes:
  *     bearerAuth:
@@ -19,17 +23,50 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
  *         type: string
  *         example: "Bearer <access_token>"
  *       description: Access token để xác thực người dùng
- * tags:
- *   - name: Checkout
- *     description: API thanh toán (Buy Now / Cart Checkout / Xác nhận thanh toán)
+ *   schemas:
+ *     CheckoutItem:
+ *       type: object
+ *       required: [productId, skuNo, quantity]
+ *       properties:
+ *         productId:
+ *           type: integer
+ *           example: 1
+ *         skuNo:
+ *           type: string
+ *           example: "SKU-ABC-123"
+ *         quantity:
+ *           type: integer
+ *           example: 2
+ *         discountIds:
+ *           type: array
+ *           items:
+ *             type: integer
+ *     CheckoutRequest:
+ *       type: object
+ *       required: [selectedItems, addressId, paymentMethodId]
+ *       properties:
+ *         selectedItems:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/CheckoutItem'
+ *         addressId:
+ *           type: integer
+ *           example: 12
+ *         paymentMethodId:
+ *           type: integer
+ *           example: 3
+ *         source:
+ *           type: string
+ *           enum: [cart, buynow]
+ *           example: buynow
  */
 
 /**
  * @swagger
- * /api/v1/checkout/buynow:
+ * /api/v1/checkout:
  *   post:
  *     tags: [Checkout]
- *     summary: Thanh toán ngay 1 sản phẩm (Buy Now)
+ *     summary: Tạo phiên thanh toán (áp dụng cho cả giỏ hàng và mua ngay)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -39,19 +76,7 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [productId, skuNo, quantity]
- *             properties:
- *               productId:
- *                 type: integer
- *               skuNo:
- *                 type: string
- *               quantity:
- *                 type: integer
- *               discountIds:
- *                 type: array
- *                 items:
- *                   type: integer
+ *             $ref: '#/components/schemas/CheckoutRequest'
  *     responses:
  *       200:
  *         description: Tạo paymentIntent thành công
@@ -62,69 +87,13 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Tạo thanh toán buy-now thành công
+ *                   example: Tạo thanh toán thành công
  *                 metadata:
  *                   type: object
  *                   properties:
  *                     paymentIntentClientSecret:
  *                       type: string
- *                     totalAmount:
- *                       type: number
- */
-
-/**
- * @swagger
- * /api/v1/checkout/from-cart:
- *   post:
- *     tags: [Checkout]
- *     summary: Thanh toán từ giỏ hàng
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - $ref: '#/components/parameters/AccessTokenHeader'
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [selectedItems]
- *             properties:
- *               selectedItems:
- *                 type: array
- *                 items:
- *                   type: object
- *                   required: [productId, skuNo, quantity]
- *                   properties:
- *                     productId:
- *                       type: integer
- *                     skuNo:
- *                       type: string
- *                     quantity:
- *                       type: integer
- *                     discountIds:
- *                       type: array
- *                       items:
- *                         type: integer
- *               shopDiscountIds:
- *                 type: array
- *                 items:
- *                   type: integer
- *     responses:
- *       200:
- *         description: Tạo paymentIntent từ giỏ hàng thành công
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Tạo thanh toán từ cart thành công
- *                 metadata:
- *                   type: object
- *                   properties:
- *                     paymentIntentClientSecret:
+ *                     paymentIntentId:
  *                       type: string
  *                     totalAmount:
  *                       type: number
@@ -135,7 +104,7 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
  * /api/v1/checkout/confirm:
  *   post:
  *     tags: [Checkout]
- *     summary: Xác nhận thanh toán và tạo đơn hàng
+ *     summary: Xác nhận thanh toán & tạo đơn hàng
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -150,9 +119,10 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
  *             properties:
  *               paymentIntentId:
  *                 type: string
+ *                 example: pi_1Nk4WKLZ0a3OK6
  *     responses:
  *       200:
- *         description: Đơn hàng đã được tạo thành công
+ *         description: Tạo đơn hàng thành công
  *         content:
  *           application/json:
  *             schema:
@@ -174,6 +144,5 @@ const checkOutController = require("../../../controllers/client/Checkout.Control
 
 router.post("/", asyncHandler(checkOutController.checkout));
 router.post("/confirm", asyncHandler(checkOutController.confirmPayment));
-
 
 module.exports = router;
