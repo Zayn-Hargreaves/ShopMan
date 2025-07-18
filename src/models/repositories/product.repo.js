@@ -263,13 +263,9 @@ class ProductRepository {
     async createNewSku(ProductId, ShopId, { sku_name, sku_desc, sku_attrs, sku_specs, sku_price, sku_stock, sku_type, sort, location, sku_no, spu_no }, options) {
         const sku = await this.Sku.create({ ProductId, sku_no, sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price }, options)
         const skuAttr = await this.SkuAttr.create({ sku_no, sku_stock, sku_price, sku_attrs }, options)
-        console.log(skuAttr)
         const SkuSpecs = await this.SkuSpecs.create({ sku_specs, SkuId: sku.id }, options)
-        console.log(SkuSpecs)
         const SpuToSku = await this.SpuToSku.create({ sku_no, spu_no, ProductId }, options)
-        console.log(SpuToSku)
         const Inventory = await this.Inventories.create({ SkuId: sku.id, ShopId, quantity: sku_stock, location }, options)
-        console.log(Inventory)
         return {
             ...sku.toJSON(),
             ...skuAttr.toJSON(),
@@ -290,66 +286,51 @@ class ProductRepository {
         newSpuNo, newSkuNo,
         options = {}
     ) {
-        // Nếu thay đổi sku_no & spu_no
         if (newSkuNo && newSpuNo) {
-            // Update Sku
             await this.Sku.update(
                 { sku_no: newSkuNo, sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price },
                 { where: { ProductId, sku_no }, ...options }
             );
-            // Update SkuAttr
             await this.SkuAttr.update(
                 { sku_stock, sku_price, sku_attrs, sku_no: newSkuNo },
                 { where: { sku_no }, ...options }
             );
-            // Tìm lại sku id mới theo newSkuNo
             const sku = await this.Sku.findOne({ where: { ProductId, sku_no: newSkuNo }, ...options });
 
-            // Update SkuSpecs
             await this.SkuSpecs.update(
                 { sku_specs },
                 { where: { SkuId: sku.id }, ...options }
             );
-            // Update SpuToSku
             await this.SpuToSku.update(
                 { sku_no: newSkuNo, spu_no: newSpuNo },
                 { where: { sku_no }, ...options }
             );
-            // Update Inventory
             await this.Inventories.update(
                 { quantity: sku_stock, location },
                 { where: { ShopId, SkuId: sku.id }, ...options }
             );
 
-            // Có thể trả lại bản ghi mới nhất
             return await this.getFullSku(ProductId, newSkuNo, options);
         }
-        // Nếu không đổi sku_no/spu_no
         else {
-            // Update Sku
             await this.Sku.update(
                 { sku_name, sku_desc, sku_type, status: 'active', sort, sku_stock, sku_price },
                 { where: { ProductId, sku_no }, ...options }
             );
-            // Update SkuAttr
             await this.SkuAttr.update(
                 { sku_stock, sku_price, sku_attrs },
                 { where: { sku_no }, ...options }
             );
-            // Tìm lại sku id
             const sku = await this.Sku.findOne({ where: { ProductId, sku_no }, ...options });
 
-            // Update SkuSpecs
             await this.SkuSpecs.update(
                 { sku_specs },
                 { where: { SkuId: sku.id }, ...options }
             );
-            // Update SpuToSku
             await this.SpuToSku.update(
                 { spu_no },
                 { where: { sku_no }, ...options }
             );
-            // Update Inventory
             await this.Inventories.update(
                 { quantity: sku_stock, location },
                 { where: { ShopId, SkuId: sku.id }, ...options }
@@ -359,7 +340,6 @@ class ProductRepository {
         }
     }
 
-    // Hàm trả về đầy đủ bản ghi mới nhất của sku, attributes, specs, inventory...
     async getFullSku(ProductId, sku_no, options = {}) {
         const sku = await this.Sku.findOne({
             where: { ProductId, sku_no },

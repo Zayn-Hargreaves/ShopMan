@@ -2,35 +2,16 @@ const { Op } = require("sequelize");
 const RepositoryFactory = require("../../models/repositories/repositoryFactory");
 const { ConflictError, NotFoundError } = require("../../cores/error.response");
 
-/**
- * Service cho Campaign (Chiến dịch quảng cáo)
- */
+
 class CampaignService {
-    /**
-     * Lấy danh sách campaign của 1 shop, hỗ trợ phân trang, lọc
-     * @param {number} shopId - ID của shop
-     * @param {Object} query
-     * @param {string} [query.status]        - Trạng thái ('active', 'inactive', ...)
-     * @param {string} [query.from]          - Từ ngày (YYYY-MM-DD)
-     * @param {string} [query.to]            - Đến ngày (YYYY-MM-DD)
-     * @param {number} [query.page=1]        - Trang hiện tại
-     * @param {number} [query.limit=20]      - Số bản ghi/trang
-     * @returns {Promise<{items: Array, total: number, page: number, limit: number, totalPages: number}>}
-     */
+   
     static async listCampaigns(status,shopId,from, to, page, limit ) {
-        console.log(status,shopId,from, to, page, limit)
         await RepositoryFactory.initialize();
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository");
 
         return await CampaignRepo.getListCampaign(status, shopId, from,to, page,limit)
     }
 
-    /**
-     * Thêm campaign mới cho shop
-     * @param {number} shopId
-     * @param {Object} data - { title, description, thumb, start_time, end_time, status }
-     * @returns {Promise<Object>}
-     */
     static async addCampaign(shopId, data, isAdmin) {
         await RepositoryFactory.initialize();
 
@@ -63,13 +44,6 @@ class CampaignService {
         return await CampaignRepo.getCampaignDetail(ShopId, CampaignId, isAdmin)
     }
 
-    /**
-     * Cập nhật campaign
-     * @param {number} shopId
-     * @param {number} campaignId
-     * @param {Object} data
-     * @returns {Promise<Object>}
-     */
 
     static async getCampaignProduct(campaignId, page = 1, limit= 20){
         await RepositoryFactory.initialize()
@@ -81,7 +55,6 @@ class CampaignService {
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository");
         const BannerRepo = RepositoryFactory.getRepository("BannerRepository")
         if(!isAdmin){
-            // Kiểm tra campaignId này có thuộc shop không
             const mapping = await CampaignRepo.findOneCampaignShop(campaignId, shopId)
             if (!mapping) throw new NotFoundError("No permission to update this campaign");
         }

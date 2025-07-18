@@ -42,7 +42,6 @@ class CommentService {
         const rawComment = newComment.toJSON()
         rawComment.isEditable= true
         rawComment.isDeletable= true
-        console.log(rawComment)
         return rawComment
     }
 

@@ -132,7 +132,6 @@ class UserRepository {
         })
     }
     async findAllRole(){
-        console.log("repository")
         return this.Roles.findAll({where:{role_name:{[Op.notIn]:['superadmin', 'seller']}}},{ attributes: ["id", "role_name", "role_desc"] })
     }
 }

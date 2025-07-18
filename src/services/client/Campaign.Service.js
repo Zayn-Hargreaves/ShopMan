@@ -8,12 +8,11 @@ class CampaignService {
         const CampaignRepo = RepositoryFactory.getRepository("CampaignRepository")
         const cacheKey = `campaign:slug:${slug}`
         let campaign
-        // campaign = await RedisService.getCachedData(cacheKey)
+        campaign = await RedisService.getCachedData(cacheKey)
         if(!campaign){
             campaign = await CampaignRepo.findCampaignAndDiscountBySlug(slug)
             if(!campaign){
                 await RedisService.cacheData(cacheKey,{},300)
-                console.log(await RedisService.getCachedData(cacheKey))
                 throw new NotFoundError("Campaign is not found or ended")
             }
             await RedisService.cacheData(cacheKey,campaign,3600)

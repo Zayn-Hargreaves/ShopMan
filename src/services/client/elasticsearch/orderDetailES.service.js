@@ -1,7 +1,6 @@
 const { getClient } = require('../../../db/edb/edb');
 const orderRepository = require('../../../db/edb/repositories/orderRepository');
 
-// Push bản ghi Order (có nested products)
 async function pushOrderToES(orderDoc) {
     const es = await getClient();
     await es.index({
@@ -11,7 +10,6 @@ async function pushOrderToES(orderDoc) {
     });
 }
 
-// (Giữ nguyên hàm pushOrderDetailToES nếu muốn lưu order detail riêng)
 async function pushOrderDetailToES(orderDetailDoc) {
     const es = await getClient();
     await es.index({
@@ -40,7 +38,7 @@ async function pushProductToES(productDoc) {
     const esDoc = {
         ...productDoc,
         CategoryPath: Array.isArray(productDoc.CategoryPath)
-            ? productDoc.CategoryPath.map(String) // hoặc .join(',') nếu mapping là string
+            ? productDoc.CategoryPath.map(String)
             : productDoc.CategoryPath,
         attrs: typeof productDoc.attrs === 'object'
             ? JSON.stringify(productDoc.attrs)
@@ -54,7 +52,6 @@ async function pushProductToES(productDoc) {
     });
 }
 
-// Xoá bản ghi Product khỏi Elasticsearch
 async function deleteProductFromES(productId) {
     const es = await getClient();
     try {
@@ -64,7 +61,6 @@ async function deleteProductFromES(productId) {
         });
         console.log(`Product ${productId} deleted from ES`);
     } catch (err) {
-        // Nếu document không tồn tại, ES sẽ báo lỗi 404 (có thể ignore lỗi này)
         if (err.meta && err.meta.statusCode === 404) {
             console.log(`Product ${productId} not found in ES, skip delete`);
         } else {

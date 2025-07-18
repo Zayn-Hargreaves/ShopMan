@@ -9,7 +9,6 @@ class ReportController {
             metadata: await ReportService.listReports(req.params.shopId, req.query)
         }).send(res);
     }
-    // Thêm các hàm report khác nếu có
 }
 
 module.exports = new ReportController();

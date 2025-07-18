@@ -1,4 +1,4 @@
-const NotificationService = require("../../services//admin/Notification.Service.js")
+const NotificationService = require("../../services/admin/Notification.Service.js")
 const { OkResponse } = require("../../cores/success.response")
 
 class NotificationController {

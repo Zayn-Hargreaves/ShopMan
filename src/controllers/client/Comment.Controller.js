@@ -23,7 +23,6 @@ class CommentController {
         const id = req.params.id
         const userId = req.userId
         const {content, image_urls, rating} = req.body
-        console.log(req.body)
         new OkResponse({
             message:"update message success",
             metadata: await CommentService.updateComment(id,userId, content,image_urls)

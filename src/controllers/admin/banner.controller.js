@@ -2,10 +2,7 @@ const BannerService = require("../../services/admin/banner.service.js")
 const { OkResponse } = require("../../cores/success.response")
 
 class BannerController {
-    /**
-     * GET /api/admin/banner
-     * Liệt kê banner (Admin: tất cả, Shop: chỉ của mình)
-     */
+
     listBanners = async (req, res, next) => {
         new OkResponse({
             message: "List banners success",
@@ -13,10 +10,7 @@ class BannerController {
         }).send(res);
     }
 
-    /**
-     * POST /api/admin/banner/:shopId
-     * Thêm banner mới cho shop
-     */
+
     addBanner = async (req, res, next) => {
         try {
             const isAdmin = req.Role = !!"superadmin"
@@ -30,10 +24,7 @@ class BannerController {
         }
     }
 
-    /**
-     * PUT /api/admin/banner/:shopId/:bannerId
-     * Cập nhật banner
-     */
+
     updateBanner = async (req, res, next) => {
         try {
             const isAdmin = req.Role = !!"superadmin"

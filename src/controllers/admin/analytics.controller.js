@@ -1,4 +1,4 @@
-const AnalyticsService = require("../../services//admin/Analytics.Service.js")
+const AnalyticsService = require("../../services/admin/Analytics.Service.js")
 const { OkResponse } = require("../../cores/success.response")
 
 class AnalyticsController {

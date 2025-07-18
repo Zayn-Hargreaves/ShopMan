@@ -12,7 +12,6 @@ class ShopController {
     }
     getProductShop = async (req, res, next) => {
         const { slug } = req.params;
-        console.log(slug)
         const { minPrice, maxPrice, sortBy, lastSortValues, pageSize, isAndroid } = req.query;
         new OkResponse({
             message: "Get products by shop successfully",

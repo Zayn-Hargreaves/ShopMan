@@ -8,7 +8,6 @@ class ComplaintController {
             metadata: await ComplaintService.listComplaints(req.params.shopId, req.query)
         }).send(res);
     }
-    // Có thể có thêm createComplaint nếu cho khách gửi khiếu nại
 }
 
 module.exports = new ComplaintController();

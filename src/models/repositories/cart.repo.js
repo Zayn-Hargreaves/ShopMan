@@ -104,25 +104,19 @@ class CartRepository {
 
     async updateProductToCart({ UserId, CartDetailId, sku_no, quantity }) {
         const { Cart, CartDetails, Products, Sku, SkuAttr, SkuSpecs } = this;
-        console.log(CartDetailId)
-        // Tìm cart đang active
 
         const cart = await Cart.findOne({ where: { UserId, cart_status: "active" } });
         if (!cart) throw new NotFoundError("Cart not found");
 
-        // Dòng cart cần update
         const item = await CartDetails.findOne({ where: { CartId: cart.id, id: CartDetailId } });
         if (!item) throw new NotFoundError("Product not found in cart");
 
-        // Nếu số lượng = 0, xóa luôn dòng này
         if (quantity === 0) {
             await item.destroy();
             return null;
         }
 
-        // Nếu thay đổi SKU (sku_no mới khác dòng hiện tại)
         if (sku_no && sku_no !== item.sku_no) {
-            // Check xem đã có dòng nào cùng ProductId + sku_no mới trong cart chưa
             const existing = await CartDetails.findOne({
                 where: {
                     CartId: cart.id,
@@ -132,12 +126,10 @@ class CartRepository {
             });
 
             if (existing) {
-                // Nếu đã có dòng, cộng dồn quantity, xoá dòng cũ
                 existing.quantity += quantity;
                 await existing.save();
                 await item.destroy();
 
-                // Trả về dòng vừa merge (có thể cần reload toàn bộ cart ở FE)
                 return existing.reload({
                     include: [
                         { model: Products, as: "product" },
@@ -152,7 +144,6 @@ class CartRepository {
                     ]
                 });
             } else {
-                // Nếu chưa có, chỉ update sku_no và quantity dòng này
                 item.sku_no = sku_no;
                 item.quantity = quantity;
                 await item.save();
@@ -172,7 +163,6 @@ class CartRepository {
                 });
             }
         } else {
-            // Không đổi SKU, chỉ update số lượng
             item.quantity = quantity;
             await item.save();
 
@@ -217,9 +207,9 @@ class CartRepository {
             },
             include: [{
                 model: this.DiscountsProducts,
-                as: 'DiscountsProducts', // dùng đúng alias khai báo association!
+                as: 'DiscountsProducts',
                 where: { ProductId: productId },
-                required: true, // INNER JOIN: chỉ lấy những voucher thực sự gắn với product này
+                required: true,
             }]
         });
 

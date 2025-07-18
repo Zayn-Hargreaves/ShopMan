@@ -11,7 +11,6 @@ class CheckoutController {
     }
 
     checkout = async (req, res, next) => {
-        console.log(req.body)
         const { selectedItems, addressId, paymentMethodId, source } = req.body; // [{ productId, skuNo, quantity }]
         const userId = req.userId;
 

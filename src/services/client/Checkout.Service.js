@@ -118,12 +118,6 @@ class CheckoutService {
                 paymentMethodId,
                 type: source,
             }, 900);
-            console.log(  userId,
-                finalItems,
-                totalAmount,
-                addressId,
-                paymentMethodId,
-                source,)
             return {
                 paymentIntentClientSecret: paymentResult.clientSecret,
                 paymentIntentId,
@@ -372,7 +366,6 @@ class CheckoutService {
 
             retry(async () => {
                 const res = await NotfiticationService.sendNotification(userId, "Thanh toán đơn hàng thành công", `Bạn vừa thanh toán thành công đơn hàng ${createdOrder.id}`);
-                console.log("[NOTI] Gửi notification result:", res);
                 return res;
             }).catch(err => {
                 console.error("[NOTI] Lỗi gửi notification:", err);

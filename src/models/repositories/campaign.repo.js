@@ -77,7 +77,6 @@ class CampaignRepository {
             };
         }
 
-        // Tìm productId trong DiscountsProducts
         const discountsProducts = await this.DiscountsProducts.findAll({
             where: { DiscountId: { [Op.in]: DiscountIds } },
             attributes: ['ProductId']
@@ -93,20 +92,19 @@ class CampaignRepository {
             };
         }
 
-        // Sử dụng lastId để lấy dữ liệu tiếp theo
         const whereClause = {
             id: { [Op.in]: productIds },
             status: 'active'
         };
         if (lastId) {
-            whereClause.id = { [Op.gt]: lastId }; // Lấy các sản phẩm có ID lớn hơn lastId
+            whereClause.id = { [Op.gt]: lastId }; 
         }
 
         const { count, rows } = await this.Products.findAndCountAll({
             where: whereClause,
             attributes: getSelectData(['id', 'slug', 'name', 'sale_count', 'price', 'discount_percentage', 'thumb', 'rating']),
             limit,
-            order: [['id', 'ASC']], // Đảm bảo sắp xếp tăng dần theo ID
+            order: [['id', 'ASC']],
         });
 
         return {
@@ -118,7 +116,6 @@ class CampaignRepository {
     }
 
     async getListCampaign(status, ShopId, from, to, page = 1, limit = 20) {
-        console.log(page, limit)
         let where = {};
         if (status) where.status = status;
         if (from || to) {
@@ -128,19 +125,17 @@ class CampaignRepository {
         }
         const offset = (page - 1) * limit;
 
-        // Nếu không phải super admin, phải include CampaignShop để lọc theo ShopId
         let include = [];
+
         if (ShopId) {
-            // Nếu là superadmin thì có thể lấy hết, hoặc thêm filter nếu truyền ShopId
-            if (ShopId) {
-                include.push({
-                    model: this.CampaignShop,
-                    where: { ShopId: ShopId },
-                    required: true,
-                });
-            }
-            // Nếu không truyền ShopId thì không cần include
+            include.push({
+                model: this.CampaignShop,
+                where: { ShopId: ShopId },
+                required: true,
+            });
         }
+
+
 
         const { rows, count } = await this.Campaign.findAndCountAll({
             where,
@@ -209,26 +204,19 @@ class CampaignRepository {
             ]
         })
     }
-    // Cập nhật campaign info
     async updateCampaign(id, data) {
-        // Update info
         await this.Campaign.update(data, { where: { id } });
 
-        // Update list discount
         if (Array.isArray(data.discountIds)) {
-            // Lấy tất cả discount hiện tại của campaign
             const oldDiscounts = await this.Discounts.findAll({
                 where: { CampaignId: id },
                 attributes: ['id']
             });
             const oldDiscountIds = oldDiscounts.map(d => d.id);
 
-            // Discount bị bỏ (cũ nhưng không còn trong mảng mới)
             const toRemove = oldDiscountIds.filter(oldId => !data.discountIds.includes(oldId));
-            // Discount mới (có trong mảng mới, nhưng chưa gán campaign)
             const toAdd = data.discountIds.filter(newId => !oldDiscountIds.includes(newId));
 
-            // Bỏ liên kết với campaign (unset CampaignId)
             if (toRemove.length > 0) {
                 await this.Discounts.update(
                     { CampaignId: null },
@@ -236,7 +224,6 @@ class CampaignRepository {
                 );
             }
 
-            // Gán CampaignId cho discount mới
             if (toAdd.length > 0) {
                 await this.Discounts.update(
                     { CampaignId: id },
@@ -245,7 +232,6 @@ class CampaignRepository {
             }
         }
 
-        // Có thể trả về campaign mới nếu cần
         return await this.Campaign.findByPk(id);
     }
 

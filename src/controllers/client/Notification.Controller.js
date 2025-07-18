@@ -1,5 +1,5 @@
 const { OkResponse } = require("../../cores/success.response")
-const NotfiticationService = require("../../services//client/Notification.service")
+const NotfiticationService = require("../../services/client/Notification.service")
 
 class NotificationController{
     getAllNotification = async(req , res , next)=>{
